@@ -1,0 +1,31 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container body">
+    	<div class="head_div">
+        	<img src="{:ADDON_PUBLIC_PATH}/head_bg.jpg"/>
+            <notempty name="user[headimgurl]">
+                <p class="u_info">
+                    <img class="head" src="{$user.headimgurl}"/>
+                    <span>{$user.nickname}</span>
+                </p>
+            </notempty>
+        </div>
+       <notempty name="cate_data">
+           <ul class="card_type_list">
+                <volist name="cate_data" id="vo">
+                <li>
+                    <a href="{:addons_url('WishCard://Wap/wish_list',array('id'=>$vo['id']))}">
+                        <img class="preview_img" src="{$vo.content_cate_icon|get_cover_url}"/>
+                        <p class="desc">{$vo.content_cate_name}</p>
+                    </a>
+                </li>
+                </volist>
+            </ul>
+        <else/>
+        	<p class="empty_tips">管理员真懒~~还没有配置数据!</p>
+        </notempty>
+        <p class="copyright">{$system_copy_right}{$tongji_code}</p>  
+	</div>  
+</body>
+</html>

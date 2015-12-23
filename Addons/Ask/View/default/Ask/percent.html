@@ -1,0 +1,53 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="http://yaotv.qq.com/shake_tv/include/js/jsapi_subscribe.js"></script>
+<body>
+	<div id="container" class="container">
+    	<!--<img src="{:ADDON_PUBLIC_PATH}/finish.jpg" width="100%"/>-->
+     <div class="startContent" style="margin:10px 20px;">
+        <div class="questionContent" style="text-align:center; margin:40px 0; color:#888">
+        	<img src="__IMG__/blank_pic.png" width="100"/>
+        	<div class="lead_over">不好意思，您没有抢到题目</div>
+        	<div class="lead_over" id="msg1">请等待<span id="left_time">{$time_left}</span>秒后再参与摇一摇重新抢答</div>
+        	<div class="lead_over" id="msg2" style="display:none">请摇一摇重新抢答</div>
+        </div>
+        <php> foreach($ask['appidArr'] as $id=>$val) { </php>
+        <div class="btnWrap">
+        	<a href="javascript:;" onClick="subscribe('{$id}');" class="start_btn" >{$val}</a>
+        </div>
+        <php> } </php>
+        <center>
+            <a href="javascript:;" onClick="closepage();" style="color:#444">返回微信</a>
+        </center>       
+        <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+        
+    </div>
+</div>
+<script type="text/javascript">
+function subscribe(appid){
+	shaketv.subscribe(appid, function(returnData){
+		  alert(returnData.errorCode + ":" + returnData.errorMsg);
+	});	
+}
+function closepage(){
+	WeixinJSBridge.call('closeWindow');
+}
+var reSentTime = parseInt({$time_left});
+function show_time(){ 
+	if(reSentTime > 0){ 
+		--reSentTime; 
+		$('#msg1').show();
+		$('#msg2').hide();
+		$('#left_time').html(reSentTime);
+		setTimeout("show_time()", 1000); //设置1000毫秒以后执行一次本函数
+	}else{
+		$('#msg1').hide();
+		$('#msg2').show();
+	}
+};
+$(function(){
+  show_time();	
+});
+</script>
+</body>
+</html>

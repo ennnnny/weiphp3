@@ -1,0 +1,59 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/mobile/shop.js?v={:SITE_VERSION}"></script>
+<body class="withFoot">
+    <div class="container">
+    	<div class="order_detail">
+    	<div class="order">
+        	<h3 class="mb_10">订单号:{$info.order_number}</h3>
+            <volist name="info.goods" id="gg">
+        	<img src="{$gg.cover|get_cover_url}"/>
+            <p class="info">
+            	{$gg.title}
+                <br/>购买数量：{$gg.num}
+                <br/>价格:{$gg[price]*$gg[num]}元
+            </p>
+            </volist>
+        </div>
+        <div class="order_adress">
+        	<p class="info">
+            	收件人：{$addressInfo.truename}<br/>
+                联系方式：{$addressInfo.mobile}<br/>
+                收货地址：{$addressInfo.address}<br/>
+            </p>
+        </div>
+         <div class="order_action">
+        	
+            	<if condition="$info[pay_status]==0 && $info[pay_type]!=10">
+                	<p class="wait_pay">等待付款中...</p>
+                    <div class="m_15">
+                    <a href="{:U('choose_pay')}&order_id={$info.id}" class="btn">立即付款</a>
+                    </div>
+                <else />
+                	<eq name="info[is_send]" value="0">
+                    	<p>等待卖家发货</p>
+                    <else/>
+                    	<p>商品已发货&nbsp;&nbsp;&nbsp;</p>
+                        <p>发货方式:{$info.send_code_name}</p>
+                        <p>快递单号:{$info.send_number}</p>
+                        <p class="m_10"><if condition="$info['status_code']==3"><a class="btn" href="javascript:;" onClick="confirmGetGoods('{:U('confirm_get',array('id'=>$info[id]))}');">确认收货</a></if></p>
+                        <div class="shipping_info" style="display:">
+                            <volist name="log" id="vo">
+                                <P><span>{$vo.cTime|time_format} </span></P>
+                                <p>{$vo.remark}</p>
+                                <p>&nbsp;</p>
+                            </volist>
+                        </div>
+                    </eq>
+                </if>
+            
+        </div>
+         
+        </div>
+    </div>	
+    <!-- 底部导航 -->
+    <include file="_footer"/>
+    <block name="script">
+</block>
+</body>
+</html>

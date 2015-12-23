@@ -1,0 +1,67 @@
+<include file="Public/mobile_head" />
+<link href="{:ADDON_PUBLIC_PATH}/css1.css?v={:SITE_VERSION}"
+	rel="stylesheet" type="text/css">
+<!-- {:ADDON_PUBLIC_PATH}/top.jpg -->
+<body>
+	<div class="common_header">
+        <if condition="!$_GET['preview']">
+            <a class="back" href="{:addons_url( 'Invite://Wap/lists')}">&nbsp;</a>
+        </if>
+        微邀约
+    </div>
+	<div id="container" class="container body">
+    	<img width="100%" src="{:get_cover_url ( $info ['cover'] )}"/>
+        <div  class="detail_content">
+        	<div class="content_head">
+            
+            	<notempty name="recode.invite_uid"><p><span class="name">{$recode.invite_uid|get_nickname}</span>邀约你参加该活动!</p></notempty>
+                
+                <p class="desc">恭喜获取{$info.keyword}邀约机会，必须邀约到<span>{$info.num}</span>人才能使用哦。<br/>
+                目前已邀请到<span>{$recode.invite_num|intval}</span>人参加,
+                
+                <php>$left = intval($info['num']-$recode['invite_num']); if($left>0) { </php>
+                再邀约<span>{$left}</span>人就可以完成邀功邀约，享受优惠啦！
+                <php> } else { </php>
+                已经达到邀约人数要求，可以享受优惠券了
+                <php> } </php>
+                
+                </p>
+                <p class="btn_wrap"><a class="btn" href="javascript:;" onClick="$.WeiPHP.showShareTips();">赶紧转发邀请小伙伴来吧</a></p>
+                <php>if($left<=0){</php> <p class="desc">优惠券已经加入你的空间，可以在你的空间优惠券里找到哦。</p><p class="btn_wrap"><a href="{:addons_url('Coupon://Wap/personal')}" class="btn">查看</a></p><php>}</php>
+            </div>
+        	<div class="content">
+            	<p class="content_title"><span>邀约简介</span></p>
+            	<p class="title">{$info.title}</p>
+            	<!--<p class="time">{$info.cTime|time_format}</p>-->
+            	<p>{$info.content}</p>
+            </div>
+        </div>
+	</div>
+	<p class="copyright">{$system_copy_right}{$tongji_code}</p>
+</body>
+<script type="text/javascript">
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	WeixinJSBridge.call('hideToolbar');
+});
+wx.ready(function(){
+	var shareData = {
+			title: '{$info.title}', // 分享标题
+			desc: '{$info.intro}', // 分享描述
+			link: "{:addons_url( 'Invite://Wap/receive',array('invite_uid'=>$mid,'id'=>$info['id'],'token'=>get_token()))}", //分享的链接地址
+			imgUrl: "{:get_cover_url ( $info ['cover'] )}", // 分享图标
+			type: 'link', // 分享类型,music、video或link，不填默认为link
+			dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			success: function () { 
+				// 用户确认分享后执行的回调函数
+			},
+			cancel: function () { 
+				// 用户取消分享后执行的回调函数
+			}
+	}
+	wx.onMenuShareAppMessage(shareData);
+	wx.onMenuShareTimeline(shareData);
+	wx.onMenuShareQQ(shareData);
+	wx.onMenuShareWeibo(shareData);
+});
+</script>
+</html>

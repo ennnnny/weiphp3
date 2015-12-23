@@ -1,0 +1,8 @@
+<volist name="goods_list" id="vo">
+  <li class="contentItem" data-lastid="{$vo.id}"> <a href="{:U('detail',array('shop_id'=>$shop_id,'id'=>$vo['id']))}"> <img src="{$vo.cover|get_cover_url}"/>
+    <div class="desc">
+      <p class="name">{$vo.title}</p>
+      <p class="price">￥{$vo.price|wp_money_format}</p>
+    </div>
+    </a> </li>
+</volist>

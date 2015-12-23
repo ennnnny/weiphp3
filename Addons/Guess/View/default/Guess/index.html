@@ -1,0 +1,94 @@
+<include file="Public/mobile_head"/>
+<style type="text/css">
+body,html{ background:#414e5f}
+.head_hd img{ display:block; width:100%;}
+.main_body{ margin:0 14px; position:relative;}
+.main_body h6{ text-align:center; line-height:50px; padding:0 15px; font-size:20px; color:#eee;}
+.main_body .intro{ padding:0 10px 0; color:#fff; font-size:13px; color:#ddd;}
+.intro_content{ padding:5px 0; margin-bottom:10px;}
+.vs{ overflow:hidden; position:relative; padding-bottom:30px; overflow:hidden; color:#fff}
+.vs_item{ width:33%; text-align:center; position:relative; float:left; margin-bottom:15px;}
+.vs_item img{ width:70px; height:70px; border-radius:100%; border:5px solid #fff; display:block; margin:20px auto; position:relative; z-index:100;}
+.vs_item .count{ line-height:30px; font-size:12px; display:none}
+.vs_item .name{ padding: 6px 5px;background: #647284;color:#fff;border-radius:5px;font-size:10px;display: block;margin: 0 10px;}
+.circle_name{ border-radius:100%; background:#fff; color:#333; width:60px; height:40px; padding:20px 10px; display:inline-block; font-size:13px; text-align:center;}
+.total_tips{ border-radius:10px; color:#fff; text-align:center; padding:5px 0; margin:0 50px; border:1px dashed #647284}
+</style>
+<body>
+<div id="container" class="container">
+	  <div class="head_hd">
+          <img src="{$info.cover|get_cover_url}" width="100%"/>
+      </div>
+      <div class="main_body">
+      	   <h6>{$info.title}</h6>  
+            <div class="intro">
+               <p class="intro_content">
+                    {$info.desc}
+              </p>
+           </div>
+           <form class="vs" id="form">
+           		<volist name="opts" id="vo">
+                	<div class="vs_item vs_item_{$i}" data-count = "{$vo.guess_count}">
+                        <input type="radio" name="optArr[]" value="{$vo.id}" style="display:none"/>
+                        <notempty name="vo[image]">
+                        	<img <php>if(in_array($vo[id], $joinData)) echo 'style="border-color:#018455" ';</php> src="{$vo.image|get_cover_url}"/>
+                         	<span class="name">{$vo.name}</span>
+                        <else/>
+                        	<span class="circle_name" <php>if(in_array($vo[id], $joinData)) echo 'style="background:#89dbfa" ';</php>>{$vo.name}</span>
+                        </notempty>
+                        
+                       
+                        <div><span class="count">{$vo.guess_count|intval}</span>人猜TA</div>
+                    </div>
+                </volist>
+                <input type="hidden" value="{:I('token')}" name="token" />
+                <input type="hidden" value="{:I('wecha_id')}" name="wecha_id" />
+                <input type="hidden" value="{$info.id}" name="guess_id" />
+           </form>
+           <div class="total_tips"><span id="totalCount">{$info.guess_count|intval}</span>人参加</div>
+          
+      </div>
+    </div>
+<p class="copyright">{$system_copy_right}</p>
+<include file="Public/mobile_foot"/> 
+<script>
+$.WeiPHP.initWxShare({
+	title:"{$info.title}",
+	imgUrl:"{$info.cover|get_cover_url}",
+	desc:"{$info.desc}",
+	link:window.location.href
+})
+
+var canJoin = '{$canJoin}';
+if(canJoin=="" || canJoin=='false'){
+	$('.vs_item .count').show();
+	$('.vs_item .progress').show();
+}
+$('.vs_item').click(function(){
+	$.Dialog.loading();
+	$(this).find('input').prop('checked',true);
+	__this = $(this);
+	$.ajax({
+		url:"{:U( 'saveGuess' )}",
+		data:$('#form').serializeArray(),
+		dataType:"json",
+		type:"POST",
+		success:function(data){
+			//console.log(data);
+			if(data.result=='success'){
+				$.Dialog.confirm("提示",data.msg);
+				var totalCount = parseInt($('#totalCount').text())+1;
+				$('#totalCount').text(totalCount)
+				__this.find('.count').text(parseInt(__this.find('.count').text())+1);
+				$('.vs_item .count').show();
+				$('.vs_item .progress').show();
+			}else{
+				$.Dialog.fail(data.msg);
+			}
+			
+		}
+	})
+})
+</script>
+</body>
+</html>

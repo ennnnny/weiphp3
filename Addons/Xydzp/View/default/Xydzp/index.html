@@ -1,0 +1,33 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/xydzp.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container"> 
+	<div class="head_hd">
+        <notempty name="data.picurl">
+        	<img src="{$data.picurl|get_cover_url}" width="100%">
+        <else />
+    		<img src="head_pic.jpg" width="100%">
+        </notempty>
+     </div>
+     <div class="btnWrap" style="margin:0 50px;">
+     	<a href="{$jumpUrl}" class="start_btn"> 立即开始参与活动</a>
+     </div>
+     <div class="content">
+     	 <h4>{$data.title}</h4>
+         <div class="detail_desc"><strong>简介：</strong><br/>{$data.des_jj}</div>
+         <div class="detail_desc"><strong>规则：</strong><br/>{$data.guiz}</div>
+     </div>
+     <p class="copyright">{$system_copy_right}</p>
+     
+</div>
+<include file="Public/mobile_foot"/>
+<script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:"{$data.title}",
+		imgUrl:"{$data.picurl|get_cover_url}",
+		desc:"{$data.des_jj}",
+		link:window.location.href
+	})
+</script>
+</body>
+</html>

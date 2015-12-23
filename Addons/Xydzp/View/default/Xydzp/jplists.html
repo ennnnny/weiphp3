@@ -1,0 +1,52 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> 
+      <ul class="tab-nav nav">
+		<li class=""><a href="{:U('lists')}">活动管理</a></li>
+        <li><a href="{:U('jpoplists')}">奖品库管理</a></li>
+		<li class="current"><a href="{:U('jplists?xydzp_id='.$xydzp_id)}">编号为({$xydzp_id})的奖励机制配置</a></li>
+      </ul>
+      <div class="cf">
+        <div class="fl">
+          <empty name="model.extend">
+            <div class="tools"> <a class="home_btn" href="{:addons_url($_REQUEST ['_addons'].'://'.$_REQUEST ['_controller'].'/jpadd?xydzp_id='.$xydzp_id)}">新增奖品</a>
+              <button class="home_btn ajax-post confirm" target-form="ids" url="{:U('jpdel?model='.$model['id'])}">删除奖品</button>
+            </div>
+          </empty>
+        </div>        
+      </div>
+      
+      <!-- 数据列表 -->
+      <div class="data-table">
+        <div class="data-table table-striped">
+          <table>
+            <!-- 表头 -->
+            <thead>
+              <tr>
+                <th class="row-selected row-selected"> <input class="check-all" type="checkbox">
+                </th>
+                <volist name="list_grids" id="field">
+                  <th>{$field.title}</th>
+                </volist>
+              </tr>
+            </thead>
+            
+            <!-- 列表 -->
+            <tbody>
+              <volist name="list_data" id="data">
+                <tr>
+                  <td><input class="ids" type="checkbox" value="{$data['id']}" name="ids[]"></td>
+                  <volist name="list_grids" id="grid">
+                    <td>{:get_list_field($data,$grid,$model)}</td>
+                  </volist>
+                </tr>
+              </volist>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="page"> {$_page|default=''} </div>
+    </section>
+  </div>
+</block>

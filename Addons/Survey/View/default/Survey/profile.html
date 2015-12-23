@@ -1,0 +1,53 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container">
+    	<div class="bind_box">
+        	<h6>请填写你的资料</h6>
+            <form id="form" action="{:U('profile?survey_id='.$_GET['survey_id'])}" method="post">
+            <div class="bind_box">            
+            	<div class="form-item cf">
+                  	<div class="controls">
+                    <em class="icon_user_s">&nbsp;</em>
+                     <input type="text" placeholder="称呼" class="text input-medium" name="nickname" value="{$info.truename}">
+                    </div>
+                </div>
+                <div class="form-item cf">
+                    <div class="controls">
+                     <em class="icon_phone_s">&nbsp;</em>
+                     <input type="tel" placeholder="手机号" class="text input-medium icon_phone_s" name="mobile" value="{$info.mobile}">
+                    </div>
+                </div>            
+            </div>
+            <a class="lead_btn" id="submit" type="submit">开始调研</a>
+            <p class="form_tips">填写的信息仅用于领取奖品用，不会被公开，请放心填写。</p>
+            </form>
+	</div>
+    <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+<script type="text/javascript">
+$('#submit').click(function(){
+   //判断
+   if($('input[name="nickname"]').size()>0 && ( $('input[name="nickname"]').val().length<2)){
+   		 $.Dialog.fail("名字限2个以上的中文字符!");
+		 return false;
+   }
+ 
+   ;
+  /* if($('input[name="mobile"]').size()>0 && $('input[name="mobile"]').val().length!=11){
+   		 $.Dialog.fail("请填写正确的手机号码!");
+		 return false;
+   }*/
+	var reg = /^\d{11}$/;
+   if(!reg.test($('input[name="mobile"]').val())){
+	   $.Dialog.fail("请填写正确的手机号码!");
+		 return false;
+	}
+   $.Dialog.loading();
+   $.post($('#form').attr('action'),$('#form').serializeArray(),function(data){
+		window.location.href = data.url;
+   });
+   
+});
+</script>
+</body>
+</html>

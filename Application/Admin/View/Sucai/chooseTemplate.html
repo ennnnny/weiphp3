@@ -1,0 +1,90 @@
+<extend name="Public/base" />
+
+<block name="body">
+	<!-- 标题栏 -->
+	<div class="main-title">
+		<h2>素材模板授权</h2>
+	</div>
+	<div class="cf">
+		<div class="fl">
+            
+        </div>
+
+        <!-- 高级搜索 -->
+		<div class="search-form fr cf">
+			<div class="sleft">
+				<input type="text" name="nickname" class="search-input" value="{:I('nickname')}" placeholder="请输入用户昵称或者ID">
+				<a class="sch-btn" href="javascript:;" id="search" url="{:U('index')}"><i class="btn-search"></i></a>
+			</div>
+		</div>
+    </div>
+    <!-- 数据列表 -->
+    <div class="data-table table-striped">
+	<table class="">
+    <thead>
+        <tr>
+		<th class="">所属插件</th>
+		<th class="">模板名称</th>
+        <th class="">模板预览图</th>
+        <th class="">模板描述</th>
+		<th class="">操作</th>
+		</tr>
+    </thead>
+    <tbody>
+		<notempty name="templateList">
+		<volist name="templateList" id="vo">
+		<tr>
+            <td>{$vo.addons} </td>
+            <td>{$vo.title}</td>
+            <td><img width="100" src="{$vo.icon}"/> </td>
+            <td>{$vo.desc}</td>
+            <td>
+            	<if condition = "$vo[isUse]">
+                	<a style="color:red" class="confirm ajax-get" href="{:U('Sucai/cancelTemplate',array('addons'=>$vo['addons'],'uid'=>I('uid'),'template'=>$vo['template']))}">取消授权</a>
+                <else/>
+                	<a class="confirm ajax-get"   href="{:U('Sucai/useTemplate',array('addons'=>$vo['addons'],'uid'=>I('uid'),'template'=>$vo['template']))}">模板授权</a>
+                	
+                </if>
+            </td>
+		</tr>
+		</volist>
+		<else/>
+		<td colspan="5" class="text-center"> aOh! 暂时还没有内容! </td>
+		</notempty>
+	</tbody>
+    </table> 
+	</div>
+    <div class="page">
+        {$_page}
+    </div>
+</block>
+
+<block name="script">
+	<script src="__STATIC__/thinkbox/jquery.thinkbox.js?v={:SITE_VERSION}"></script>
+
+	<script type="text/javascript">
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});
+	//回车搜索
+	$(".search-input").keyup(function(e){
+		if(e.keyCode === 13){
+			$("#search").click();
+			return false;
+		}
+	});
+    //导航高亮
+    highlight_subnav('{:U('User/index')}');
+	
+	</script>
+</block>

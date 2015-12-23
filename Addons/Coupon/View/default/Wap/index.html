@@ -1,0 +1,62 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/index.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container">
+	   <div class="head_hd" style="background:{$info.head_bg_color} url({$info.background|get_cover_url}); background-size:100% auto;">
+          
+         <p class="title">
+          	{$info.title}<br/>
+          	<span class="time">有效期：<span class="use_start_time">{$info.use_start_time|time_format}</span> - <span class="over_time">{$info.over_time|time_format}</span></span> 
+          </p>
+          <div class="line"></div>
+      </div>
+      
+      
+     
+         <div class="v_nav">
+            <a class="item" href="{:addons_url('Coupon://Wap/coupon_detail',array('id'=>$info[id]))}">优惠券详情<em>&nbsp;</em></a>
+            <notempty name="shop_list">
+            <if condition="count($shop_list) neq  1">
+                <a class="item" href="{:addons_url('Coupon://Wap/store_list',array('id'=>$info[id]))}">适用门店<em>&nbsp;</em></a>
+            <else/>
+            	<volist name="shop_list" id="vo">
+                    <li class="item single_address">
+                        <span class="title">{$vo.name}</span>
+		 				<span style="padding-left: 8px;">营业时间：{$vo.open_time}</span>
+		                <br/>
+                         <notempty name="$vo[gps]">
+                        	<a href="http://api.map.baidu.com/marker?location={$vo.gps}&title={$vo.name}&content={$vo.address}&output=html">{$vo.address}</a>
+                        <else />
+                        	<a href="http://api.map.baidu.com/geocoder?address={$vo.address}&output=html&src={$vo.name}|{$vo.address}">{$vo.address}</a>
+                        </notempty>
+                        <a href="tel:{$vo.phone}"><em>&nbsp;</em></a>
+                    </li>
+                </volist>
+            </if>
+            </notempty>
+         </div>
+         
+         <div class="btnWrap">
+    	<a href="{$jumpURL}" class="start_btn" style="background:{$info.button_color}"> 
+        	领取优惠券
+        </a> 
+        <notempty name="info[more_button_arr]" id="vo">
+        	<volist name="info[more_button_arr]" id="vo">
+        		<a href="{$key}"  class="start_btn" style="background:{$info.button_color}">{$vo}</a>
+            </volist>
+        </notempty>
+     </div>
+     
+     <p class="copyright">{$system_copy_right}</p>
+	</div>
+    <include file="Public/mobile_foot"/>
+    <script type="text/javascript">
+    	$.WeiPHP.initWxShare({
+			title:"{$info.title}",
+			imgUrl:"{$info.shop_logo|get_cover_url}",
+			desc:"{$info.shop_name}",
+			link:window.location.href
+		})
+    </script>
+</body>
+</html>

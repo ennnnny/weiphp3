@@ -1,0 +1,56 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container">
+  <div class="head_hd" style="background:{$info.head_bg_color}"> <img 
+          
+    <empty name="info.background">style="display:none"</empty>
+    class="head_pic" src="{$info.background|get_cover_url}" width="100%">
+    <div class="seller">
+      <notempty name="info.shop_logo"> <img src="{$info.shop_logo|get_cover_url}">
+        <else/>
+        <img src="pic_money.png"/> </notempty>
+      <span class="name">{$info.shop_name}</span> </div>
+    <p class="title"> <span id="title">{$info.title}</span> </p>
+    <div class="line"></div>
+  </div>
+  <div class="btnWrap"> <a href="javascript:void(0)" class="start_btn" id="batchAddCard" style="background:{$info.button_color}"> 领取卡券 </a> </div>
+  <!-- 更多按钮 -->
+     <notempty name="info[more_button_arr]" id="vo">
+        <volist name="info[more_button_arr]" id="vo">
+            <a href="{$key}"  class="start_btn" style="background:{$info.button_color}">{$vo}</a>
+        </volist>
+    </notempty>
+  <!--
+  <div class="v_nav"> <a class="item" href="{:addons_url('CardVouchers://Wap/cardVouchers_detail',array('id'=>$info[id]))}">卡券详情<em>&nbsp;</em></a> </div>
+  -->
+  <div id="content" style="background:#fff; color:#888; border-radius:5px; padding:10px; border:1px solid #ddd; margin:15px;">
+  		{$info.content}
+  </div>
+  <p class="copyright">{$system_copy_right}</p>
+</div>
+<include file="Public/mobile_foot"/> 
+<script>
+$.WeiPHP.initWxShare({
+	title:"{$info.title}",
+	imgUrl:"{$info.shop_logo|get_cover_url}",
+	desc:"{$info.shop_name}",
+	link:window.location.href
+})
+var readyFunc = function onBridgeReady() {
+	document.querySelector('#batchAddCard').addEventListener('click',
+		function(e) {
+			  WeixinJSBridge.invoke('batchAddCard', { "card_list": [{ "card_id":'{$info[card_id]}', "card_ext":'{$info.card_ext}'}]},								
+			  function(res) {
+			  });
+		}
+	); 
+}
+if (typeof WeixinJSBridge === "undefined") {
+	  document.addEventListener('WeixinJSBridgeReady', readyFunc, false);
+} else {
+	  readyFunc();
+}
+</script>
+</body>
+</html>

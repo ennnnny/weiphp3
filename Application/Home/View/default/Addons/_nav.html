@@ -1,0 +1,29 @@
+<ul class="tab-nav nav">
+  <volist name='nav' id='vo'>
+    <li class="{$vo.class}"><a href="{$vo.url}">{$vo.title}<span class="arrow fa fa-sort-up"></span></a></li>
+  </volist>
+  
+  <php>
+  if (defined ( '_ADDONS' )) {
+      $page = _ADDONS . '_' . _CONTROLLER . '_' . _ACTION;
+  } else {
+      $page = MODULE_NAME . '_' . CONTROLLER_NAME . '_' . ACTION_NAME;
+  }
+  $url = wp_file_get_contents ( REMOTE_BASE_URL . '/index.php?s=/Home/Index/getDocUrl/page/' . $page );
+  if (strpos($url,'http')==0) {
+  </php>
+  <span class="fr" style="margin:10px;"><a href="{$url}"><b style="font-size:16px;" class="fa fa-question-circle"></b>查看配置教程</a></span>
+  <php> } </php>
+</ul>
+<if condition="!empty($sub_nav)">
+<div class="sub-tab-nav">
+       <ul class="sub_tab">
+       <volist name="sub_nav" id="vo">
+          <li><a class="{$vo.class}" href="{$vo.url}">{$vo.title}<span class="arrow fa fa-sort-up"></span></a></li>
+       </volist>
+      </ul>
+</div> 
+</if>
+<if condition="!empty($normal_tips)">
+	<p class="normal_tips"><b class="fa fa-info-circle"></b> {$normal_tips}</p>
+</if>

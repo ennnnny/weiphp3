@@ -1,0 +1,156 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/vote.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div class="container body">
+	<div class="vote_wrap">
+  <article>
+  	<div class="img_wrap">
+        <img width="100%" src="{$info.picurl|get_cover_url}">
+    </div>
+    <h2 style="position:static"><div style="word-wrap:break-word;">{$info.title}</div></h2>
+    <div class="content">
+    	{$info.description}
+    </div>
+    <P class="total_vote">总共有<span id="totalCount">{$info.vote_count}</span>人投票</P>
+  <form id="form1" name="form1" method="post" action="{:U( 'join' )}" onSubmit="return checkForm();">
+    <div class="clearfix choice_list <if condition="$info['is_img'] && !empty($opt['image'])">img_choice</if>">
+      <ul>
+        <volist name='opts' id='opt' key="k">
+        	
+                <!-- 带图片投票 -->
+                <if condition="$info['is_img'] && !empty($opt['image'])">
+                	<li class="pic_li <if condition="$canJoin eq false">disable</if>" data-count="{$opt.opt_count}">
+                    <p class="mb" ><span class="img_wrap"><img <php>if(in_array($opt[id], $joinData)) echo 'style="border-color:#c07b36" ';</php> src="{$opt.image|get_cover_url}" />
+                    <em class="check <php>if(in_array($opt[id], $joinData)) echo 'checked';</php>"></em>
+                    </span>
+                    </p>
+                    <p class="count">
+                        <span class="count_num">
+							{$opt.opt_count}
+                         </span>
+                          票
+                    </p>
+                    <p><span class="name">{$opt.name|msubstr=0,15}</span></p>
+                <else/>
+                	<li class="text_li <if condition="$canJoin eq false">disable</if>" data-count="{$opt.opt_count}">
+                	<div class="bar" <php>if(in_array($opt[id], $joinData)) echo 'style="font-size:16px;font-weight:bold"';</php>">
+                        <p>
+                        	
+                            <em class="check <php>if(in_array($opt[id], $joinData)) echo 'checked';</php>"></em>
+                            <span class="name">{$opt.name}</span>
+                        </p>
+                        <p class="count">
+                           
+                            <span class="count_num">
+                                {$opt.opt_count}
+                             </span>
+                              票
+                        </p>
+                        <div class="progress"></div>
+                    </div>
+                </if>
+                <p class="list" style="display:none"> 
+                    <input type="radio" class="{$style_cls}" id="check_{$opt.id}" name="optArr[]" value="{$opt.id}"           
+                  <php>/**if(in_array($opt[id], $joinData)) echo 'checked="checked" '; if(!$canJoin) echo ' disabled'; */</php>
+                  ><label for="check_{$opt.id}"></label>
+                </p>
+            </li>
+        </volist>
+      </ul>
+      <if condition="$canJoin eq true">
+      		<div class="m_15">
+                <a class="btn yellow_btn submit" href="javascript:;">提 交</a>
+            </div>
+      </if>
+      <if condition="$overtime eq true">
+      		<div class="m_15">
+                <a class="btn gray_btn" href="javascript:;">已过期或已结束</a>
+            </div>
+      </if>
+      
+    </div>
+    
+    <div class="warning" id="errorInfo"></div>
+    <input type="hidden" value="{:I('token')}" name="token" />
+    <input type="hidden" value="{:I('wecha_id')}" name="wecha_id" />
+    <input type="hidden" value="{$info.id}" name="vote_id" />
+    
+  </form>
+  </div>
+  <p class="copyright">{$system_copy_right}</p>
+</div>
+<include file="Public/mobile_foot"/>
+<script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:"{$info.title}",
+		imgUrl:"{$info.picurl|get_cover_url}",
+		desc:"{$info.description}",
+		link:window.location.href
+	})
+</script>
+</body>
+</html>
+<script>
+function initProgressBar(){
+	var totalCount = parseInt($('#totalCount').text());
+	$('.text_li').each(function(index, element) {
+        var count = parseInt($(this).find('.count_num').text());
+		var percent = (count/totalCount)*100+"%";
+		$(this).find('.progress').width(percent).css('background-color',WeiPHP_RAND_COLOR[index]);
+    });
+}
+$(function(){
+	initProgressBar();
+	
+	$(".choice_list li").click(function () {
+		var overtime="{$overtime}";
+		var _this = $(this);
+		 if(_this.hasClass('disable')){
+			 if(overtime=='1'){
+				 //$.Dialog.fail("该投票已过期");
+			}else{
+			 	//$.Dialog.fail("你已经投过票了");
+			}
+		   return;	
+		  }else{
+			  if(!_this.find('em').hasClass('checked')){
+			  	_this.find("input").prop("checked", true);
+			  	_this.find('em').addClass('checked');
+			  }else{
+				_this.find("input").prop("checked", false);
+			  	_this.find('em').removeClass('checked');	 
+			  }
+	      }
+	 });
+	 $('.submit').click(function(){
+		
+		  var url = $('#form1').attr('action');
+		  var param = $('#form1').serializeArray();
+		  $.Dialog.loading();
+		  $.post(url,param,function(data){
+	
+			  //_this.find('img').css('border-color','#c07b36');
+			  //_this.find('.count_num').html((parseInt(_this.find('.count_num').text())+1));
+			  // var totalCount = parseInt($('#totalCount').text());
+			  //$('#totalCount').text(totalCount+1);
+			  //重新算进度条
+			  window.location.reload();
+			  $.Dialog.close();
+		  })
+		
+	})
+	 /*
+	if (typeof WeixinJSBridge == "undefined"){
+		if( document.addEventListener ){
+			document.addEventListener('WeixinJSBridgeReady', init_close, false);
+		}else if (document.attachEvent){
+			document.attachEvent('WeixinJSBridgeReady', init_close); 
+			document.attachEvent('onWeixinJSBridgeReady', init_close);
+		}
+	}else{
+		init_close();
+	}	
+	*/   
+});
+</script>

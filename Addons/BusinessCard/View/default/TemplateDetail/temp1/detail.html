@@ -1,0 +1,196 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/{$info.temp}/style.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/common.js"></script>
+<body>
+	<div id="container" class="container">
+    	<div class="bg"></div>
+    	<div class="card_wrap">
+        	<div class="head animated slideRightIn">
+            	<empty name="info['headimgurl']">
+            		<a class="head_pic" href="{$info.personal_url}"><img src="__IMG__/default.png"/></a>
+                <else/>
+                	<a class="head_pic" href="{$info.personal_url}"><img src="{$info.headimgurl}"/></a>
+                </empty>
+                <p class="name">{$info.truename}</p>
+                <p class="position">{$info.position}</p>
+                 <a href="javascript:;" class="qrcode_icon qrcode_btn" onClick="$.WeiPHP.showQrcode('扫一扫，进入{$info.truename}的名片','{:U('detail',array('uid'=>$info['uid']))}')">&nbsp;</a>
+            </div>
+        	<div class="detail_info animated slideLeftIn">
+            	<notempty name="info[company]">
+                	<div class="item"><span class="label">所在公司:</span>
+                    	<p>
+                            <notempty name="info[company_url]">
+                                <a href="{$info.company_url}">{$info.company}</a>
+                            <else/>
+                                {$info.company}
+                            </notempty>
+                    	</p>
+                    </div>
+                </notempty>
+            	<notempty name="info[department]">
+                	<div class="item"><span class="label">所在部门:</span><p>{$info.department}</p></div>
+                </notempty>
+                <notempty name="info[service]">
+                	<div class="item"><span class="label">产品服务:</span><p>{$info.service}</p></div>
+                </notempty>
+                <notempty name="info[city]">
+                	<div class="item"><span class="label">所在地区:</span><p>{$info.province}  {$info.city} </p></div>
+                </notempty>
+                <notempty name="info[address]">
+                	<div class="item"><span class="label">详细地址:</span><p>{$info.address}</p></div>
+                </notempty>
+                <notempty name="info[mobile]">
+                	<div class="item"><span class="label">手机号码:</span><p><a href="tel:{$info.mobile}">{$info.mobile}</a></p></div>
+                </notempty>
+                <notempty name="info[telephone]">
+                	<div class="item"><span class="label">座机号码:</span><p><a href="tel:{$info.telephone}">{$info.telephone}</a></p></div>
+                </notempty>
+                <notempty name="info[wechat]">
+                	<div class="item"><span class="label">微信号:</span><p>{$info.wechat}</p></div>
+                </notempty>
+                <notempty name="info[qq]">
+                	<div class="item"><span class="label">QQ:</span><p>{$info.qq}</p></div>
+                </notempty>
+                <notempty name="info[Email]">
+                	<div class="item"><span class="label">电子邮件:</span><p><a href="mailto:{$info.Email}">{$info.Email}</a></p></div>
+                </notempty>
+                <notempty name="info[intro]">
+                	<div class="item"><span class="label">个人简介:</span><p>{$info.intro}</p></div>
+                </notempty>
+                <notempty name="info[tag]">
+                	<div class="item"><span class="label">个人标签:</span><p>{$info.tag}</p></div>
+                </notempty>
+                <notempty name="info[personal_url]">
+                	<div class="item"><span class="label">个人主页:</span><p>{$info.personal_url}</p></div>
+                </notempty>
+            </div>
+             <div class='animated slideLeftIn btn_container'>
+             	<notempty name="card_colunm">
+             		<volist name='card_colunm' id='cc'>
+             			<eq name='cc.type' value='1'>
+             				<a href='{$cc.cate_url}' style="background: lightcoral;">{$cc.cate_title}</a>
+             			<else />
+             				<a href='{$cc.url}' style="background: darkkhaki;">{$cc.title}</a>
+             			</eq>
+             		</volist>
+             	</notempty>
+             </div>
+             <div class='animated slideLeftIn'>
+             	<div class='commenttitle'>留言咨询</div>
+             	<div class='commentbottom'>
+             	
+             	<eq name='isself' value='1'>
+             		<notempty name='comments'>
+             		<table class="msg_list" cellpadding="0" cellspacing="0" width="100%">
+             		<volist name='comments' id='c'>
+             			<tr>
+             			<td><notempty name='c.headimgurl'><img src="{$c.headimgurl}" /><else /><img src="__STATIC__/face/default_head_50.png" /></notempty></td>
+             			<td>{$c.truename}</td>
+             			<td>{$c.mobile}</td>
+             			<td>{$c.content}</td>
+             			<td><a href='javascript:;' class="delbtn" id="{$c.id}_del">删除</a></td>
+             			</tr>
+             		</volist>
+             		</table>
+             		<else />
+             		还没有留言。。。
+             		</notempty>
+             		<else />
+             		<form action="" id='commentform' method="post" >
+             		<input type='hidden' name='aim_table' value='business_card' />
+             		<input type='hidden' name='aim_id' value='{$info.id}' />
+             		<input type='text' name='truename' placeholder="请输入姓名"/>
+             		<input type='text' name='mobile' placeholder="请输入联系手机号" />
+             		<textarea  placeholder="请输入留言内容" id='content'></textarea>
+             		<a href='javascript:;' class='btn commentbtn' id='comment_submit'>提交</a>
+             		</form>
+             	</eq>
+             	</div>
+             </div>
+             <eq name="isShowBtn" value="1">
+              		<a class="exchange_btn animated slideLeftIn" data-flag="{$isCreate}" data-exurl="{:U ( 'add_collect', array ('to_uid' => $info ['uid'] ))}" data-addurl="{:U( 'add', array ('to_uid' => $info ['uid'] ))}" onClick="exchangeCard(this);" href="javascript:;">交换名片</a>
+              </eq>
+              <eq name="needDeleteBtn" value="1">
+              			<a class="exchange_btn del_btn animated slideLeftIn" data-href="{:U('del_collect',array('to_uid'=>$info['uid']))}" data-myurl="{:U('collected')}" onClick="delCard(this);" href="javascript:;">删除名片</a>
+              </eq>
+              <eq name="info['uid']" value="$mid">
+              		<div class="edit_tab animated slideLeftIn">
+                    	<a href="{:U('edit',array('id'=>$info[id]))}">修改信息</a>
+                        <a href="{:U('choose_template',array('id'=>$info[id]))}">切换模板</a>
+                    </div>
+              </eq>
+            <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+        </div>
+        <div class="bottom_menu">
+        	<a class="back" href="javascript:;" onClick="$.WeiPHP.back();">返回</a>
+        	<a class="center" href="{:U('detail')}">我的名片</a>
+            <a class="collected" href="{:U('collected')}">名片夹</a>
+        	<a class="share" href="javascript:;" onClick="$.WeiPHP.showShareTips();">一键分享</a>
+        </div>
+    </div>
+    <include file="Public/mobile_foot"/>
+    <script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:'{$info.truename}的互联网名片',
+		desc:'{$info.position}',
+		link:"{:U('detail', array('uid'=>$mid))}",
+		imgUrl:'{$info.headimgurl}'
+	});
+	 $(document).ready(function(){
+		 $('.delbtn').click(function(){
+			 var delId=parseInt($(this).attr('id'));
+			 var choice=confirm("您确认要删除吗？", function() { }, null);
+			 if(choice){
+				 $.post("{:addons_url('BusinessCard://Wap/delComment')}",{id:delId},function(d){
+					 if(d==0){
+						 alert('删除失败');
+					 }else{
+						 location.reload();
+					 }
+				 });
+			 }
+			
+		 });
+		 $('#comment_submit').click(function(){
+			 var uid="{$_GET['uid']}";
+			 var aim_id="{$info.id}";
+			 var truename=$("input[name='truename']").val();
+			 var mobile=$("input[name='mobile']").val();
+			 var content=$('#content').val();
+			 if(truename==''){
+				 alert('请输入姓名');
+				 return false;
+			 }
+			 if(mobile==''){
+				 alert('请输入手机号码');
+				 return false;
+			 }
+			 var reg = /^[0-9]{11}$/;
+			 if(!reg.test(mobile))
+			  {
+			   alert("手机号码格式不对！");
+			   return false;
+			  }
+			 
+			 if(content==''){
+				 alert('请输入留言内容');
+				 return false;
+			 }
+			$.post("{:addons_url('Comment://Wap/add')}",{'aim_table':'business_card','aim_id':aim_id,'content':content,'truename':truename,'mobile':mobile,'uid':uid},function(d){
+				if(d.result=='success'){
+					alert('提交成功');
+					$("input[name='truename']").val('');
+					$("input[name='mobile']").val('');
+					$('#content').val('');
+				}else{
+					alert('提交失败');
+				}
+				
+			}); 
+		 });
+			
+		
+	 });
+	</script>
+</body>
+</html>

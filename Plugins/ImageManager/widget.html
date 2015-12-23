@@ -1,0 +1,57 @@
+<!-- Add fancyBox main JS and CSS files -->
+<script type="text/javascript" src="{$addon_path}Public/jquery.fancybox.js?v=2.1.5"></script>
+<link rel="stylesheet" type="text/css" href="{$addon_path}Public/jquery.fancybox.css?v=2.1.5" media="screen" />
+<script type="text/javascript">
+$(function(){
+	$("div.upload-img-box").parent(".controls").each(function(index, element) {
+        $(this).css({"width":"100%"});
+        $(".edit_img_icon").css({'right':'0','left':'0'});
+		$name = $(this).find("input[type='hidden']").attr('name');
+		$SelectButtonHtml = "<input type='button' class='btn selectImg' data-name='" + $name + "' value='选择图片' />";
+		$(this).append($SelectButtonHtml);
+    });
+	//$("div[id^='upload_picture_']").parent(".controls").css({"position":"relative"}).append("<input type='button' class='btn selectImg' value='选择图片' />");
+})
+$(document).delegate(".selectImg", "click", function() {
+	$name = $(this).data("name");
+	$id   = $(this).data("id");
+	$.fancybox.open({
+		href : "{:addons_url('ImageManager://ImageManager/ImageManager')}&name="+$name,
+		type : 'iframe',
+		padding : 5 ,
+		margin:65 ,
+	});
+});
+
+function uploadPicture(name,file, data){
+	var data = $.parseJSON(data);
+	var src = '';
+	if(data.status){
+		$("#cover_id_"+name).val(data.id);
+		src = data.url || '' + data.path;
+		$("#cover_id_"+name).parent().find('.upload-img-box').html(
+				'<div class="upload-pre-item2"><img width="180" height="100" src="' + src + '"/></div>'
+		);
+		$('.weixin-cover-'+name).attr('src',src);
+	} else {
+		updateAlert(data.info);
+		setTimeout(function(){
+			$('#top-alert').find('button').click();
+			$(that).removeClass('disabled').prop('disabled',false);
+		},1500);
+	}
+}
+</script>
+<style type="text/css">
+.controls .selectImg{margin-left:5px;}
+input.selectImg{
+        position:absolute;
+        top:5px;
+        left:180px;
+		margin-left:5px;
+        height: 30px;
+        width: 120px;
+        background-color: #27AE60;
+        color: #FFF;
+}
+</style>

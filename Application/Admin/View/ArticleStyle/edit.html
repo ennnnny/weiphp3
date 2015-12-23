@@ -1,0 +1,48 @@
+<extend name="Public/base"/>
+
+<block name="body">
+    <div class="main-title">
+        <h2>{:isset($info['id'])?'编辑':'新增'}图文样式</h2>
+    </div>
+    <form action="{$postUrl}" method="post" class="form-horizontal">
+        <div class="form-item">
+            <label class="item-label">样式分组<span class="check-tips"></span></label>
+            <div class="controls">
+            	<select name="group_id">
+            	<volist name="info['group_list']" id="vo">
+                	<option <eq name="vo['selected']" value="1">selected="selected"</eq> value="{$vo.id}">{$vo.group_name}</option>
+                </volist>
+                </select>
+            </div>
+        </div>
+        <div class="form-item" style="clear:both; overflow:hidden">
+        	<div class="fl">
+            <label class="item-label">样式内容<span class="check-tips"></span></label>
+            <div class="controls" style="width:600px" >
+             <label class="textarea">
+                <textarea style="height:200px" name="style" onKeyUp="$('.style_content').html($(this).val())" >{$info.style}</textarea>
+             </label>
+            </div>
+            </div>
+            <div class="fl" style="width:400px; margin-left:20px">
+            	<h6>预览</h6>
+            	<div class="style_content">
+                	{$info.style}
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-item">
+            <input type="hidden" name="id" value="{$info.id|default=''}">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            <button class="btn btn-return" onclick="javascript:history.back(-1);return false;">返 回</button>
+        </div>
+    </form>
+</block>
+
+<block name="script">
+    <script type="text/javascript">
+        //导航高亮
+        highlight_subnav('{:U('index')}');
+    </script>
+</block>

@@ -1,0 +1,49 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/Coupon.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body id="scratch">
+<div class="container body" style="position:relative; background:#eee;">
+	<div class="head_hd" style="background:{$coupon.head_bg_color}">
+          <img 
+          <empty name="coupon.background">style="display:none"</empty> 
+          class="head_pic" src="{$coupon.background|get_cover_url}" width="100%">	  
+          
+          <div class="seller">
+          		<notempty name="coupon.shop_logo">
+                	<img src="{$coupon.shop_logo|get_cover_url}">	
+                <else/>
+                	<img src="{:ADDON_PUBLIC_PATH}/pic_money.png"/>
+                </notempty>
+          		<span class="name">{$coupon.shop_name}</span>
+          </div>
+          <p class="title">
+          	{$coupon.title}<br/><br/>
+          	<span class="time">有效期：<span class="use_start_time">{$coupon.use_start_time|time_format}</span> - <span class="over_time">{$coupon.over_time|time_format}</span></span> 
+          </p>
+          <div class="line"></div>
+      </div>
+      
+      <div class="sn_box">
+         <p class="qr_tips">会员： {$info.uid|get_nickname}</p>
+         <notempty name="coupon.pay_password">
+      	 <p class="qr_tips">请输入密码进行核销</p>
+         </notempty>
+          <div class="box">
+                <form id="form" action="{:U('do_pay_ok')}" method="post" class="form-horizontal">
+                        <input type="hidden" name="sn_id" value="{$info.id}" >
+                        <notempty name="coupon.pay_password">
+                        <input type="text" class="text input-large" name="pay_password" value="" placeholder="请输入核销密码">
+                        </notempty>
+                        <button class="use_btn" id="submit" type="submit" target-form="form-horizontal">确认核销</button>
+                </form>
+           </div>  
+     </div>
+   
+    
+   <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+</div>
+</body>
+<script type="text/javascript">
+var h=$(document).height();
+$('.container').css("min-height",h);
+</script>
+</html>

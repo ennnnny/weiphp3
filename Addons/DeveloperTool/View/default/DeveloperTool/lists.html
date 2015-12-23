@@ -1,0 +1,93 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> <include file="Addons/_nav" /> 
+      
+      <!-- 数据列表 -->
+      <div class="data-table">
+        <div class="table-striped">
+          <table cellspacing="1">
+            
+            <!-- 列表 -->
+            <tbody>
+              <tr>
+                <td colspan="2">Token</td>
+                <td>{$token}</td>
+              </tr>
+              <tr>
+                <td colspan="2">公众号ID</td>
+                <td>{$info.id}</td>
+              </tr>
+              <tr>
+                <td colspan="2">公众号类型</td>
+                <td>{$info.type}</td>
+              </tr>
+              <tr>
+                <td colspan="2">公众号名</td>
+                <td>{$info.public_name}</td>
+              </tr>
+              <tr>
+                <td colspan="2">微信号</td>
+                <td>{$info.wechat}</td>
+              </tr>
+              <tr>
+                <td colspan="2">原始ID</td>
+                <td>{$info.public_id}</td>
+              </tr>
+              <tr>
+                <td colspan="2">AppID</td>
+                <td>{$info.appid}</td>
+              </tr>
+              <tr>
+                <td colspan="2">Secret</td>
+                <td>{$info.secret}</td>
+              </tr>
+              <tr>
+                <td colspan="2">EncodingAESKey</td>
+                <td>{$info.encodingaeskey}</td>
+              </tr>
+              <tr>
+                <td colspan="2">管理员ID</td>
+                <td>{$info.uid}</td>
+              </tr>
+              <tr>
+                <td colspan="2">&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="2">微信后台配置的地址：</td>
+                <td>{:U('home/weixin/index',array('id'=>$info[id]))}</td>
+              </tr>
+              <tr>
+                <td colspan="2">微信后台配置的Token(令牌)：</td>
+                <td>weiphp</td>
+              </tr>
+              <tr>
+                <td colspan="2">&nbsp;</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td colspan="3" align="center">各插件配置参数</td>
+              </tr>
+              
+   
+              <php>foreach($info['addon_config'] as $k=>$vo) { $count = count($vo); foreach($vo as $kkk=>$vvv) { $key = $kkk; $val=$vvv;unset($vo[$kkk]);break;} </php>
+              <tr>
+                <td rowspan="{$count}">{$k}</td>
+                <td>{$key}</td>
+                <td>{$val}</td>
+              </tr>
+              <php>foreach($vo as $kk=>$vv) {  </php>
+              <tr>
+                <td>{$kk}</td>
+                <td>{$vv}</td>
+              </tr>
+              <php> }} </php>
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</block>

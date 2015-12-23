@@ -1,0 +1,42 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container">
+        <div class="startContent hasBtmBg">
+        	<div class="questionContent" style="text-align:center; margin:40px 0;color:#888">
+            	<img src="__IMG__/yes_pic.png" width="100"/><br/>
+                <if condition="empty($info['finish_tip'])">抢答完成，谢谢参与<else/>{$info.finish_tip}</if>
+                
+                <php>if(!empty($info['card_id'])) { </php>
+                <div class="btnWrap"><a href="javascript:void(0)" class="start_btn" id="batchAddCard">领取卡券</a></div>
+                <php> } </php>
+            
+                <php> foreach($info['finish_button_arr'] as $url=>$name) { </php>
+                <div class="btnWrap"><a href="{$url}" class="start_btn">{$name}</a></div>
+                <php> } </php><br/><br/><br/>
+                <a href="javascript:;" onClick="closepage();" class="lead_btn">返回微信</a>
+        	</div>
+        </div>
+         <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+          
+     </div>
+<script type="text/javascript">
+function closepage(){
+	WeixinJSBridge.call('closeWindow');
+}
+
+var readyFunc = function onBridgeReady() {
+	document.querySelector('#batchAddCard').addEventListener('click',
+		function(e) {
+			  WeixinJSBridge.invoke('batchAddCard', {"card_list": [{"card_id": "{$info.card_id}", "card_ext":'{$info.card_ext}'}]},function(res) {});
+		}
+	); 
+}
+if (typeof WeixinJSBridge === "undefined") {
+	  document.addEventListener('WeixinJSBridgeReady', readyFunc, false);
+} else {
+	  readyFunc();
+}
+</script>
+</body>
+</html>

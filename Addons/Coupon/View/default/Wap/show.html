@@ -1,0 +1,87 @@
+<include file="Public/mobile_head"/>
+<script type="text/javascript" src="__STATIC__/qrcode/qrcode.js"></script>
+<script type="text/javascript" src="__STATIC__/qrcode/jquery.qrcode.js"></script>
+<link href="{:ADDON_PUBLIC_PATH}/Coupon.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container">
+	  <div class="head_hd" style="background:{$data.head_bg_color} url({$data.background|get_cover_url}); background-size:100% auto;">
+          
+         <p class="title">
+          	{$data.title}<br/>
+          	<span class="time">有效期：<span class="use_start_time">{$data.use_start_time|time_format}</span> - <span class="over_time">{$data.over_time|time_format}</span></span> 
+          </p>
+          <div class="line"></div>
+      </div>
+      
+      <div class="sn_box">
+          
+                        <div id="usedStatus" style='display: <eq name="sn.is_use" value="0"> none </eq>;'> 
+                        <img src="__IMG__/blank_pic.png" width="100"/>
+                        <P class="used">优惠券已使用</P>
+                        </div>
+                        
+                      <div id="unusedStatus" style='display: <eq name="sn.is_use" value="1"> none </eq> '>
+                      恭喜，您已经获得奖品：{$info.prize_title}<br/>
+                      <div id="qrCode">SN码：{$sn.sn}</div>
+                      <p class="qr_time_tips"></p>
+                      <script type="text/javascript">
+                      var textLink = "{:U('do_pay',array('sn_id'=>$sn['id'],'publicid'=>$public_info['id']))}";
+                      $('#qrCode').qrcode({width:150,height:150,text:textLink,refresh:true,time:30000}); 
+                      </script>
+                      <p class="qr_tips">将本页面展示给商家即可使用</p>
+                      </div>
+     </div>
+     
+         <div class="v_nav">
+            <a class="item" href="{:addons_url('Coupon://Wap/coupon_detail',array('id'=>$data[id]))}">优惠券详情<em>&nbsp;</em></a>
+            <notempty name="shop_list">
+            <if condition="count($shop_list) neq  1">
+                <a class="item" href="{:addons_url('Coupon://Wap/store_list',array('id'=>$data[id]))}">适用门店<em>&nbsp;</em></a>
+            <else/>
+            	<volist name="shop_list" id="vo">
+                    <li class="item single_address">
+                        <span class="title">{$vo.name}</span>
+ 				<span style="padding-left: 8px;">营业时间：{$vo.open_time}</span>
+                <br/>
+                        <notempty name="$vo[gps]">
+                        	<a href="http://api.map.baidu.com/marker?location={$vo.gps}&title={$vo.name}&content={$vo.address}&output=html">{$vo.address}</a>
+                        <else />
+                        	<a href="http://api.map.baidu.com/geocoder?address={$vo.address}&output=html&src={$vo.name}|{$vo.address}">{$vo.address}</a>
+                        </notempty>
+                        <a href="tel:{$vo.phone}"><em>&nbsp;</em></a>
+                    </li>
+                </volist>
+            </if>
+            </notempty>
+         </div>
+     
+     
+     
+     <div class="wx_page btnWrap">
+     	<a href="{:addons_url('Coupon://Wap/personal')}" class="start_btn">查看全部优惠券</a>
+     </div>
+     
+     <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+</div>
+
+<script type="text/javascript">   
+function closepage(){
+	WeixinJSBridge.call('closeWindow');
+}
+var isUsed= '{$sn.is_use}';
+$(function(){
+	if(isUsed==0){
+	var timer = setInterval(function(){
+		$.post("{:addons_url('Coupon://Wap/get_sn_status')}",{ sn_id:"{$sn.id}"},function(data){
+			if(data==1){
+				$('#usedStatus').show();
+				$('#unusedStatus').hide();
+				clearInterval(timer)
+			}
+		})
+	},2000);
+	}
+})
+</script>
+</body>
+</html>

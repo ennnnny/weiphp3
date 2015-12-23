@@ -1,0 +1,86 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+  <section id="contents"> <include file="Addons/_nav" />
+    <div class="tab-content"> 
+      <!-- 表单 -->
+      <php> $post_url || $post_url = U('edit?model='.$model['id'], $get_param);</php>
+      <form id="form" action="{$post_url}" method="post" class="form-horizontal" style="overflow:hidden">
+      	 <div class="fl" style="width:600px;">
+            <div class="controls">
+                <label class="item-label">
+                       发送人<span class="check-tips"></span>
+                </label>
+                <input type="text" name="send_name" class="text input-large" value="{$data.send_name}"/>
+            </div>
+            
+            
+            <div class="controls">
+                <label class="item-label">
+                       接收人<span class="check-tips"></span>
+                </label>
+                <input type="text" name="receive_name" class="text input-large" value="{$data.receive_name}"/>
+            </div>
+            <div class="form-item">
+                <label class="item-label">
+                       祝福语[<a style="color:red" href="javascript:;" id="chooseWishContentBtn">从祝福语库中选择</a>]<span class="check-tips"></span>
+                </label>
+                <div class="controls">
+                    <label class="textarea input-large">
+                        <textarea name="content">{$data.content}</textarea>
+                    </label>
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="item-label">
+                       <a class="border-btn" href="javascript:;" id="chooseTemplateBtn">模板选择</a><span class="check-tips"></span>
+                       <input type="hidden" value="{$data.template_cate}" name="template_cate"/>
+                       <input type="hidden" value="{$data.template}" name="template"/>
+                </label>
+                <div class="controls">
+                    <div class="template_div" id="chooseTemplateBtn1">
+                    	<img src="{$template.icon}"/>
+                        <span>{$template.desc}</span>
+                    </div>
+                </div>
+            </div>
+      
+      </div>
+      <div class="form-item form_bh" style="text-align:center">
+      	   <input type="hidden" name="id" value="{$data.id}">
+          <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">提交</button>
+      </div>
+    </form>
+    
+    </div>
+  </section>
+  </div>
+</block>
+<block name="script">
+<script type="text/javascript">
+$('#submit').click(function(){
+    $('#form').submit();
+});
+//选择祝福语
+var chooseWishContentUrl = "{:addons_url('WishCard://WishCardContent/content_list')}";
+var addWishContentUrl = "{:addons_url('WishCard://WishCardContent/add?model=wish_card_content')}";
+$('#chooseWishContentBtn').click(function(){
+	$.WeiPHP.chooseWishContentDialog(addWishContentUrl,chooseWishContentUrl,function(_this){
+		$('textarea[name="content"]').val($(_this).text());
+		$.Dialog.close();
+	})
+})
+//选择模板
+var templateDataUrl = "{:addons_url('WishCard://WishCard/getTemplist')}";
+$('#chooseTemplateBtn,#chooseTemplateBtn1').click(function(){
+	$.WeiPHP.chooseWishTemplateDialog(templateDataUrl,function(_this){
+		var templateCate = $(_this).data('cate');
+		var template = $(_this).data('template');
+		$('input[name="template_cate"]').val(templateCate);
+		$('input[name="template"]').val(template);
+		$('.template_div').html($(_this).html());
+		$.Dialog.close();
+	})
+})
+</script> 
+</block>

@@ -1,0 +1,43 @@
+<extend name="Base/common" />
+<block name="body">
+  <!-- 标签页导航 -->
+  <div class="span9 page_message">
+    <section id="contents">      
+		<include file="Addons/_nav" />  
+      <div class="tab-content"> 
+        <!-- 表单 -->
+        <form id="form" action="{:U('testpay')}" method="post" class="form-horizontal">
+          <!-- 基础文档模型 -->        
+            <div id="tab33" class="tab-pane in">
+				  <div class="form-item cf">
+                    <label class="item-label">支付金额<span class="check-tips">建议输入0.1元</span></label>
+                    <div class="controls">
+                          <input type="text" class="text input-medium" name="zfje" value="0.1">
+                    </div>
+                  </div>
+                  <div class="form-item cf">
+                    <label class="item-label">支付类型<span class="check-tips">选择需要测试的支付类型</span></label>
+                    <div class="controls">                          
+                          <select name="zftype">                          
+						   <option value="1">支付宝</option>
+						   <option value="2">财付通(WAP手机接口)</option>
+						   <option value="3">财付通(及时到帐)</option>
+						   <option value="0">微信支付</option>
+						   <option value="4">银联在线</option>
+                          </select>
+                    </div>
+                  </div>
+                    
+            </div>         
+          <div class="form-item cf">
+            <input type="hidden" name="id" value="{$data.id}">
+            <button class="btn submit-btn" id="submit" type="submit" target-form="form-horizontal">确认支付</button>
+		</div>
+        </form>		
+      </div>
+    </section>
+  </div>
+  </div>
+</block>
+<block name="script">
+</block>

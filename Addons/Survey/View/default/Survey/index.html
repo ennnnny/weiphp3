@@ -1,0 +1,28 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container">
+	 <img src="{$info.cover|get_cover_url}" width="100%"/>
+	 <div class="lead_box">
+        	<h6 class="m_t"><div style="word-wrap:break-word;">{$info.title}</div></h6>
+            <div class="lead_content" style="word-wrap:break-word;">{$info.intro}</div>
+    </div>
+    <eq name='overtime' value='1'>
+     <p style="border-radius: 5px;background: darkgrey;color: #fff;font-size: 16px; padding: 12px;display: block;text-align: center;margin: 20px auto;width: 100px;">调研已结束</p>
+    <else />
+    <a href="{:U('survey','id='.$info[id])}" class="lead_btn">立即参与</a>
+    </eq>
+    
+    <p class="copyright">{$system_copy_right}</p>
+</div>
+<include file="Public/mobile_foot"/>
+<script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:"{$info.title}",
+		imgUrl:"{$info.cover|get_cover_url}",
+		desc:"{$info.intro}",
+		link:window.location.href
+	})
+</script>
+</body>
+</html>

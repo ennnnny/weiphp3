@@ -1,0 +1,27 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> <include file="Addons/_nav" /> 
+      
+      <!-- 数据列表 -->
+      <div class="data-table">
+        <div class="table-striped">
+          <table cellspacing="1">
+            
+            <!-- 列表 -->
+            <tbody>
+            <php> foreach($list as $key=>$val) { </php>
+              <tr>
+                <td width="250">{$key}</td>
+                <td>{$key|constant}</td>
+                <td>{$val}</td>
+              </tr>
+              <php> } </php>
+             
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</block>

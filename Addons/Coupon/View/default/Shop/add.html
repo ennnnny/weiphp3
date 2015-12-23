@@ -1,0 +1,67 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> <include file="Addons/_nav" />
+      <div class="tab-content"> 
+        <!-- 表单 -->
+        <php> $post_url || $post_url = U('add?model='.$model['id'], $get_param);</php>
+        <form class="form-horizontal form-center" method="post" action="{$post_url}" id="form">
+          <div class="form-item cf toggle-name">
+            <label class="item-label"> <span class="need_flag">*</span> 店名 <span class="check-tips"> </span></label>
+            <div class="controls">
+              <input type="text" value="{$data.name}" name="name" class="text input-large">
+            </div>
+          </div>
+          <div class="form-item cf toggle-phone">
+            <label class="item-label"> 联系电话 <span class="check-tips"> </span></label>
+            <div class="controls">
+              <input type="text" value="{$data.phone}" name="phone" class="text input-large">
+            </div>
+          </div>    
+          <div class="form-item cf">
+            <label class="item-label"> 营业时间 <span class="check-tips"> </span></label>
+            <div class="controls">
+              <input type="text" value="{$data.open_time}" name="open_time" class="text input-large">
+            </div>
+          </div>                   
+          <div class="form-item cf toggle-address">
+            <label class="item-label"> <span class="need_flag">*</span> 详细地址 <span class="check-tips">地址输入完按回车可以实时在地图上显示</span></label>
+            <div class="controls">
+              <input type="text" value="{$data.address}" name="address" id="address" class="text input-large">
+            </div>
+          </div>
+          <div class="form-item cf toggle-gps">
+            <label class="item-label"> 地图位置 <span class="check-tips"> （请点击地图，然后拖动图标到你的位置上） </span></label>
+            <div class="controls">
+              <input type="hidden" value="{$data.gps}" name="gps" id="gps" class="text input-large">
+              <div id="map" style="height:400px;width:600px;border:1px solid #bcbcbc;"></div>
+            </div>
+          </div>
+
+          <input type="hidden" value="0" name="coupon_id" class="text">
+          
+          <div class="form-item form_bh" style="text-align:center">
+            <notempty name="data.id"><input type="hidden" name="id" value="{$data.id}"></notempty>
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">{$submit_name|default='确 定'}</button>
+          </div>
+          
+        </form>
+      </div>
+    </section>
+  </div>
+</block>
+<block name="script"> 
+  <script type="text/javascript" src="__STATIC__/bdMap.js?v={:SITE_VERSION}"></script> 
+  <script type="text/javascript">
+function initMap(){
+	var _addr = '';
+	_addr = $('#address').val();
+	ShowMap("map",{city:'深圳',addr:_addr,title:'',lawfirm:'',tel:'',mapx:'{$data.gps}',pic:'',ismove:'1',piobj:'gps'});
+}
+$(function(){
+    showTab();
+	initMap();
+	$('#address').keyup(function(){ initMap(); });
+});
+</script> 
+</block>

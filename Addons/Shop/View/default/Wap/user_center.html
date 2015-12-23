@@ -1,0 +1,32 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body class="withFoot">
+    <div class="container">
+    	<div class="center_header">
+    		<notempty name='follow.headimgurl'>
+    		<img src="{$follow.headimgurl}"/>
+    		<else />
+        	<img src="{:ADDON_PUBLIC_PATH}/mobile/center.png"/>
+        	</notempty>
+           <notempty name='follow.nickname'>
+    		{$follow.nickname}
+    		<else />
+        	本地用户
+        	</notempty>
+        </div>		
+        <div class="center_nav">
+        	<a href="{$ordersUrl}">全部订单</a>
+            <a href="{$unPayUrl}">待付款</a>
+            <a href="{:U('shippingOrder')}">配送中</a>
+        </div>
+        <div class="block">
+        	<a class="block_a" href="{$cartUrl}">我的购物车<em class="arrow_right">&nbsp;</em></a>
+            <a class="block_a" href="{$collectUrl}">我的收藏<em class="arrow_right">&nbsp;</em></a>
+            <!--<a class="block_a" href="#">我的浏览器记录<em class="arrow_right">&nbsp;</em></a>-->
+            <a class="block_a block_last" href="{$addressUrl}">我的收货地址<em class="arrow_right">&nbsp;</em></a>
+        </div>
+    </div>	
+    <!-- 底部导航 -->
+    <include file="_footer"/>
+</body>
+</html>

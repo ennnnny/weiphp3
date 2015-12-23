@@ -1,0 +1,72 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container">
+    	<div class="head_hd">
+            <notempty name="ask.cover">
+                <img src="{$ask.cover|get_cover_url}" width="100%">
+            <else />
+                <img src="head_pic.jpg" width="100%">
+            </notempty>
+         </div>
+         <div class="btnWrap" style="margin:0 50px;">
+            <a href="{:U('ask','ask_id='.$ask[id])}" class="start_btn"> {$button_name}</a>
+         </div>
+         <div class="content">
+             <h4>{$ask.title}</h4>
+             <div class="detail_desc">{$ask.content}</div>
+         </div>
+         <div class="content">
+             <h4>商家地址：</h4>
+             <div class="detail_desc">
+             <volist name="ask.shop_address_arr" id="vo">
+                {$vo}<br/>
+             </volist>
+              </div>
+         </div>
+         
+         <p class="copyright">{$system_copy_right}</p>
+     
+     
+    	
+    </div>
+    <include file="Public/mobile_foot"/>
+</body>
+</html>
+<script>
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {  
+	// 分享到朋友圈
+	WeixinJSBridge.on('menu:share:timeline', function (argv) {
+	WeixinJSBridge.invoke('shareTimeline', {
+		"img_url": "{$ask.cover|get_cover_url}",
+		"img_width": "640",
+		"img_height": "640",
+		"link": "{:addons_url('Ask://Ask/ask', $get_param)}",
+		"desc": "{$ask.intro}",
+		"title": "{$ask.title}"
+	}, 
+	function (res) {
+	//分享到朋友圈成功
+	if(res.err_msg=="share_timeline:ok"){
+		//$.post("{:U('share','id='.I('id').'&fromuid='.$fromuid)}",function(e){alert(e);window.location.reload();});
+	}
+	   });
+	});
+	WeixinJSBridge.on('menu:share:appmessage', function (argv) {
+	WeixinJSBridge.invoke('sendAppMessage', { 
+		"img_url": "{$ask.cover|get_cover_url}",
+		"img_width": "640",
+		"img_height": "640",
+		"link": "{:addons_url('Ask://Ask/ask', $get_param)}",
+		"desc": "{$ask.intro}",
+		"title": "{$ask.title}"
+		},
+	function (res) {
+	//分享给好友成功
+	if(res.err_msg=="send_app_msg:ok"){
+		   //$.post("{:U('share','id='.I('id').'&fromuid='.$fromuid)}",function(e){alert(e);window.location.reload();});
+	}
+	  })
+	});
+}, false);
+</script>

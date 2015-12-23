@@ -1,0 +1,43 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container body">
+  <div class="common_header">
+        <if condition="!$_GET['preview']">
+            <a class="back" href="javascript:history.back();">&nbsp;</a>
+        </if>
+        互动游戏
+  </div>
+  <img src="{:ADDON_PUBLIC_PATH}/head.jpg"/>
+  <ul class="game_list">
+    	<li>
+        	<a href="#">
+        		<img src="{:ADDON_PUBLIC_PATH}/default_game_icon.png">
+            	<p>
+                	<strong>趣味竞猜</strong><br/>
+                    <p>趣味竞猜是一款充满趣味性的电视竞猜小游戏</p>
+                </p>
+                <span class="btn">立即开玩</span>
+            </a>
+        </li>
+        <li>
+        	<a href="#">
+        		<img src="{:ADDON_PUBLIC_PATH}/default_game_icon.png">
+            	<p>
+                	<strong>趣味竞猜</strong><br/>
+                    <p>趣味竞猜是一款充满趣味性的电视竞猜小游戏</p>
+                </p>
+                <span class="btn">立即开玩</span>
+            </a>
+        </li>
+  </ul>
+  <div class="page"> {$_page|default=''} </div>
+  <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+</div>
+</body>
+<script type="text/javascript">
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	WeixinJSBridge.call('hideToolbar');
+});
+</script>
+</html>

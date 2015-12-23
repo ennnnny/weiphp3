@@ -1,0 +1,9 @@
+@charset "utf-8";
+/* CSS Document by jacy use in weisite */
+.container{ background:#fff;}
+.wish{ margin:15px; padding:10px; background:#fff; border-radius:5px;}
+.wish .receive{ line-height:40px; font-size:22px;}
+.wish .content{ text-indent:2em; line-height:22px; font-size:18px;}
+.wish .send{ text-align:right;line-height:50px; font-size:22px;}
+.btn,.btn:hover{ border-radius:5px; background:#f91466; color:#fff; height:50px; line-height:50px; padding:0; width:40%; margin:20px auto; display:block;}
+

@@ -1,0 +1,81 @@
+<!-- 提示 -->
+<div id="top-alert" class="top-alert-tips alert-error" style="display: none;">
+  <a class="close" href="javascript:;"><b class="fa fa-times-circle"></b></a>
+  <div class="alert-content"></div>
+</div>
+<!-- 导航条
+================================================== -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="wrap">
+    
+       <a class="brand" title="{:C('WEB_SITE_TITLE')}" href="{:U('index/index')}">
+       <notempty name="userInfo[website_logo]">
+       		<img height="52" src="{$userInfo.website_logo|get_cover_url}"/>
+       	<else/>
+       		<img height="52" src="__IMG__/logo.png"/>
+       </notempty>
+       </a>
+        <if condition="is_login()">
+        	<div class="switch_mp">
+            	<a href="#">{$public_info.public_name}<b class="pl_5 fa fa-sort-down"></b></a>
+                <ul>
+                <volist name='myPublics' id='vo'>
+                	<li><a href="{:U('home/index/main', array('publicid'=>$vo[mp_id]))}">{$vo.public_name}</a></li>
+                    </volist>
+                </ul>
+            </div>
+        </if>
+      <php> $index_2 = strtolower ( MODULE_NAME . '/' . CONTROLLER_NAME . '/*' ); $index_3 = strtolower ( MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME ); </php>
+       
+            <div class="top_nav">
+                <if condition="is_login()">
+                    <ul class="nav" style="margin-right:0">
+                    	<if condition="$myinfo.is_init eq 0 ">
+                    		<li><p>该账号配置信息尚未完善，功能还不能使用</p></li>
+                    		<elseif condition="$myinfo.is_audit eq 0 and !$reg_audit_switch" />
+                    		<li><p>该账号配置信息已提交，请等待审核</p></li>
+                            <elseif condition="$index_2 eq 'home/public/*' or $index_3 eq 'home/user/profile' or $index_2 eq 'home/publiclink/*'" />
+                    		
+                    		<else /> 
+                    		<volist name='core_top_menu' id='ca'>
+                           		<li data-id="{$ca.id}" class="{$ca.class}"><a href="{$ca.url}">{$ca.title}</a></li>
+                       		</volist>
+                    	</if>
+                    	
+                    	
+                        
+                        <li class="dropdown admin_nav">
+                            <a href="#" class="dropdown-toggle login-nav" data-toggle="dropdown" style="">
+                                <notempty name="myinfo[headimgurl]">
+                                    <img class="admin_head url" src="{$myinfo.headimgurl}"/>
+                                <else/>
+                                    <img class="admin_head default" src="__IMG__/default.png"/>
+                                </notempty>
+                                {$myinfo.nickname|getShort=4}<b class="pl_5 fa fa-sort-down"></b>
+                            </a>
+                            <ul class="dropdown-menu" style="display:none">
+                               <if condition="$mid==C('USER_ADMINISTRATOR')"><li><a href="{:U ('Admin/Index/Index')}" target="_blank">后台管理</a></li></if>
+                            	<li><a href="{:U ('Home/Public/lists')}">公众号列表</a></li>
+                                <li><a href="{:U ('Home/Public/add')}">账号配置</a></li>
+                                <li><a href="{:U('User/profile')}">修改密码</a></li>
+                                <li><a href="{:U('User/logout')}">退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                <else/>
+                    <ul class="nav" style="margin-right:0">
+                    	<li style="padding-right:20px">你好!欢迎来到{:C('WEB_SITE_TITLE')}</li>
+                        <li>
+                            <a href="{:U('User/login')}">登录</a>
+                        </li>
+                        <li>
+                            <a href="{:U('User/register')}">注册</a>
+                        </li>
+                        <li>
+                            <a href="{:U('admin/index/index')}" style="padding-right:0">后台入口</a>
+                        </li>
+                    </ul>
+                </if>
+            </div>
+        </div>
+</div>

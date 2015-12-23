@@ -1,0 +1,13 @@
+<block name="header"></block>
+<php>
+//验证登录
+if(!is_login()){
+   Cookie ( '__forward__', $_SERVER ['REQUEST_URI'] );
+   redirect(U('home/user/login',array('from'=>5)));
+}
+</php>
+<div id="main-container" class="container" style="position:relative">
+    <div class="no_side_main_body">
+        <block name="body"></block>
+    </div>
+</div>

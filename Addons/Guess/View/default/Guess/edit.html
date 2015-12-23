@@ -1,0 +1,198 @@
+<extend name="Base/common" />
+<block name="body">
+  <script type="text/javascript" src="__STATIC__/uploadify/jquery.uploadify.min.js"></script>
+  <!-- 标签页导航 -->
+  <div class="span9 page_message">
+    <section id="contents">
+      <ul class="tab-nav nav">
+        <li class=""><a href="{:U('lists')}">竞猜列表</a></li>
+        <li class="current"><a href="javascript:;">编辑竞猜<b class="arrow fa fa-sort"></b></a></li>
+      </ul>
+      <div class="tab-content"> 
+        <!-- 表单 -->
+        <form id="form" action="{:U('edit?model='.$model['id'])}" method="post" class="form-horizontal">
+          	<ul id="tab" class="tab-pane in">
+            	 <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>竞猜标题<span class="check-tips"></span></label>
+                    <div class="controls">
+                      <input type="text" class="text input-large" name="title" value="{$data.title}">
+                    </div>
+                  </li>  
+                  <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>活动说明<span class="check-tips"></span></label>
+                    <div class="controls">
+                      <label class="textarea input-large">
+                      <textarea class="text input-large" name="desc" >{$data.desc}</textarea>
+                      </label>
+                    </div>
+                  </li>   
+                  <li class="form-item cf">
+                  		<label class="item-label"><span class="need_flag">*</span>主题图片<span class="check-tips"></span></label>
+                		<div class="controls uploadrow2" title="点击修改图片" rel="cover">
+                            <input type="file" id="upload_picture_cover">
+                            <input type="hidden" name="cover" id="cover_id_cover" value="{$data.cover}"/>
+                            <div class="upload-img-box" rel="img">
+                              <notempty name="data[cover]">
+                                <div class="upload-pre-item2"><img width="100" height="100" src="{$data.cover|get_cover_url}"/></div>
+                                <em class="edit_img_icon">&nbsp;</em>
+                              </notempty>
+                            </div>
+                      </div>
+                  </li> 
+                  <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>有效期<span class="check-tips"></span></label>
+                    <div class="controls">
+                       <input type="datetime" name="start_time" class="text time" value="{$data.start_time|time_format}" placeholder="请选择时间" /> - 
+                       <input type="datetime" name="end_time" class="text time" value="{$data.end_time|time_format}" placeholder="请选择时间" />
+                    </div>
+                  </li>   
+                 
+                  <!--选项--->
+                 <li class="form-item cf">
+                    <label class="item-label">添加竞猜选项<span class="check-tips"> </span></label>
+                    <div class="controls">
+                        <table id="option_list" class="add_list_table" cellpadding="0" cellspacing="1">
+                          
+                          <tr class="add_list add_list_head" <if condition="empty($option_list)">style="display:none"</if>>
+                            <td class="pic_td">图片(上传正方形最佳)</td>
+                            <td>标题</td>
+                            <td>排序</td>
+                            <td>操作</td>
+                          </tr>
+                          
+                          <volist name='option_list' id='vo'>
+                          
+                          <tr class="add_list">
+                            <td class="pic_td">
+                            <div class="uploadrow" title="更改图片">
+                            <input type="file" class="uploadImage" id="uploadImage_exist_{$vo.id}" rel="{$vo.id}">
+                            <input type="hidden" name="image[{$vo.id}]" id="cover_id_{$vo.id}" value="{$vo.image}"/>
+                            <div class="upload-img-box">
+                              <notempty name="vo.image">
+                                <div class="upload-pre-item"><img width="120" height="120" src="{$vo.image|get_cover_url}"/></div>
+                              </notempty>
+                            </div>
+                            </div>
+                            </td>
+                            <td>
+                            <input type="text"  name="name[{$vo.id}]" class="text input-large" style="width:250px" value="{$vo.name}">&nbsp;
+                            </td>
+                            <td>
+                            <input type="text"  name="order[{$vo.id}]" class="optionSort text input-large" value="{$vo.order}" style="width:80px">&nbsp;
+                            </td>
+                            <td>
+                            <a href="javascript:;" onClick="delOpt(this)" class="fr btn btn-yellow" >删除</a>
+                            </td>
+                           </tr>
+                          </volist>
+                          </table>
+                      </div>
+                      <p><a href="javascript:;" class="btn btn-yellow mt_10 mb_10" onClick="addOpt()" >增加选项</a></p>
+                  </li>       
+            </ul>
+          	<div class="form-item form_bh">
+            	<input type="hidden" name="id" value="{$data.id}">
+            	<button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+            </div>
+        </form>
+      </div>
+    </section>
+  </div>
+  </div>
+</block>
+<block name="script">
+<link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<php>
+if(C('COLOR_STYLE')=='blue_color') echo '
+<link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+';
+</php>
+<link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+<script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+<script type="text/javascript">
+//上传图片
+/* 初始化上传插件 */
+var node = '';
+function initPuls(){
+	$(".uploadImage").each(function(index, obj) {
+		var id = $(obj).attr('rel');
+		if(id>0)
+			node = '#uploadImage_exist_'+id;
+		else
+		    node = '#uploadImage_'+(0-id);
+		$(node).uploadify({
+			"height"          : 120,
+			"swf"             : "__STATIC__/uploadify/uploadify.swf",
+			"fileObjName"     : "download",
+			"buttonText"      : "上传图片",
+			"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+			"width"           : 120,
+			'removeTimeout'	  : 1,
+			'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+			"onUploadSuccess" : function(file, data, response) {
+                uploadPictureimage(file, data, id);
+            }
+	    });
+	});
+}
+
+function uploadPictureimage(file, data, id){
+	var data = $.parseJSON(data);
+	var src = '';
+	if(data.status){
+		$("#cover_id_"+id).val(data.id);
+		src = data.url || '__ROOT__' + data.path;
+		$("#cover_id_"+id).parent().find('.upload-img-box').html(
+			'<div class="upload-pre-item"><img width="120" height="120" src="' + src + '"/></div>'
+		);
+	} else {
+		updateAlert(data.info);
+		setTimeout(function(){
+			$('#top-alert').find('button').click();
+			$(that).removeClass('disabled').prop('disabled',false);
+		},1500);
+	}
+}
+
+function addOpt(){
+	var i = 1;
+	$('.optionSort').each(function(){i++;});
+	var id = 0-i;
+	
+	var html = '<tr class="add_list"><td class="pic_td"><div class="uploadrow" title="更改图片">'
+		+'<input type="file" class="uploadImage" id="uploadImage_'+i+'" rel="'+id+'"/>'
+		+'<input type="hidden" name="image['+id+']" id="cover_id_'+id+'"/>'
+		+'<div class="upload-img-box"></div>'
+		+'</div></td><td>'
+		+'<input type="text" value="" name="name['+id+']" class="text input-large" style="width:250px">'
+		+'</td><td>'
+		+'<input type="text" value="'+i+'" name="order['+id+']" class="optionSort text input-large" style="width:80px">&nbsp;'
+		+'</td><td>'
+		+'<a href="###" onClick="delOpt(this)" class="fr btn btn-yellow" >删除</a></td></tr>';
+	$('#option_list').append(html);
+	initPuls(); 
+	$('.add_list_head').show();
+}
+function delOpt(obj){
+	$(obj).parents('tr').remove();
+}
+$(function(){ 
+	initUploadImg();
+   initPuls(); 
+});
+$('#submit').click(function(){
+    $('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+    showTab();
+});
+</script>
+</block>

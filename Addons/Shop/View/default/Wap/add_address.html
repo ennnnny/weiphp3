@@ -1,0 +1,64 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+    <div class="container">
+    	<form action="{:U('add_address')}" method="post" onSubmit="return tgSubmit()">
+            <div class="address_form">
+            	<div class="addressItem tb">
+                    <label for="truename" class="flex_1">收货人</label>
+                    <div class="right flex_1">
+                        <input type="text" name="truename" id="truename" value="{$info.truename}"/>
+                    </div>
+                </div>
+                <div class="addressItem tb">
+                    <label for="mobile" class="flex_1">手机号码</label>
+                    <div class="right flex_1">
+                        <input type="text" name="mobile" id="mobile" value="{$info.mobile}"/>
+                    </div>
+                </div>
+                <div class="addressItem tb">
+                    <label for="address" class="flex_1">收货地址</label>
+                    <div class="right flex_1 ">
+                        <div id="cascade_city"></div>
+                       {:hook('cascade', array('name'=>'city','value'=>$info['city'],'extra'=>'module=city'))}
+                       
+                        <input type="text" name="address" id="address" value="{$info.address}" />
+                    </div>
+                </div>
+                <div class="addressItem tb">
+                    <label for="is_use" class="flex_1">设置为默认地址</label>
+                    <div class="right flex_1">
+                        <label class="radio"><input type="radio" value="0" name="is_use" <eq name="info[is_use]" value="0">checked="checked"</eq> />否 </label>
+                        <label class="radio"><input type="radio" value="1" name="is_use" <eq name="info[is_use]" value="1">checked="checked"</eq> />是 </label>
+                    </div>
+                </div>                
+            </div>
+   			<div class="m_15" style="position:static">
+                <notempty name="info.id"><input type="hidden" name="id" value="{$info.id}" /></notempty>
+                <input type="hidden" name="from" value="{:I('from')}"/>
+                <button class="btn" type="submit">保存</button>
+            </div>
+        </form>
+    </div>	
+<script type="text/javascript">
+function tgSubmit() {      
+	var userName = $('#truename').val();
+	if ($.trim(userName) == "") {
+		$.Dialog.fail('请填写姓名');
+		return false;
+	}
+	var userPhone = $("#mobile").val();
+	if ($.trim(userPhone) == "") {
+		$.Dialog.fail('请填写您的手机号码');
+		return false;
+	}                   
+	var patrn = /^0?(13[0-9]|15[0123456789]|18[0123456789]|14[0123456789])[0-9]{8}$/;
+	if (!patrn.exec($.trim(userPhone))) {
+		$.Dialog.fail('手机号格式错误');
+		return false;
+	}
+	return true;
+}
+</script>
+</body>
+</html>

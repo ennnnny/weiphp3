@@ -1,0 +1,24 @@
+<include file="Public/mobile_head"/>
+<style type="text/css">
+.comfirm_pay ul{background:#fff; padding:0 10px; border-bottom:1px solid #ccc;border-top:1px solid #ccc;}
+.comfirm_pay ul li{  padding:8px 0; overflow:hidden; border-bottom:1px solid #ddd;}	
+.comfirm_pay ul li:last-child{ border:none}
+.comfirm_pay .price{ font-size:30px; color:#F60; text-align:center; padding:25px 0;}
+</style>
+<body>
+	<div id="container" class="container body">
+    	<div class="comfirm_pay">
+       		<div class="price">￥{$price}</div>
+       		<ul>
+       			<li><span class="fl">收款方</span><span class="fr colorless">{$pubilc_name}</span></li>
+            	<li><span class="fl">商品</span><span class="fr colorless">{$title}</span></li>
+            </ul>
+       </div>
+       <div class="m_15">
+       		<a class="btn" href="{$url}">确认支付</a>
+       </div>
+       <p class="copyright">{$system_copy_right}</p>
+	</div>
+	<include file="Public/mobile_foot"/>
+</body>
+</html>

@@ -1,0 +1,113 @@
+@charset "utf-8";
+/* 
+	CSS 商城公用js  主要是除首页列表和详情外的其他页面
+  	@author jacy 
+  	mail:51daxigua@gmail.com 
+*/
+/* 通用 */
+body{ font-size:14px;}
+a{ color:#444;}
+.orange{ color:#ff9000}
+.blue{ color:#15afe1}
+.radio_icon{ padding:15px; background:url(radio_icon.png) no-repeat center center; background-size:26px 26px;}
+.add_icon{padding:15px; background:url(add_icon.png) no-repeat center center; background-size:26px 26px;}
+.write_icon{ padding:5px 15px; background:url(icon_pencil.png) no-repeat center center; background-size:20px 20px;}
+.arrow_right{ padding:5px 15px; background:url(arrow_right.png) no-repeat center center; background-size:20px 20px;}
+.top_tab{ background:#f3f3f3; border-bottom:1px solid #ddd; display:-webkit-box;}
+.top_tab a{ display:block; height:50px; line-height:50px; text-align:center; -webkit-box-flex:1; border-right:1px solid #dedede;}
+.top_tab a.current{ background:#fff}
+/* 订单列表 */
+.order_list{ margin:15px 0;}
+.order_list li{ border-bottom:1px solid #ddd; border-top:1px solid #ddd; background:#fff; margin-bottom:10px; padding:10px;}
+.order_list li a:visited,.order_list li a:link,.order_list li a:active{ color:#333;}
+.order_list li a.btn,.order_list li a.btn:visited,.order_list li a.btn:link,.order_list li a.btn:active{ color:#fff}
+.order_list_bottom{ border-top:1px solid #eee; margin:10px 0 0; padding:15px 10px 10px; text-align:right;}
+.order_list .top{ border-bottom:1px solid #ddd; padding-bottom:10px; margin-bottom:10px;}
+.order_list .goods_item{ position:relative; min-height:60px; padding-left:70px; display:block}
+.order_list .goods_item img{ width:60px; height:60px; position:absolute; top:0; left:0;}
+.order_detail{ margin:15px; border:1px solid #ddd; background:#fff; padding:10px;}
+.order_detail .order_adress{ background:#f3f3f3; border:1px solid #eee; padding:10px; margin:15px 0;}
+.order_detail .shipping_info{ border:1px solid #F90; background:#fdf8e3; padding:10px; font-size:12px;}
+/* 确认订单 */
+.choose_address{ display:block; padding:10px 30px 10px 10px;; margin:10px 0; background:#fff; border-bottom:1px solid #ccc; border-top:1px solid #ccc; color:#444; overflow:hidden; position:relative}
+.choose_address .label{ float:left; margin-right:10px;}
+.choose_address .address{ float:left; color:#666; font-size:13px;}
+.choose_address .arrow_right{ position:absolute; top:50%; padding:0; height:20px; width:20px; margin-top:-10px; right:10px;}
+.order_info{ padding:10px; margin:10px 0; background:#fff; border-top:1px solid #ccc; border-bottom:1px solid #ccc;}
+.order_info .t{ border-bottom:1px solid #ddd; padding-bottom:10px;}
+.order_info .order_item{ min-height:80px; padding:10px 0; position:relative; padding-left:90px; border-bottom:1px solid #ddd;}
+.order_info .order_item img{ width:80px; height:80px; position:absolute; top:10px; left:0;}
+.order_info .order_item .property{ font-size:14px;}
+.total_price{ text-align:center; font-size:18px; line-height:50px;}
+.ship_type{ padding:10px; overflow:hidden;  border-bottom:1px solid #ddd;}
+.order_remark{ padding:10px; background:#f3f3f3; border-bottom:1px solid #ddd;}
+.order_remark textarea{ height:50px; min-height:50px;}
+/* 选择支付方式 */
+.pay_header{ width:100%; height:160px; background:#3eb94e url(safe.png) no-repeat center center; background-size:50px 50px;}
+.pay_header_success{ width:100%; height:160px; background:#3eb94e url(pay_succeed.png) no-repeat center center; background-size:50px 50px;}
+.pay_header_fail{ width:100%; height:160px; background:#3eb94e url(pay_failed.png) no-repeat center center; background-size:50px 50px;}
+.pay_result{ text-align:center; margin:40px 0; font-size:16px;}
+.pay_ok_back{ background:#fff; border:2px solid #3eb94e; color:#3eb94e; font-size:16px; text-align:center; padding:10px; display:block; margin:20px 70px; border-radius:5px;}
+.choose_pay_type{ background:#fff; border-top:1px solid #ddd;  margin:15px 0;}
+.choose_pay_type a{ display:block; padding:15px; color:#333; font-size:16px;border-bottom:1px solid #ddd;}
+.choose_pay_type a em{ padding:20px; margin-right:10px; }
+.choose_pay_type .alipay{ background:url(alipay.png) no-repeat center center;background-size:40px 40px;}
+.choose_pay_type .tenpay{ background:url(ten_pay.png) no-repeat center center;background-size:40px 40px;}
+.choose_pay_type .cardpay{ background:url(card_pay.png) no-repeat center center;background-size:40px 40px;}
+.choose_pay_type .wxpay{ background:url(wx_pay.png) no-repeat center center;background-size:40px 40px;}
+.choose_pay_type .rechpay{ background:url(rech_pay.png) no-repeat center center;background-size:30px 30px;}
+/* 收货地址 */
+.address_list{ margin:10px 0; border-top:1px solid #ddd;}
+.address_list li{ border-bottom:1px solid #ddd;background:#fff; position:relative;}
+.address_list li .address_item{ padding:10px 40px 10px 40px; position:relative; display:block;}
+.address_list li .address_item .radio_icon{ position:absolute; left:0; top:50%; margin-top:-20px; height:40px; width:40px; padding:0;}
+.address_list li .address_item:active .radio_icon{ background:url(radio_check.png) no-repeat center center; background-size:26px 26px;}
+.address_list li .write_icon{position:absolute; right:0; top:50%; margin-top:-20px; height:40px; width:40px; padding:0;}
+.add_address{background:#fff; padding:10px 10px 10px 3px; border-top:1px solid #ddd; border-bottom:1px solid #ddd; margin:10px 0; display:block; position:relative}
+.add_address .arrow_right{ position:absolute; padding:0; height:30px; width:30px;top:50%; margin-top:-15px; right:10px;}
+.address_form{ margin:15px 0; background:#fff; border-top:1px solid #ddd; border-bottom:1px solid #ddd}
+.addressItem{ padding:10px; overflow:hidden; zoom:1; border-bottom:1px solid #ddd;}
+.address_form label{ width:60px; line-height:30px; margin:0; padding-right:10px;}
+.address_form label.radio{ float:left; margin-right:10px;}
+.address_form input[type='text'],.address_form textarea,.address_form select{ width:95%; padding:6px; display:block}
+.address_form textarea{ height:60px;}
+/* 购物车列表 */
+.cart_list_top{ padding:10px; height:20px; line-height:20px;}
+.cart_item{ background:#fff; padding:10px 10px 10px 40px; border-top:1px solid #ddd; border-bottom:1px solid #ddd; position:relative; margin-bottom:10px;}
+.cart_item .goods_item{ position:relative; min-height:80px; padding-left:90px;}
+.cart_item .goods_img{ width:80px; height:80px; position:absolute; top:0; left:0;}
+.cart_item label{ position:absolute; top:10px; left:5px;}
+.cart_item .name{ font-size:13px;}
+.cart_item .info{ font-size:13px;}
+.buy_count{ border:1px solid #ccc; height:30px; display:inline-block; margin:5px 0;}
+.buy_count .add,.buy_count .reduce{ height:30px; width:30px; text-align:center;line-height:30px; background:#ccc; font-size:20px; font-weight:bold; display:inline-block}
+.buy_count input{ height:20px; width:40px; text-align:center; border:none; display:inline-block}
+.star_rader{ display:inline-block; vertical-align:middle; height:30px; width:125px; background:url(star.png) no-repeat 0 -25px;}
+.cartBottom{ position:fixed; height:50px; padding:5px; right:0; left:0; bottom:0; background:#f3f3f3; border-top:1px solid #ccc;}
+.cartBottom .check_all{ float:left; position:relative; margin:10px 5px 10px;}
+.cartBottom .total{ float:left; margin:6px 0;}
+.cartBottom .count{ color:#888}
+.cartBottom .settlement{ background:#ff9000; border-radius:5px; height:40px; width:auto;line-height:40px; margin:6px 10px; float:right; padding:0 10px; color:#fff; border:none;}
+.cart_empty{ text-align:center; padding:50px 20px;}
+/* 个人中心 */
+.center_header{ padding:15px; line-height:80px; font-size:18px}
+.center_header img{ float:left; width:80px; height:80px; border-radius:40px; margin-right:10px;}
+.center_nav{ background:#fff; border-top:1px solid #ddd; border-bottom:1px solid #ccc; margin-bottom:15px; display:-webkit-box;}
+.center_nav a{ display:block; height:50px; line-height:50px; -webkit-box-flex:1; text-align:center}
+.block{ background:#fff;border-top:1px solid #ddd; border-bottom:1px solid #ccc; margin:15px 0;}
+.block_a{ margin:0 15px; height:50px; line-height:50px; border-bottom:1px solid #ddd; display:block; position:relative}
+.block_a:active{ background:#f3f3f3}
+.block_last{ border:none}
+.block_a em{ position:absolute; right:5px; top:-3px}
+/* 底部 */
+.withFoot{ padding-bottom:50px;}
+.bottom_menu{ height:50px; padding:0 10px; position:fixed; right:0; left:0; bottom:0; background:#fff; box-shadow:0 -1px 1px #ccc; border-top:1px solid #ddd; display:-webkit-box;}
+.bottom_menu a{ display:block; -webkit-box-flex:1; padding-top:30px;text-align:center; color:#888; font-size:12px;}
+.bottom_menu .home{ background:url(shop.png) no-repeat center 8px; background-size:22px 22px;}
+.bottom_menu .cart{ background:url(cart.png) no-repeat center 8px; background-size:22px 22px; position:relative}
+.bottom_menu .cart .count{ position:absolute; top:0; left:50%; margin-left:15px; background:#F00; color:#fff; font-size:12px; border-radius:15px; padding:0 3px;}
+.bottom_menu .center{ background:url(center.png) no-repeat center 8px; background-size:22px 22px;}
+/* 自定义check */
+.custom_check{ display:none}
+.custom_check + label em{ width:30px; height:30px; display:inline-block; background:url(radio_icon.png) center center no-repeat; background-size:24px;}
+input[type="checkbox"]:checked + label em{ background:url(radio_check.png) center center no-repeat;background-size:24px;}

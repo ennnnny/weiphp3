@@ -1,0 +1,58 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="http://yaotv.qq.com/shake_tv/include/js/jsapi_subscribe.js"></script>
+<body>
+	<div id="container" class="container">
+    	<div class="questionContent" style="text-align:center; margin:50px 0; color:#888">
+            <img src="__IMG__/yes_pic.png" width="100"/><br/>
+        	<php>if(isset($_GET['from_post'])) { </php> <div class="lead_over">恭喜您答对了</div><php> } </php>
+        	<div class="lead_over" id="msg1">请等待<span id="left_time">{$time_left}</span>秒后再参与摇一摇进入下一题</div>
+        	<div class="lead_over" id="msg2" style="display:none">请返回微信进入下一题</div>
+        	<div class="btnWrap" style="margin:20px 0;">
+        	<php> foreach($ask['appidArr'] as $id=>$val) { </php>
+            
+                <a href="javascript:;" onClick="subscribe('{$id}');" class="start_btn">{$val}</a>
+             
+        	 <php> } </php>
+        	</div>
+            <a href="javascript:;" onClick="closepage();"  style="color:#444">返回微信</a>
+            
+        </div>
+        
+        <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+        
+    </div>
+<script type="text/javascript">
+$(function(){
+	$('body').css('min-height',$(window).height());
+	if($('.startContent ').height()+$('.bottomContainer').height()<$(window).height()){
+		$('.bottomContainer').height($(window).height()-$('.startContent ').height());
+	}
+})
+function subscribe(appid){
+	shaketv.subscribe(appid, function(returnData){
+		  alert(returnData.errorCode + ":" + returnData.errorMsg);
+	});	
+}
+function closepage(){
+	WeixinJSBridge.call('closeWindow');
+}
+var reSentTime = parseInt({$time_left});
+function show_time(){ 
+	if(reSentTime > 0){ 
+		--reSentTime; 
+		$('#msg1').show();
+		$('#msg2').hide();
+		$('#left_time').html(reSentTime);
+		setTimeout("show_time()", 1000); //设置1000毫秒以后执行一次本函数
+	}else{
+		$('#msg1').hide();
+		$('#msg2').show();
+	}
+};
+$(function(){
+  show_time();	
+})
+</script>
+</body>
+</html>

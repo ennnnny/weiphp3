@@ -1,0 +1,1 @@
+a:8:{i:0;s:2:"id";i:1;s:3:"uid";i:2;s:5:"mp_id";i:3;s:10:"is_creator";i:4;s:12:"addon_status";i:5;s:6:"is_use";s:3:"_pk";s:2:"id";s:5:"_type";a:6:{s:2:"id";s:16:"int(10) unsigned";s:3:"uid";s:7:"int(10)";s:5:"mp_id";s:16:"int(10) unsigned";s:10:"is_creator";s:10:"tinyint(2)";s:12:"addon_status";s:4:"text";s:6:"is_use";s:10:"tinyint(2)";}}

@@ -1,0 +1,246 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container body">
+          <div class="top_relative" <empty name="reserve.cover">style="background:url({:ADDON_PUBLIC_PATH}/background.png) no-repeat"</empty>> 
+            <notempty name="reserve.cover"><img src="{$reserve.cover}"/></notempty>
+            <p style="word-wrap:break-word;">{$reserve.title}</p>
+            
+       </div>
+        	
+        <ul class="toggle_list" style="margin-top:10px">
+        	<li class="single_item m_10 p_10">
+            	<div class="title icon_arrow_right">
+                	<img width="30" class="fl mr_10" src="{:ADDON_PUBLIC_PATH}/intro.png"/>
+                	<p class="t_color"><strong>活动说明</strong></p>
+                </div>
+                <div class="content">
+                	<p>{$reserve.intro}</p>
+                </div>
+            </li>
+        </ul>
+        
+    	<div class="block_content_bg m_10"> 
+<!--            <div class="block_content_top_min">
+                <center>请填写以下信息</center>
+            </div>-->
+        <!-- 微预约 -->
+        <form id="form" action="{:addons_url('Reserve://Wap/index')}" method="post" class="form-horizontal p_10">
+                <div class="form-item cf">
+                  <label class="item-label">
+                  	<span class="need_flag">*</span>报名项目
+                  </label>
+                  <div id="option_id_tips" class="item_intro"></div>
+                  <div class="controls">
+                    <select name="option_id">
+                            <volist name="option_list" id="vo">
+                            <option value="{$vo.id}" data-money="{$vo.money}" data-max="{$vo.max_limit}" data-join="{:intval($vo[join_count]+$vo[init_count])}" 
+                            <php>if($data['option_id']==$vo['id']){ echo 'selected';}</php>  >{$vo.name}</option>
+                            </volist>
+                    </select>
+                </div>
+              <volist name="fields" id="field">
+                <if condition="$field['is_show'] == 4">
+                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                </if>
+                <if condition="$field['is_show'] == 1 || $field['is_show'] == 3 || ($field['is_show'] == 5 && I($field['name']) )">
+                  <div class="form-item cf">
+                    <label class="item-label"><notempty name="field.is_must"><span class="need_flag">*</span></notempty>
+                    {$field['title']}<span class="check-tips">
+                      <notempty name="field['remark']">（{$field['remark']}）</notempty>
+                      </span></label>
+                    <div class="controls">
+                      <switch name="field.type">
+                        <case value="num">
+                          <input type="text" class="text input-medium" name="{$field.name}" value="{$data[$field['name']]}">
+                        </case>
+                        <case value="string">
+                          <input type="text" class="text input-large" name="{$field.name}" value="{$data[$field['name']]}">
+                        </case>
+                        <case value="textarea">
+                          <label class="textarea input-large">
+                            <textarea name="{$field.name}">{$data[$field['name']]}</textarea>
+                          </label>
+                        </case>
+                        <case value="datetime">
+                          <input type="text" name="{$field.name}" class="text input-large time" value="{$data[$field['name']]|time_format}" placeholder="请选择时间" />
+                        </case>
+                        <case value="bool">
+                          <select name="{$field.name}">
+                            <volist name=":parse_field_attr($field['extra'])" id="vo"> <option value="{$key}" 
+                              <eq name="data[$field['name']]" value="$key">selected</eq>
+                              >{$vo}
+                              </option>
+                            </volist>
+                          </select>
+                        </case>
+                        <case value="select">
+                          <select name="{$field.name}">
+                            <volist name=":parse_field_attr($field['extra'])" id="vo"> <option value="{$key}" 
+                              <eq name="data[$field['name']]" value="$key">selected</eq>
+                              >{$vo}
+                              </option>
+                            </volist>
+                          </select>
+                        </case>
+                        <case value="cascade">
+                        <div id="cascade_{$field.name}"></div>
+                        {:hook('cascade', array('name'=>$field['name'],'value'=>$data[$field['name']],'extra'=>$field['extra']))}
+                        </case>   
+                        <case value="dynamic_select">
+                        <div id="dynamic_select_{$field.name}"></div>
+                        {:hook('dynamic_select', array('name'=>$field['name'],'value'=>$data[$field['name']],'extra'=>$field['extra']))}
+                        </case>                        
+                        <case value="radio">
+                          <volist name=":parse_field_attr($field['extra'])" id="vo">
+                            <label class="radio"> <input type="radio" value="{$key}" name="{$field.name}" 
+                              <eq name="data[$field['name']]" value="$key">checked="checked"</eq>
+                              >{$vo} </label>
+                          </volist>
+                        </case>
+                        <case value="checkbox">
+                          <volist name=":parse_field_attr($field['extra'])" id="vo">
+                            <label class="checkbox"> <input type="checkbox" value="{$key}" name="{$field.name}[]" 
+                              <in name="key" value="$data[$field['name']]" >checked="checked"</in>
+                              >{$vo} </label>
+                          </volist>
+                        </case>
+                        <case value="editor">
+                          <label class="textarea">
+                            <textarea name="{$field.name}">{$data[$field['name']]}</textarea>
+                            {:hook('adminArticleEdit', array('name'=>$field['name'],'value'=>$data[$field['name']]))} </label>
+                        </case>
+                        <case value="picture">
+                          <div class="controls">
+                            <div class="upload_row muti_picture_row">
+                            	
+                            	<notempty name="data[$field['name']]">
+                                	<php>
+                                        $tempArr = explode(',',$data[$field['name']]);
+                                        
+                                    	for($i=0;$i<count($tempArr);$i++){
+                                       		echo '<div class="img_item"><em>X</em><input type="hidden" name="'.$field[name].'[]" value="'.$tempArr[$i].'"/><img src="'.get_cover_url($tempArr[$i]).'"/></div>';
+                                        }
+                                    </php>
+                                </notempty>
+                            	<a class="img_item add_btn" href="javascript:;" onClick="$.WeiPHP.wxChooseImg(this,1,'{$field.name}[]')"><img src="__IMG__/add.png"/></a>
+                            </div>
+                          </div>
+                        </case>
+                        <case value="file">
+                          <div class="controls upload_file" rel="{$field.name}">
+                            <input type="file" id="upload_file_{$field.name}">
+                            <input type="hidden" name="{$field.name}" value="{$data[$field['name']]}"/>
+                            <div class="upload-img-box">
+                              <present name="data[$field['name']]">
+                                <div class="upload-pre-file"><span class="upload_icon_all"></span>{$data[$field['name']]|get_table_field=###,'id','name','File'}</div>
+                              </present>
+                            </div>
+                          </div>
+                          
+                        </case>
+                        <default/>
+                        <input type="text" class="text input-large" name="{$field.name}" value="{$data[$field['name']]}">
+                      </switch>
+                    </div>
+                  </div>
+                </if>
+              </volist>
+
+                    <div id="top-alert" class="fixed alert alert-error" style="display: none;">
+  <button class="close fixed" style="margin-top: 4px;">&times;</button>
+  <div class="alert-content"></div>
+  </div>
+          	<div class="form-item cf">
+            <input type="hidden" name="id" value="{$data.id}">
+           
+            <eq name='reserve.status' value='0'>
+              <button class="gray_btn"  type="button" target-form="form-horizontal">活动未开启</button>
+        	<else />
+            <button class="home_btn submit-btn mb_10 mt_10" id="submit" type="button" target-form="form-horizontal">确 定</button>
+              </eq>
+            </div>
+        </form>
+
+      </div>
+       <p class="copyright">{$system_copy_right}</p>
+  </div>
+  <include file="Public/mobile_foot"/>
+<script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:"{$reserve.title}",
+		imgUrl:"{$reserve.cover}",
+		desc:"{$reserve.intro}",
+		link:window.location.href
+	})
+</script>
+ <block name="script">
+ <link href="{:SITE_URL}/Public/static/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="{:SITE_URL}/Public/static/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="{:SITE_URL}/Public/static/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="{:SITE_URL}/Public/static/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+  <script type="text/javascript" src="{:SITE_URL}/Public/static/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script>
+<script type="text/javascript">
+$('#submit').click(function(){
+   $.Dialog.loading();
+   $.ajax({
+	   url:"{:addons_url('Reserve://Wap/index')}",
+	   type:'post',
+	   data:$('#form').serializeArray(),
+	   dataType:'json',
+	   success:function(json){
+			if(json.status==1){			   		
+			   		$.Dialog.success(json.info);
+			   }else{
+				   	$.Dialog.fail(json.info);
+			}
+		   if(json.url!=""){
+			   setTimeout(function(){
+				   window.location.href=json.url;
+				   },2000);
+			   }
+   		},
+		error:function(){
+				$.Dialog.close();
+			}
+	   });
+});
+
+$(function(){
+	//initUploadImg();
+	//initUploadFile();
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+	
+	$("select[name='option_id']").change(function(){
+		change_option();
+	});
+	change_option();
+});
+function change_option(){
+	var obj = $("select[name='option_id'] option:selected");
+	
+	var html = '';
+	var money = obj.attr('data-money');
+	if(money>0){
+		html += '报名费用 '+money+' 元， ';
+	}
+	var join_count = obj.attr('data-join');
+	html += '已报名 '+join_count+' 人， ';
+	
+	var max_limit = obj.attr('data-max');
+	if(max_limit>0){
+		html += '限制 '+max_limit+' 人';
+	}
+	
+	$('#option_id_tips').html(html);
+}
+</script> 
+</body>
+</html>

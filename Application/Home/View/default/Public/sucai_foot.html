@@ -1,0 +1,40 @@
+<div id="bottomFollowBar" style="position:fixed;z-index:10000; bottom:0;right:0;left:0; height:70px">
+	<p class="copyright" style="position:static">{$system_copy_right}</p>
+    <div id="div_subscribe_area"></div>
+</div>
+<script type="text/javascript" src="http://yaotv.qq.com/shake_tv/include/js/jsapi.js"></script>
+<script>
+var WX_APP_ID = "{$user.GammaAppId}";//电视频道一标识
+var MP_APP_ID = "{$jsapiParams.appId}";//公众号
+var SECRET_KEY = "{$user.GammaSecret}";
+//调用关注
+shaketv.subscribe({
+		appid: MP_APP_ID,
+		selector: "#div_subscribe_area",
+		type: 1
+	}, function (returnData) {
+       //一键关注bar消失后会调用回调函数，在此处理bar消失后带来的样式问题
+   	   //console.log(JSON.stringify(returnData));
+	   $('#bottomFollowBar').height('auto');
+});
+//调用分享
+if(shareTvData){
+	shaketv.wxShare(
+		shareTvData.img,
+		shareTvData.title,
+		shareTvData.desc,
+		shareTvData.url
+	);	
+}
+//base userinfo
+var tongjiLink = '{:SITE_URL}/online_check.php?deal_count=1&publicid={$publicid}&addon={$source}&aim_id={$aim_id}';
+//$.get(tongjiLink);
+$.ajax({
+   url: tongjiLink,
+   type: "GET",
+   dataType: 'jsonp',
+   jsonp: 'jsoncallback',
+   timeout: 5000
+})
+</script>
+<div style="display:none">{$tongji_code}</div>

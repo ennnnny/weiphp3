@@ -1,0 +1,22 @@
+<empty name="list_data">
+<div class="empty_container"><p>您的视频素材库为空，<a href="{:U('Home/Material/video_lists')}">请先增加素材</a></p></div>
+<else /><div class="data_container"><ul class="picture_list">
+      <volist name="list_data" id="vo">
+      <li  class="appmsg_li" data-id="{$vo.id}"  style="overflow:hidden">
+                	<div class="picture_item">
+                        <div class="video_item">
+                        	<p class="title">{$vo.title}</p>
+                            <p class="ctime colorless">{$vo.cTime|time_format}</p>
+                            <div class="video_area">
+                            	<video src="{$vo.file_id|get_file_url}" controls="controls">您的浏览器不支持 video 标签。</video>
+                            </div>
+                             <p>{$vo.desc}</p>
+                        </div>
+                        
+                    </div>
+                </li>
+            </volist>
+            <div class="hover_area"></div>
+        </volist></ul>
+</empty>
+<div class="page"> {$_page|default=''} </div></div>

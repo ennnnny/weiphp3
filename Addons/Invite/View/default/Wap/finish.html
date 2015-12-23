@@ -1,0 +1,22 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container">
+    	<!-- 此图片后台可上传 -->
+    	<img src="{:ADDON_PUBLIC_PATH}/top_pic.jpg" alt=""/>
+        <div class="finish_content">
+        	<h5>谢谢参与！</h5>
+            <p>分享到朋友圈让更多人一起参与~~</p>
+            <div class="share_btn_wrap">
+            	<a href="javascript:;" class="btn" onClick="$.WeiPHP.showShareTips();">立即分享</a>
+            </div>
+        </div>  
+    </div>
+<p class="copyright">{$system_copy_right}{$tongji_code}</p>
+<script type="text/javascript">
+function closepage(){
+	WeixinJSBridge.call('closeWindow');
+}
+</script>
+</body>
+</html>

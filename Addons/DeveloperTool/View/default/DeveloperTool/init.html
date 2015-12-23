@@ -1,0 +1,61 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> <include file="Addons/_nav" /> 
+      
+      <!-- 数据列表 -->
+      <div class="data-table">
+        <div class="table-striped">
+          <table cellspacing="1">
+            
+            <!-- 列表 -->
+            <tbody>
+              <tr>
+                <td colspan="2">用户ID</td>
+                <td>{$info.uid}</td>
+              </tr>
+              <tr>
+                <td colspan="2">用户名</td>
+                <td>{$info.nickname}</td>
+              </tr>
+              <tr>
+                <td colspan="2">真实姓名</td>
+                <td>{$info.truename}</td>
+              </tr>
+              <tr>
+                <td colspan="2">手机号</td>
+                <td>{$info.mobile}</td>
+              </tr>
+              <tr>
+                <td colspan="2">Email</td>
+                <td>{$info.email}</td>
+              </tr>
+              <tr>
+                <td colspan="2">性别</td>
+                <td>{$info.sex_name}</td>
+              </tr>
+              <tr>
+                <td colspan="2">版权</td>
+                <td>{$info.copy_right}</td>
+              </tr>
+              <tr>
+                <td colspan="2">统计代码</td>
+                <td>{$info.tongji_code}</td>
+              </tr>
+              <tr>
+                <td colspan="2">所属用户组</td>
+                <td>{:implode(', ', getSubByKey($info['groups'],'title'))}</td>
+              </tr>
+              <tr>
+                <td colspan="2">是否是系统管理员</td>
+                <td>{$info.is_root}</td>
+              </tr>
+              
+              
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</block>

@@ -1,0 +1,30 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/style.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/common.js"></script>
+<body>
+	<div id="container" class="container">
+    	<div class="wrap">
+        	<div class="m_20"><center>名片信息保存成功！<br/>请选择一个名片模板</center></div>
+        	<ul class="temp_list">
+            	<volist name="tempList" id="vo">
+            		<li class="{$vo.class}"><a href="javascript:;" data-temp="{$vo.dirName}" onClick="previewCard(this,'{:U('save_template',array('id'=>I('id')))}','{:U('detail')}');"><img src="{$vo.icon}"/><br/><span>{$vo.title}</span></a>
+                    <eq name="vo['class']" value="selected">
+                    	<em class="checked"></em>
+                    </eq>
+                    </li>
+                </volist>
+            </ul>
+            <p class="copyright">{$system_copy_right}</p>
+        </div>
+    </div>
+    <include file="Public/mobile_foot"/>
+    <script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:'{$info.truename}的互联网名片',
+		desc:'{$info.position}',
+		link:"{:U('detail', array('uid'=>$mid))}",
+		imgUrl:'{$info.headimgurl}'
+	});
+	</script>
+</body>
+</html>

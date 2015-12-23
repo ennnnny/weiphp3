@@ -1,0 +1,64 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/style.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container">
+    	<div class="wrap">
+        	<eq name="type" value="collected">
+                <div class="top_tab">
+                    <a class="l current" href="javascript:;">我收藏的名片</a>
+                    <a class="r" href="{:U('collecting')}">收藏我的人</a>
+                </div>
+            <else/>
+            	<div class="top_tab">
+                    <a class="l" href="{:U('collected')}">我收藏的名片</a>
+                    <a class="r current" href="javascript:;">收藏我的人</a>
+                </div>
+			</eq>
+            <empty name="list_data">
+            	<div class="empty_container">
+                	<p>你还没有任何收藏的名片~~</p>
+                </div>
+            <else/>
+            	<ul class="card_list">
+            	<volist name="list_data" id="vo">
+            		<li>
+                    	<a href="{:U('detail',array('uid'=>$vo['uid']))}">
+                        	<empty name="vo[headimgurl]">
+                    			<img src="__IMG__/default.png"/>
+                            <else/>
+                            	<img src="{$vo.headimgurl}"/>
+                            </empty>
+                            <div class="info">
+                            	<p class="name"><empty name="vo.truename">{$vo.nickname}<else />{$vo.truename}</empty></p>
+                                <p class="position">{$vo.position}</p>
+                            </div>
+                            <em></em>
+                        </a>
+                    </li>
+            	</volist>
+                </ul>
+                <div class="m_10">
+                	{$_pages}
+                </div>
+            </empty>
+        	
+            <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+        </div>
+        <div class="bottom_menu">
+        	<a class="back" href="javascript:;" onClick="$.WeiPHP.back();">返回</a>
+        	<a class="center" href="{:U('detail')}">我的名片</a>
+            <a class="collected" href="{:U('collected')}">名片夹</a>
+        	<a class="share" href="javascript:;" onClick="$.WeiPHP.showShareTips();">一键分享</a>
+        </div>
+    </div>
+    <include file="Public/mobile_foot"/>
+    <script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:'{$info.truename}的互联网名片',
+		desc:'{$info.position}',
+		link:"{:U('detail', array('uid'=>$mid))}",
+		imgUrl:'{$info.headimgurl}'
+	});
+	</script>
+</body>
+</html>

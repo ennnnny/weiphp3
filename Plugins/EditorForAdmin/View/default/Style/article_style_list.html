@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<include file="Public/head"/>
+    <script src="__STATIC__/ueditor/dialogs/internal.js"></script>
+    <style type="text/css">
+    	.style_list{ box-shadow:0 0 3px #ccc inset; background:#fff}
+		.style_list .tabs{ height:40px; border-bottom:1px solid #ddd;}
+		.style_list .tabs a{ line-height:40px; padding:0 15px; float:left; color:#444; border-right:1px solid #ddd;}
+		.style_list .tabs a.current{ background:#3C0; color:#fff;}
+		.style_wrap{ margin:15px auto; width:500px;}
+		#styleList li{ padding:10px 0; cursor:pointer;border:3px solid #fff}
+		
+    </style>
+</head>
+<body>
+	<div class="style_list">
+    	<div class="tabs">
+        	<volist name="group_list" id="vo">
+        		<a class="{$vo.class}" href="{:addons_url('EditorForAdmin://Style/get_article_style',array('group_id'=>$vo[id]))}">{$vo.group_name}</a>
+            </volist>
+        </div>
+        <div class="style_wrap">
+        	<ul id="styleList">
+            	<volist name="list[list_data]" id="vo">
+                	<li>{$vo.style}</li>
+                </volist>
+            </ul>
+        </div>
+        
+        <div id="pagelist">{$list._page}</div>
+    </div>
+	
+</body>
+<script type="text/javascript">
+$('#styleList li').click(function(){
+	 editor.execCommand("inserthtml", $(this).html());
+	 dialog.close();
+})
+</script>
+</html>
+

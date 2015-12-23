@@ -1,0 +1,65 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/qrcode/qrcode.js"></script>
+<script type="text/javascript" src="__STATIC__/qrcode/jquery.qrcode.js"></script>
+<body>
+	<div id="container" class="container body">
+      <div class="top_relative" <empty name="forms.cover">style="background:url({:ADDON_PUBLIC_PATH}/background.png) no-repeat"</empty>> 
+            <notempty name="forms.cover"><img src="{$forms.cover}"/></notempty>
+            <p style="word-wrap:break-word;">{$forms.title}</p>
+            <span class="joined">已参加人数:{$attend_num}</span>
+       </div>
+       <php>$public=get_token_appinfo();</php>
+       <div class="forms_success">
+        	   <h6>预约成功！感谢你的支持</h6>
+               <div class="qr_wrap">
+                  <div id="qrCode"></div>
+                  <p class="qr_time_tips"></p>
+                  <script type="text/javascript">
+                  var textLink = "{:U('scan_success',array('forms_id'=>$forms['id'],'scan_code'=>$value_data['scan_code'],'uid'=>$value_data['uid'],'publicid'=>$public['id']))}";
+                  $('#qrCode').qrcode({width:100,height:100,text:textLink,refresh:true,time:30000}); 
+                  </script>
+                  <p class="qr_tips"><notempty name="value_data[scan_code]"><span class="colorless">{$value_data.scan_code}</span><br/></notempty>现场出示二维码验证</p>
+              </div>
+              <div class="success_wrap" style="display:none">
+              		<br/>
+              		<center><img src="__IMG__/yes.png" width="60"/></center>
+					<center>恭喜，已通过验证！</center>
+                    <br/>
+                    
+              </div>
+              <div class="user_info">
+              	<p class="title">个人信息</p>
+                <p class="info">报名项目：{$value_data.option_id}</p>
+                <notempty name='fields'>
+                	<volist name='fields' id='vo'>
+                	 <p class="info">{$vo.title}：<php>echo $value_data[$vo['name']];</php></p>
+                	</volist>
+                </notempty>
+              </div>
+              <div class="m_15">
+               <eq name='forms.pay_online' value='1'>
+               	<eq name='is_pay' value='0'>
+              		<a href="{:addons_url('Payment://Payment/confirm',array('title'=>$forms['title'],'price'=>$value_data['price'],'from'=>'forms','aim_id'=>$forms['id']))}" class="btn">在线支付</a>
+              	<else/>
+              		<button class="gray_btn"  type="button" >已支付</button>
+              	</eq>
+              	</eq>
+              </div>
+       </div>
+       <p class="copyright">{$system_copy_right}</p>
+	</div>
+	<include file="Public/mobile_foot"/>
+    <script type="text/javascript">
+    	var checkUrl = "{:U('get_check_code')}&id={$value_data.id}";
+		var interval = setInterval(function(){
+			$.get(checkUrl,function(data){
+				if(data==1){
+					$('.success_wrap').show();
+					$('.qr_wrap').hide();
+				}
+			})
+		},3000)
+    </script>
+</body>
+</html>

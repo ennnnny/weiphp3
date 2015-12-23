@@ -1,0 +1,15 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<link href="{:CUSTOM_TEMPLATE_PATH}Public/shop.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div class="container"> 
+	<div class="shop_intro">
+		<img class="logo" src="{$shop.logo|get_cover_url}"/>
+        <p class="name"><center><strong>{$shop.title}</strong></center><br/></p>
+        <p class="intro">{$shop.intro}</p>
+    	<div class="content">{$shop.content}</div> 
+    </div>
+</div>
+<include file="_footer"/>
+</body>
+</html>

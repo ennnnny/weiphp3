@@ -1,0 +1,481 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+  <section id="contents"> <include file="Addons/_nav" />
+    <div class="tab-content"> 
+      <!-- 表单 -->
+      <h4>编辑优惠券</h4>
+       <php> $post_url || $post_url = U('edit?model='.$model['id'], $get_param);</php>
+      <form id="form" action="{$post_url}" method="post" class="form-horizontal" style="overflow:hidden">
+      	 <div class="fl" style="width:500px;">
+            <div class="controls">
+                <label class="item-label"><span class="need_flag">*</span>
+                       优惠劵标题<span class="check-tips"></span>
+                </label>
+                <input type="text" name="title" class="text input-large" value="{$data.title}"/>
+            </div>
+            <!--
+            
+            <div class="controls">
+                <label class="item-label"><span class="need_flag">*</span>
+                       商家名称<span class="check-tips"></span>
+                </label>
+                <input type="text" name="shop_name" class="text input-large" value="{$data.shop_name}"/>
+            </div>
+            -->
+            <!--
+            <div class="controls">
+                <label class="item-label">
+                       商家LOGO<span class="check-tips"></span>
+                </label>
+                <div class="controls uploadrow2" title="点击修改图片" rel="shop_logo">
+                  <input type="file" id="upload_picture_shop_logo">
+                  <input type="hidden" name="shop_logo" id="cover_id_shop_logo" value="{$data.shop_logo}"/>
+                  <notempty name="data.shop_logo">
+                	 <div class="upload-img-box" id="cover_id_shop_logo_img">
+                        <img src="{$data.shop_logo|get_cover_url}"  width="100" height="100"/>
+                    	<em class="edit_img_icon">&nbsp;</em>
+                    </div>
+                 <else/>
+                	 <div class="upload-img-box" id="cover_id_shop_logo_img" style="display:none">
+                     	<img src=""  width="100" height="100"/>
+                    	<em class="edit_img_icon">&nbsp;</em>
+                    </div>
+                 </notempty>
+                 
+                  
+                  
+                  <script type="text/javascript">
+						//上传图片
+						/* 初始化上传插件 */
+						$("#upload_picture_shop_logo").uploadify({
+							"height"          : 100,
+							"swf"             : STATIC+"/uploadify/uploadify.swf",
+							"fileObjName"     : "download",
+							"buttonText"      : "上传图片",
+							"uploader"        : UPLOAD_PICTURE,
+							"width"           : 100,
+							'removeTimeout'	  : 1,
+							'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							"onUploadSuccess" : uploadPictureshop_logo
+						});
+						function uploadPictureshop_logo(file, data){
+							console.log(data);
+							var data = $.parseJSON(data);
+							var src = '';
+							if(data.status){										
+								src = data.url || ROOT + data.path;
+								$('#cover_id_shop_logo_img').show().find('img').attr('src',src);
+								$('input[name="shop_logo"]').val(data.id);
+								$(window.frames["wxIframe"].document).find(".seller img").attr('src',src);
+							} else {
+								updateAlert(data.info);
+								setTimeout(function(){
+									$('#top-alert').find('button').click();
+									$(that).removeClass('disabled').prop('disabled',false);
+								},1500);
+							}
+						}
+					</script> 
+                </div>
+                
+            </div>
+            -->
+            <div class="controls">
+                <label class="item-label">
+                       优惠券图片<span class="check-tips">建议图片宽度640px，高300px</span>
+                </label>
+                <div class="controls uploadrow2" title="点击修改图片" rel="background">
+                  <input type="file" id="upload_picture_background">
+                  <input type="hidden" name="background" id="cover_id_background" value="{$data.background}"/>
+                   
+                  <notempty name="data.background">
+                	 <div class="upload-img-box" id="cover_id_background_img">
+                        <img src="{$data.background|get_cover_url}"  width="100" height="100"/>
+                    	<em class="edit_img_icon">&nbsp;</em>
+                    </div>
+                 <else/>
+                	 <div class="upload-img-box" id="cover_id_background_img" style="display:none">
+                       <img src=""  width="100" height="100"/>
+                    	<em class="edit_img_icon">&nbsp;</em>
+                    </div>
+                 </notempty>
+                  <script type="text/javascript">
+						//上传图片
+						/* 初始化上传插件 */
+						$("#upload_picture_background").uploadify({
+							"height"          : 100,
+							"swf"             : STATIC+"/uploadify/uploadify.swf",
+							"fileObjName"     : "download",
+							"buttonText"      : "上传图片",
+							"uploader"        : UPLOAD_PICTURE,
+							"width"           : 100,
+							'removeTimeout'	  : 1,
+							'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							"onUploadSuccess" : uploadPicturebackground
+						});
+						function uploadPicturebackground(file, data){
+							var data = $.parseJSON(data);
+							var src = '';
+							if(data.status){										
+								src = data.url || ROOT + data.path;
+								$('#cover_id_background_img').show().find('img').attr('src',src);
+								$('input[name="background"]').val(data.id);
+								$(window.frames["wxIframe"].document).find(".head_pic").attr('src',src).show();	
+								
+							} else {
+								updateAlert(data.info);
+								setTimeout(function(){
+									$('#top-alert').find('button').click();
+									$(that).removeClass('disabled').prop('disabled',false);
+								},1500);
+							}
+						}
+					</script> 
+                </div>
+            </div>
+            <!--
+            <div class="controls">
+                <label class="item-label">
+                       优惠劵头部背景颜色<span class="check-tips"></span>
+                </label>
+                <div class="colorPicker" style="width:100px; height:100px;background:{$data.head_bg_color}" onClick="simpleColorPicker(this,bgColorChange)">
+                		<input name="head_bg_color" value="{$data.head_bg_color}" type="hidden" />
+                </div>
+            </div>
+             <div class="controls">
+                <label class="item-label">
+                       按钮颜色<span class="check-tips"></span>
+                </label>
+                <div class="colorPicker" style="width:100px; height:100px;background:{$data.button_color}" onClick="simpleColorPicker(this,buttonColorChange)">
+                		<input name="button_color" value="{$data.button_color}" type="hidden" />
+                </div>
+            </div>
+            -->
+            <div class="controls">
+                <label class="item-label">
+                       优惠券数量<span class="check-tips"></span>
+                </label>
+                <input type="text" name="num" class="text input-large" value="{$data.num}"/>
+            </div>
+            
+            
+            <div class="controls">
+<label class="item-label"><span class="need_flag"></span>
+                       适用人群<span class="check-tips"></span>
+                </label>
+                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="0" id="member_0" name="member[]" toggle-data=""
+                              
+                 <php>if(in_array(0,$data['member'])){echo ' checked="checked"';}</php>                   >
+                        <label for="member_0"></label>所有用户 </div>
+                <div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="-1" id="member_-1" name="member[]" toggle-data=""
+                              
+                           <php>if(in_array(-1,$data['member'])){echo ' checked="checked"';}</php>                        >
+                        <label for="member_-1"></label>所有会员 </div>
+                <notempty name='level'>
+                	<volist name='level' id='vo'>
+                	<div class="check-item"> <input type="checkbox" class="regular-checkbox toggle-data" value="{$key}" id="member_{$key}" name="member[]" toggle-data=""
+                      <php>if(in_array($key,$data['member'])){echo ' checked="checked"';}</php>                                    >
+                        <label for="member_{$key}"></label>
+                       {$vo} </div> 
+                	</volist>
+                </notempty>
+                             </div>
+            
+            
+            
+<!--             <div class="controls"> -->
+<!--                 <label class="item-label"> -->
+<!--                        每人最多领取<span class="check-tips">（0表示无限制）</span> -->
+<!--                 </label> -->
+<!--                 <input type="text" name="max_num" class="text input-large" value="{$data.max_num}"/> -->
+<!--             </div> -->
+            <div class="controls">
+                <label class="item-label">
+                       领取时间<span class="check-tips"></span>
+                </label>
+                <input style="width:175px" type="datetime" name="start_time" class="text time" value="{$data.start_time|time_format}" placeholder="请选择时间" />
+                到
+                <input style="width:175px"  type="datetime" name="end_time" class="text time" value="{$data.end_time|time_format}" placeholder="请选择时间" />
+            </div>
+            <div class="controls">
+                <label class="item-label">
+                       优惠券使用有效期<span class="check-tips"></span>
+                </label>
+                <input style="width:175px" type="datetime" name="use_start_time" class="text time" value="{$data.use_start_time|time_format}" placeholder="请选择时间" />
+                到
+                <input style="width:175px"  type="datetime" name="over_time" class="text time" value="{$data.over_time|time_format}" placeholder="请选择时间" />
+            </div>
+<!--            <div class="controls">
+                <label class="item-label">
+                       核销密码<span class="check-tips">提供给商家用于用户消费时核销</span>
+                </label>
+                <input type="text" name="pay_password" class="text input-large" value="{$data.pay_password}"/>
+            </div>-->
+            <!--
+            <div class="controls">
+                <label class="item-label">
+                       更多按钮<span class="check-tips">格式：按钮名称|按钮跳转地址，每行一个。如：查看官网|http://weiphp.cn</span>
+                </label>
+                <textarea name="more_button" style="width:405px; height:100px;"><volist name="data[more_button_arr]" id="vo">{$vo}|{$key}&#13;</volist></textarea>
+            </div>
+            -->
+            <div class="controls">
+                <label class="item-label">
+                       <a href="javascript:;" class="border-btn" onClick="chooseAddress();">添加适用门店</a><span class="check-tips"></span>
+                </label>
+                <table id="shopList" class="form_table" cellpadding="0" cellspacing="1" 
+                <empty name="shop_list">
+                	style="display:none"
+                </empty>
+                >
+                	<thead>
+                        <tr>
+                            <td>名称</td>
+                            <td>地址</td>
+                            <td>操作</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    	<volist name="shop_list" id="vo">
+                        <tr class="shop_tr">
+                            <td><input type="hidden" name="shop_id[]" value="{$vo.id}"/><span class="name">{$vo.name}</span></td>
+                            <td><span class="address">{$vo.address}</span></td>
+                            <td><a href="javascript:;" onclick="removeSingleAddress(this)">删除</a></td>
+                        </tr>
+                         </volist>
+                    </tbody>
+                </table>
+            </div>
+            <div class="controls">
+                <label class="item-label">
+                       优惠券详情
+                </label>
+                <textarea name="use_tips" style="width:405px; height:100px;">{$data.use_tips}</textarea>
+                {:hook('adminArticleEdit', array('name'=>'use_tips','value'=>$data[use_tips]))} 
+            </div>
+        
+          
+          </div> 
+            
+        	 
+    
+      
+<!--           <div class="fl" style="width:400px; display:none"> -->
+<!--                 <div class="wx-header"><span>优惠券</span></div> -->
+<!--                 手机端页面 -->
+<!--                 <div id="container" class="wx-container"> -->
+<!--                       <iframe name="wxIframe" frameborder="0" scrolling="no" width="320" height="560" src="{:addons_url('Coupon://Coupon/package',array('is_edit'=>1))}"></iframe> -->
+<!--                		    <div class="frame_layer"></div> -->
+<!--                </div> -->
+<!--                 手机端上页面结束 -->
+<!--           </div> -->
+      
+      </div>
+      <div class="form-item form_bh" style="text-align:center">
+      	<notempty name="data.id"><input type="hidden" name="id" value="{$data.id}"></notempty>
+          <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">提交</button>
+      </div>
+    </form>
+    
+    </div>
+  </section>
+  </div>
+</block>
+<block name="script">
+	
+    <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+   <php>if(C('COLOR_STYLE')=='blue_color') echo '
+   <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+  <script type="text/javascript">
+$('#submit').click(function(){
+    $('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+    $('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });	
+    showTab();
+	$('.toggle-data').each(function(){
+		var data = $(this).attr('toggle-data');
+		if(data=='') return true;		
+		
+	     if($(this).is(":selected") || $(this).is(":checked")){
+			 change_event(this)
+		 }
+	});
+	
+	$('select').change(function(){
+		$('.toggle-data').each(function(){
+			var data = $(this).attr('toggle-data');
+			if(data=='') return true;		
+			
+			 if($(this).is(":selected") || $(this).is(":checked")){
+				 change_event(this)
+			 }
+		});
+	});
+	//填充
+	$("iframe").load(function(){
+		$(window.frames["wxIframe"].document).find("#title").text($('input[name="title"]').val());
+		$(window.frames["wxIframe"].document).find(".name").text($('input[name="shop_name"]').val());
+		$(window.frames["wxIframe"].document).find(".use_start_time").text($('input[name="use_start_time"]').val());
+		$(window.frames["wxIframe"].document).find(".over_time").text($('input[name="over_time"]').val());
+		$(window.frames["wxIframe"].document).find(".start_btn").css('background-color',$('input[name="button_color"]').val());
+		$(window.frames["wxIframe"].document).find(".head_hd").css('background-color',$('input[name="head_bg_color"]').val());
+		if($('#cover_id_shop_logo_img img').attr('src')!=""){
+			$(window.frames["wxIframe"].document).find(".seller img").attr('src',$('#cover_id_shop_logo_img img').attr('src'));	
+		}
+		if($('#cover_id_background_img img').attr('src')!=""){
+			$(window.frames["wxIframe"].document).find(".head_pic").attr('src',$('#cover_id_background_img img').attr('src')).show();	
+		}
+		
+		var count = 0;
+		var prevLiHtml = "";
+		$('.shop_tr').each(function(index, element) {
+			count++;
+			//console.log(1);
+			var name = $(this).find('.name').text();
+			var address = $(this).find('.address').text();
+			prevLiHtml = '<li class="item single_address">'+
+					'<span class="title">'+name+'</span><br/>'+
+					 '<a href="#">'+address+'</a>'+
+					'<a href="#"><em>&nbsp;</em></a>'+
+				'</li>';
+			
+        });
+		if(count==1){
+			$(window.frames["wxIframe"].document).find(".v_nav").append(prevLiHtml);
+		}else if(count>1){
+			var prevHtml = '<a class="item" href="#">适用门店<em>&nbsp;</em></a>';
+			$(window.frames["wxIframe"].document).find(".v_nav").append(prevHtml);
+		}
+		
+		
+	})
+	//编辑页面预览
+	$('input[name="title"]').keyup(function(){
+		var val = $(this).val();
+		$(window.frames["wxIframe"].document).find("#title").text(val);
+	})
+	$('input[name="shop_name"]').keyup(function(){
+		var val = $(this).val();
+		$(window.frames["wxIframe"].document).find(".name").text(val);
+	})
+// 	$('input[name="use_start_time"]').on('changeDate', function(ev){
+// 		$(window.frames["wxIframe"].document).find(".use_start_time").text($(this).val());
+// 	});
+// 	$('input[name="over_time"]').on('changeDate', function(ev){
+// 		$(window.frames["wxIframe"].document).find(".over_time").text($(this).val());
+// 	});
+      
+});
+function buttonColorChange(color){
+	//$(window.frames["wxIframe"].document).find(".start_btn").css('background-color',color);
+}
+function bgColorChange(color){
+	//$(window.frames["wxIframe"].document).find(".head_hd").css('background-color',color);
+	//$(window.frames["wxIframe"].document).find(".head_pic").hide();	
+	$('input[name="background"]').val("");
+}
+//添加地址
+var addnewShopUrl = "{:addons_url('Coupon://Shop/add?model=coupon_shop')}";
+function chooseAddress(){
+	var $shopHtml = $('<div class="chooseShopDialog"><ul><center><img src="__IMG__/loading.gif"/></center></ul><br/><a href="javascript:;" target="_blank" id="addNewShopBtn" class="border-btn">增加新门店</a><div class="m15"><a href="javascript:;" class="btn" id="confirmBtn">确定</a></div></div>');
+	$.Dialog.open("添加适用门店",{width:600,height:500},$shopHtml);
+	$('#addNewShopBtn',$shopHtml).click(function(){
+		window.open(addnewShopUrl);
+		$.Dialog.close();
+	})
+	var ids = [];
+	$('.shop_tr').each(function(index, element) {
+        var _id = $(this).find('input').val();
+		ids[index] = _id;
+    });
+	$.ajax({
+		url:"{:addons_url('Coupon://Shop/list_data',array('p'=>1))}",
+		data:{},
+		dataType:'JSON',
+		success:function(data){
+			var html = "";
+			var list_data = data.list_data;
+			if(list_data && list_data.length>0){
+				for(var i=0;i<list_data.length;i++){
+					//console.log(list_data[i].name)
+					var id = list_data[i].id;
+					var name = list_data[i].name;
+					var address = list_data[i].address;
+					//console.log(ids)
+					//console.log(id)
+					if(ids.indexOf(id)!=-1){
+						html += '<li><input type="checkbox" checked="true" class="shop_id" value="'+id+'"/><span class="name">'+name+'</span><span class="address">'+address+'</span></li>';
+					}else{
+						html += '<li><input type="checkbox" class="shop_id" value="'+id+'"/><span class="name">'+name+'</span><span class="address">'+address+'</span></li>';
+					}
+				}
+				if(html!=""){
+					$('ul',$shopHtml).html(html);
+					$('#shopList').show();
+				}
+			}else{
+				$('ul',$shopHtml).html("<center>你没有添加任何门店</center>");
+			}
+		}
+	})
+	$('#confirmBtn',$shopHtml).click(function(){
+		var selectHtml = "";
+		var count = 0;
+		var prevLiHtml = "";
+		$('li',$shopHtml).each(function(index, element) {
+			if($(this).find('.shop_id').prop("checked")==true){
+				count++;
+				//console.log(1);
+				var id = $(this).find('.shop_id').val();
+				var name = $(this).find('.name').text();
+				var address = $(this).find('.address').text();
+				selectHtml += '<tr class="shop_tr">'+
+								'<td><input type="hidden" name="shop_id[]" value="'+id+'"/>'+name+'</td>'+
+								'<td>'+address+'</td>'+
+								'<td><a href="javascript:;" onclick="removeSingleAddress(this)">删除</a></td>'+
+							'</tr>'
+				prevLiHtml = '<li class="item single_address">'+
+                        '<span class="title">'+name+'</span><br/>'+
+                         '<a href="#">'+address+'</a>'+
+                        '<a href="#"><em>&nbsp;</em></a>'+
+                    '</li>';
+			}
+        });
+		$('#shopList tbody').html(selectHtml);
+		//$(window.frames["wxIframe"].document).find(".v_nav .item").eq(0).siblings().remove();
+		if(count==1){
+			//$(window.frames["wxIframe"].document).find(".v_nav").append(prevLiHtml);
+		}else if(count>1){
+			var prevHtml = '<a class="item" href="#">适用门店<em>&nbsp;</em></a>';
+			//$(window.frames["wxIframe"].document).find(".v_nav").append(prevHtml);
+		}
+		$.Dialog.close();
+	})
+	
+}
+function removeSingleAddress(_this){
+	$(_this).parents('tr').remove();
+	if($('.shop_tr').size()==0){
+		//$(window.frames["wxIframe"].document).find(".v_nav .item").eq(0).siblings().remove();
+	}
+}
+</script> 
+</block>

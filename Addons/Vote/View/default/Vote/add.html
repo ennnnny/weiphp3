@@ -1,0 +1,280 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents">
+      <ul class="tab-nav nav">
+        <li class=""><a href="{:U('lists')}">投票列表<b class="arrow fa fa-sort"></b></a></li>
+        <li class="current"><a href="###">新增投票<b class="arrow fa fa-sort"></b></a></li>
+      </ul>
+      <div class="tab-content"> 
+        <!-- 表单 -->
+        <php> $post_url || $post_url = U('add?model='.$model['id'], $get_param);</php>
+        <form id="form" action="{$post_url}" method="post" class="form-horizontal form-center">
+        	<ul id="tab" class="tab-pane in">
+            	 <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>关键词<span class="check-tips"></span></label>
+                    <div class="controls">
+                      <input type="text" class="text input-large" name="keyword" value="{$data.keyword}">
+                    </div>
+                  </li>  
+                   <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>投票标题<span class="check-tips"></span></label>
+                    <div class="controls">
+                      <input type="text" class="text input-large" name="title" value="{$data.title}">
+                    </div>
+                  </li>  
+                  <label class="item-label">
+                                投票类型 <span class="check-tips">
+                                </span></label>
+                  
+                  <div class="controls">
+                      <div class="check-item">
+                              <input type="radio" name="select_type" value="0" class="regular-radio" id="select_type_1" checked=""><label for="select_type_1"> </label>单选
+                           </div>
+                           <div class="check-item">   
+                              <input type="radio" name="select_type" value="1" class="regular-radio" id="select_type_2"  ><label for="select_type_2"> </label>双选
+                        
+                        </div>
+                     </div>
+                  <li class="form-item cf">
+                  		<label class="item-label"><span class="need_flag">*</span>封面图片<span class="check-tips">图片高度控制在200px-400px之间</span></label>
+                		<div class="controls uploadrow2" title="点击修改图片" rel="picurl">
+                            <input type="file" id="upload_picture_picurl">
+                            <input type="hidden" name="picurl" id="cover_id_picurl" value="{$data.picurl}"/>
+                            <div class="upload-img-box" rel="img">
+                              <notempty name="data[picurl]">
+                                <div class="upload-pre-item2"><img width="100" height="100" src="{$data.picurl|get_cover_url}"/></div>
+                                <em class="edit_img_icon">&nbsp;</em>
+                              </notempty>
+                            </div>
+                      </div>
+                  </li>
+                  <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>投票描述<span class="check-tips"></span></label>
+                    <div class="controls">
+                      <label class="textarea input-large">
+                      <textarea class="text input-large" name="description" >{$data.description}</textarea>
+                      </label>
+                    </div>
+                  </li>   
+                  
+                  <li class="form-item cf toggle-prize_type" style="display:none">
+              			<label class="item-label"><span class="need_flag">*</span>投票类型 <span class="check-tips"></span></label>
+              			<div class="controls">
+                			<volist name=":parse_field_attr($fields['type']['extra'])" id="vo">
+                          	<div class="check-item">
+								  <input type="radio" class="regular-radio toggle-data" value="{$key}" id="type_{$key}" name="type" toggle-data="{$vo|get_hide_attr}"
+								  <eq name="data[type]" value="$key">checked="checked"</eq> />
+								  <label for="type_{$key}"></label>{$vo|clean_hide_attr} 
+							  </div>
+                          </volist>        
+                      </div>
+            	  </li>
+                 
+                  <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>有效期<span class="check-tips"></span></label>
+                    <div class="controls">
+                       <input type="datetime" name="start_date" class="text time" value="{$data.start_date|time_format}" placeholder="请选择时间" /> - 
+                       <input type="datetime" name="end_date" class="text time" value="{$data.end_date|time_format}" placeholder="请选择时间" />
+                    </div>
+                  </li>   
+                  
+                  <li class="form-item cf">
+                    <label class="item-label"><span class="need_flag">*</span>文字/图片选项<span class="check-tips">
+                                            </span></label>
+                    <div class="controls">
+                      <div class="check-item">
+                              <input type="radio" name="is_img" value="0" class="regular-radio" id="is_img_0" <if condition="$data[is_img]==0">checked</if> onClick="changeOption()"><label for="is_img_0"> </label>
+                              文字投票
+                           </div>
+                           <div class="check-item">   
+                              <input type="radio" name="is_img" value="1" class="regular-radio" id="is_img_1" <if condition="$data[is_img]==1">checked</if> onClick="changeOption()">
+                              <label for="is_img_1"> </label>图片投票   
+                        
+                        </div>
+                     </div>
+                  
+					<div class="controls">
+                        <table id="option_list" class="add_list_table" cellpadding="0" cellspacing="1">
+                          
+                          <tr class="add_list add_list_head" <if condition="empty($option_list)">style="display:none"</if>>
+                            <td class="pic_td">图片(上传正方形最佳)</td>
+                            <td>标题</td>
+                            <td>排序</td>
+                            <td>操作</td>
+                          </tr>
+                          
+                          <volist name='option_list' id='vo'>
+                          
+                          <tr class="add_list">
+                            <td class="pic_td">
+                            <div class="uploadrow" title="更改图片">
+                            <input type="file" class="uploadImage" id="uploadImage_exist_{$vo.id}" rel="{$vo.id}">
+                            <input type="hidden" name="image[{$vo.id}]" id="cover_id_{$vo.id}"/>
+                            <div class="upload-img-box">
+                              <notempty name="vo.image">
+                                <div class="upload-pre-item"><img width="120" height="120" src="{$vo.image|get_cover_url}"/></div>
+                              </notempty>
+                            </div>
+                            </div>
+                            </td>
+                            <td>
+                            <input type="text" value="{$vo.name}" name="name[{$vo.id}]" class="text input-large" style="width:250px">&nbsp;
+                            </td>
+                            <td>
+                            <input type="text" value="{$vo.order}" name="order[{$vo.id}]" class="optionSort text input-large" style="width:80px">&nbsp;
+                            </td>
+                            <td>
+                            <a href="javascript:;" onClick="delOpt(this)" class="fr btn btn-yellow" >删除</a>
+                            </td>
+                           </tr>
+                          </volist>
+                          </table>
+                      </div>
+                      <p><a href="javascript:;" class="btn btn-yellow mt_10 mb_10" onClick="addOpt()" >增加选项</a></p>
+               		</li>
+                   
+               	</ul>
+          </div>
+          <div class="form-item form_bh">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>
+          </div>
+        </form>
+
+      </div>
+    </section>
+  </div>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script>
+  <script type="text/javascript">
+//上传图片
+/* 初始化上传插件 */
+var node = '';
+function initPuls(){
+	$(".uploadImage").each(function(index, obj) {
+		var id = $(obj).attr('rel');
+		if(id>0)
+			node = '#uploadImage_exist_'+id;
+		else
+		    node = '#uploadImage_'+(0-id);
+		$(node).uploadify({
+			"height"          : 120,
+			"swf"             : "__STATIC__/uploadify/uploadify.swf",
+			"fileObjName"     : "download",
+			"buttonText"      : "上传图片",
+			"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+			"width"           : 120,
+			'removeTimeout'	  : 1,
+			'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+			"onUploadSuccess" : function(file, data, response) {
+                uploadPictureimage(file, data, id);
+            }
+	    });
+	});
+}
+
+function uploadPictureimage(file, data, id){
+	var data = $.parseJSON(data);
+	var src = '';
+	if(data.status){
+		$("#cover_id_"+id).val(data.id);
+		src = data.url || '__ROOT__' + data.path;
+		$("#cover_id_"+id).parent().find('.upload-img-box').html(
+			'<div class="upload-pre-item"><img width="120" height="120" src="' + src + '"/></div>'
+		);
+	} else {
+		updateAlert(data.info);
+		setTimeout(function(){
+			$('#top-alert').find('button').click();
+			$(that).removeClass('disabled').prop('disabled',false);
+		},1500);
+	}
+}
+
+function addOpt(){
+	var i = 1;
+	$('.optionSort').each(function(){i++;});
+	var id = 0-i;
+	
+	var html = '<tr class="add_list"><td class="pic_td"><div class="uploadrow" title="更改图片">'
+		+'<input type="file" class="uploadImage" id="uploadImage_'+i+'" rel="'+id+'"/>'
+		+'<input type="hidden" name="image['+id+']" id="cover_id_'+id+'"/>'
+		+'<div class="upload-img-box"></div>'
+		+'</div></td><td>'
+		+'<input type="text" value="" name="name['+id+']" class="text input-large" style="width:250px">'
+		+'</td><td>'
+		+'<input type="text" value="'+i+'" name="order['+id+']" class="optionSort text input-large" style="width:80px">&nbsp;'
+		+'</td><td>'
+		+'<a href="###" onClick="delOpt(this)" class="fr btn btn-yellow" >删除</a></td></tr>';
+	$('#option_list').append(html);
+	initPuls(); 
+    changeOption();
+	$('.add_list_head').show();
+}
+function delOpt(obj){
+	$(obj).parents('tr').remove();
+}
+function changeOption(){
+	var val = $('input[name="is_img"]:checked').val();
+	if(val!=1){
+	   $('.uploadify').each(function() {
+          if($(this).attr('id')!='upload_picture_picurl') $(this).hide();
+       });
+	   $('.upload-img-box').each(function() {
+          if($(this).attr('rel')!='img') $(this).hide();
+       });
+	   $('.pic_td').hide();
+	}else{
+	   $('.uploadify').each(function() {
+          $(this).show();
+       });	
+	   $('.upload-img-box').each(function() {
+          $(this).show();
+       });	   
+	   $('.pic_td').show();	
+	}
+}
+$(function(){ 
+   initPuls(); 
+   changeOption(); 
+   initUploadImg();
+});
+$('#submit').click(function(){
+    $('#form').submit();
+});
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+    $('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });	
+    showTab();
+	
+	$('.toggle-data').each(function(){
+		var data = $(this).attr('toggle-data');
+		if(data=='') return true;		
+		
+	     if($(this).is(":selected") || $(this).is(":checked")){
+			 change_event(this)
+		 }
+	});
+	
+	$('.toggle-data').bind("click",function(){ change_event(this) });
+});
+</script> 
+</block>

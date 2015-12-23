@@ -1,0 +1,288 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> <include file="Addons/_nav" />
+      <div class="tab-content"> 
+        <!-- 表单 -->
+        <form id="form" action="{:U('jpadd?xydzp_id='.$xydzp_id)}" method="post" class="form-horizontal">
+          <!-- 基础文档模型 -->
+          <input type="hidden" class="text input-large" name="xydzp_id" value="{$xydzp_id}">
+          <div class="form-item cf">
+            <label class="item-label">选择奖品<span class="check-tips">选择奖品库的奖品</span></label>
+            <div class="controls">
+              <select name="xydzp_option_id">
+                <volist name="jpdata" id="jp">
+                  <option value="{$jp['id']}">{$jp['title']}</option>
+                </volist>
+              </select>
+            </div>
+          </div>
+
+              <volist name="fields" id="field">
+                <if condition="$field['is_show'] == 4">
+                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                </if>
+                <if condition="$field['is_show'] == 1 || $field['is_show'] == 2 || ($field['is_show'] == 5 && I($field['name']))">
+                  <div class="form-item cf">
+                    <label class="item-label">{$field['title']}<span class="check-tips">
+                      <notempty name="field['remark']">（{$field['remark']}）</notempty>
+                      </span></label>
+                    <div class="controls">
+                      <switch name="field.type">
+                        <case value="num">
+                          <input type="text" class="text input-medium" name="{$field.name}" value="">
+                        </case>
+                        <case value="string">
+                          <input type="text" class="text input-large" name="{$field.name}" value="">
+                        </case>
+                        <case value="textarea">
+                          <label class="textarea input-large">
+                            <textarea name="{$field.name}"></textarea>
+                          </label>
+                        </case>
+                        <case value="datetime">
+                          <input type="text" name="{$field.name}" class="text input-large time" value="" placeholder="请选择时间" />
+                        </case>
+                        <case value="bool">
+                          <select name="{$field.name}">
+                            <volist name=":parse_field_attr($field['extra'])" id="vo"> <option value="{$key}" 
+                              
+                              <eq name="field.value" value="$key">selected</eq>
+                              >{$vo}
+                              
+                              </option>
+                            </volist>
+                          </select>
+                        </case>
+                        <case value="select">
+                          <select name="{$field.name}">
+                            <volist name=":parse_field_attr($field['extra'])" id="vo"> <option value="{$key}" 
+                              
+                              <eq name="field.value" value="$key">selected</eq>
+                              >{$vo}
+                              
+                              </option>
+                            </volist>
+                          </select>
+                        </case>
+                        <case value="radio">
+                          <volist name=":parse_field_attr($field['extra'])" id="vo">
+                            <label class="radio">
+                              <input type="radio" value="{$key}" name="{$field.name}">
+                              {$vo} </label>
+                          </volist>
+                        </case>
+                        <case value="checkbox">
+                          <volist name=":parse_field_attr($field['extra'])" id="vo">
+                            <label class="checkbox">
+                              <input type="checkbox" value="{$key}" name="{$field.name}[]">
+                              {$vo} </label>
+                          </volist>
+                        </case>
+                        <case value="editor">
+                          <label class="textarea">
+                            <textarea name="{$field.name}"></textarea>
+                            {:hook('adminArticleEdit', array('name'=>$field['name'],'value'=>''))} </label>
+                        </case>
+                        <case value="picture">
+                          <div class="controls">
+                            <input type="file" id="upload_picture_{$field.name}">
+                            <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}"/>
+                            <div class="upload-img-box" rel='img'>
+                              <notempty name="data[$field['name']]">
+                                <div class="upload-pre-item"><img src="{$data[$field['name']]|get_cover_url}"/></div>
+                              </notempty>
+                            </div>
+                          </div>
+                          <script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件 */
+								$("#upload_picture_{$field.name}").uploadify({
+							        "height"          : 30,
+							        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传图片",
+							        "uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							        "onUploadSuccess" : uploadPicture{$field.name}
+							    });
+								function uploadPicture{$field.name}(file, data){
+							    	var data = $.parseJSON(data);
+							    	var src = '';
+							        if(data.status){
+							        	$("#cover_id_{$field.name}").val(data.id);
+							        	src = data.url || '__ROOT__' + data.path;
+							        	$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(
+							        		'<div class="upload-pre-item"><img src="' + src + '"/></div>'
+							        	);
+							        } else {
+							        	updateAlert(data.info);
+							        	setTimeout(function(){
+							                $('#top-alert').find('button').click();
+							                $(that).removeClass('disabled').prop('disabled',false);
+							            },1500);
+							        }
+							    }
+								</script> 
+                        </case>
+                        <case value="file">
+                          <div class="controls">
+                            <input type="file" id="upload_file_{$field.name}">
+                            <input type="hidden" name="{$field.name}" value="{$data[$field['name']]}"/>
+                            <div class="upload-img-box">
+                              <present name="data[$field['name']]">
+                                <div class="upload-pre-file"><span class="upload_icon_all"></span>{$data[$field['name']]}</div>
+                              </present>
+                            </div>
+                          </div>
+                          <script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件 */
+								$("#upload_file_{$field.name}").uploadify({
+							        "height"          : 30,
+							        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传附件",
+							        "uploader"        : "{:U('File/upload',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        "onUploadSuccess" : uploadFile{$field.name}
+							    });
+								function uploadFile{$field.name}(file, data){
+									var data = $.parseJSON(data);
+							        if(data.status){
+							        	var name = "{$field.name}";
+							        	$("input[name="+name+"]").val(data.id);
+							        	$("input[name="+name+"]").parent().find('.upload-img-box').html(
+							        		"<div class=\"upload-pre-file\"><span class=\"upload_icon_all\"></span>" + data.name + "</div>"
+							        	);
+							        } else {
+							        	updateAlert(data.info);
+							        	setTimeout(function(){
+							                $('#top-alert').find('button').click();
+							                $(that).removeClass('disabled').prop('disabled',false);
+							            },1500);
+							        }
+							    }
+								</script> 
+                        </case>
+                        <default/>
+                        <input type="text" class="text input-large" name="{$field.name}" value="">
+                      </switch>
+                    </div>
+                  </div>
+                </if>
+              </volist>
+              <script type="text/javascript">
+//上传图片
+/* 初始化上传插件 */
+var node = '';
+function initPuls(){
+	$(".uploadImage").each(function(index, obj) {
+		var id = $(obj).attr('rel');
+		if(id>0)
+			node = '#uploadImage_exist_'+id;
+		else
+		    node = '#uploadImage_'+(0-id);
+		$(node).uploadify({
+			"height"          : 30,
+			"swf"             : "__STATIC__/uploadify/uploadify.swf",
+			"fileObjName"     : "download",
+			"buttonText"      : "上传图片",
+			"uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+			"width"           : 120,
+			'removeTimeout'	  : 1,
+			'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+			"onUploadSuccess" : function(file, data, response) {
+                uploadPictureimage(file, data, id);
+            }
+	    });
+	});
+}
+
+//控制中奖方式
+function typeChangeOption(){
+	var val = $('select[name="type"]').eq(0).val();
+	switch(val){
+		case "0":
+			$('input[name="gailv"]').eq(0).parent().parent().show();
+			$('input[name="gailv_str"]').eq(0).parent().parent().hide();
+			break;
+		case "1":
+		case "2":
+		case "3":
+		case "4":
+			$('input[name="gailv"]').eq(0).parent().parent().hide();
+			$('input[name="gailv_str"]').eq(0).parent().parent().show();
+			break;
+		
+	}	
+}
+
+function uploadPictureimage(file, data, id){
+	var data = $.parseJSON(data);
+	var src = '';
+	if(data.status){
+		$("#cover_id_"+id).val(data.id);
+		src = data.url || '__ROOT__' + data.path;
+		$("#cover_id_"+id).parent().find('.upload-img-box').html(
+			'<div class="upload-pre-item"><img src="' + src + '"/></div>'
+		);
+	} else {
+		updateAlert(data.info);
+		setTimeout(function(){
+			$('#top-alert').find('button').click();
+			$(that).removeClass('disabled').prop('disabled',false);
+		},1500);
+	}
+}
+
+$(function(){ 
+   initPuls(); 
+   typeChangeOption();
+   $('select[name="type"]').eq(0).bind("change",typeChangeOption);
+});
+</script> 
+
+          <div class="form-item cf">
+            <input type="hidden" value="0" id="isjx" name="isjx">
+            <button class="btn submit-btn ajax-post" id="submitjx" type="submit" target-form="form-horizontal">保存后继续</button>
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">保 存</button>
+            <!--<a class="home_btn btn-return" href="javascript:;">返 回</a>--> </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js?v={:SITE_VERSION}"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+  <script type="text/javascript">
+$('#submit').click(function(){
+    $('#form').submit();
+});
+$('#submitjx').click(function(){
+	$('#isjx').val("1");
+    $('#form').submit();
+});
+
+
+$(function(){
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });
+    showTab();
+
+});
+</script> 
+</block>

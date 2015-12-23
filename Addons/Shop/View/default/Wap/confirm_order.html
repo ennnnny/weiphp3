@@ -1,0 +1,70 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div class="container"> 
+  <!-- 选择收货地址 --> 
+  <a class="choose_address" href="{:addons_url('Shop://Wap/choose_address')}"> 
+  <empty name="address">
+  <!-- 没有 --> 
+  <span class="write"><em class="write_icon">&nbsp;</em>请选择收货地址</span> 
+  <input type="hidden" name="address_id" id="address_id" value="" />
+  <else />
+  <!-- 已有收货地址 -->
+  <div class="adress_item"> <span class="label">送至</span> <span class="address">{$address.city_name} {$address.address}<br/>
+    {$address.truename}  {$address.mobile}</span> </div>
+    <input type="hidden" name="address_id" id="address_id" value="{$address.id}" />
+    </empty>
+    
+  <em class="arrow_right">&nbsp;</em> </a> 
+  <!-- 订单信息 -->
+  <div class="order_info">
+    <p class="t">订单信息</p>
+    <ul>
+      <volist name="lists" id="vo">
+        <li class="order_item"> <img src="{$vo.cover|get_cover_url}" />
+          <div class="info">
+            <P class="name">{$vo.title}</P>
+            <!--<p class="property">
+                    	<span class="colorless">编号</span>
+                    	<span>1212121212</span>
+                    </p>
+                    <p class="property">
+                    	<span class="colorless">型号</span>
+                    	<span>红色 34</span>
+                    </p>-->
+            <p class="property"> <span class="colorless">价格</span> <span class="orange">￥{$vo.price|wp_money_format}</span> </p>
+            <p class="property"> <span class="colorless">数量</span> <span>{$vo.num|intval}</span> </p>
+          </div>
+        </li>
+      </volist>
+    </ul>
+    <!--<p class="ship_type"> <span class="fl">配送方式</span> <span class="fr">快递：10元</span> </p>-->
+    <p class="order_remark">
+      <textarea placeholder="给卖家给留言" name="remark" id="remark"></textarea>
+    </p>
+    <p class="total_price"> <span class="orange">共{$total_price|wp_money_format}元</span> </p>
+    <a class="btn" href="javascript:void(0)" onClick="doPost()">提交订单</a> </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+function doPost(){
+	var address_id = $('#address_id').val();
+	if(address_id==''){
+	    $.Dialog.fail("请选择收货地址");
+		return false;	
+	}
+	var remark = $('#remark').val();
+
+	var url = "{:U('add_order')}";
+	$.post(url,{'address_id':address_id,'remark':remark},function(res){
+		var orderid=parseInt(res);
+		if(orderid==0){
+			$.Dialog.fail("提交订单失败");
+		}else{
+			$url="{:U('choose_pay')}&order_id="+orderid;
+			window.location.href=$url;
+		}
+	});
+}
+</script>

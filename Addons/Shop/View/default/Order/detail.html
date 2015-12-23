@@ -1,0 +1,123 @@
+<extend name="Base/common" />
+<block name="body">
+<style type="text/css">
+.order_info{ margin:20px 0; min-height:100px; border:1px solid #eee; background:#f3f3f3; padding:10px;}
+.order_info p{ color:#888; font-size:12px;}
+.order_info p.title{ font-size:16px; line-height:30px; color:#333;}
+.order_info .cover{ float:left; width:100px; height:100px;}
+.order_info .info_content{ padding-left:110px; line-height:22px;}
+.address_info{ padding:10px;border:1px solid #eee; background:#f3f3f3;}
+.address_info p{ line-height:30px;}
+.address_info p span{ color:#888;}
+.action_wrap{ margin:20px 0; border:1px solid #F90; background:#fef5ea; padding:20px;}
+#sendDiv .tab{ height:40px; margin:15px 0 0; }
+#sendDiv .tab a{ height:40px; line-height:40px; float:left; padding:0 20px; }
+#sendDiv .tab a.current{background:#44b549; color:#fff}
+.tab_content{ padding:10px; background:#fff;border:1px solid #44b549;}
+.f_i{ margin:10px 0;}
+</style>
+  <div class="span9 page_message">
+  <section id="contents"> 
+  	
+    <div class="tab-content"> 
+    	<div class="order_detail">
+        	<h3>订单编号：{$info.order_number}</h3>
+            <volist name="info.goods" id="gg">
+            <div class="order_info">
+            	<img class="cover" src="{$gg.cover|get_cover_url}"/>
+                <div class="info_content">
+                <p class="title">{$gg.title}</p>
+                <p>购买数量：{$gg.num}</p>
+                <p>单价：{$gg.price}元</p>
+                <p>总价：{$gg[price]*$gg[num]}元</p>
+            	</div>
+            </div>
+            </volist>
+            <div class="address_info">
+            	<p><span>收件人：</span>{$addressInfo.truename}</p>
+                <p><span>联系方式：</span>{$addressInfo.mobile}</p>
+                <p><span>收货地址：</span>{$addressInfo.address}</p>
+                <p><span>付款方式: </span>{$info.common}</p>
+                <p><span>总价: </span>{$info.total_price}元</p>
+            	<p><span>订单留言: </span>{$info.remark}</p>                
+             </div>
+             <div class="action_wrap">
+            	<if condition="$info[pay_status]==0 && $info[pay_type]!=10">
+                	<p class="wait_pay">等待买家付款中...</p>
+                <else />
+                	<eq name="info[is_send]" value="0">
+                    	<p><eq name="info.pay_type" value="10">买家选择货到付款<else />买家已付款</eq>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn" href="javascript:;" onClick="$('#sendDiv').show();$(this).parent().hide()">发货</a></p>
+                        <form id="sendDiv" action="{:U('do_send')}" method="post" style="display:none">
+                            <div class="tab_content" id="tab1_content">
+                                <div class="f_i">
+                                    <label>物流公司</label>
+                                    <select name="send_code">
+                                        <option>请选择物流公司</option>
+                                        <option value="sf">顺丰</option>
+                                        <option value="sto">申通</option>
+                                        <option value="yt">圆通</option>
+                                        <option value="yd">韵达</option>
+                                        <option value="tt">天天</option>
+                                        <option value="ems">EMS</option>
+                                        <option value="zto">中通</option>
+                                        <option value="ht">汇通</option>
+                                        <option value="qf">全峰</option>
+                                    </select>
+                                </div>
+                                <div class="f_i">
+                                    <label>快递单号</label>
+                                    <input type="text" name="send_number" />
+                                </div>
+                                <input type="hidden" name="order_id" value="{$info.id}" />
+								<button class="btn submit-btn" type="submit">发货</button>
+                            </div>                            
+                        </form>
+                    <else/>
+                    	商品已发货
+                        <p>物流公司: {$info.send_code_name} &nbsp;&nbsp;&nbsp;快递单号: {$info.send_number}</p>
+                        <p><a href="javascript:;" onClick="getShopping();">跟踪物流</a></p>
+                        <div class="shipping_info" style="display:none">
+                        	<P>正在加载物流信息...</P>
+                        </div>
+                        <if condition="$info[pay_type]==10 and $info['pay_status']==0">
+                        <p>此订单为货到付款，如果您已经收到款项，请点击：&nbsp;&nbsp;&nbsp;<a href="javascript:;" onClick="doPay();">确认已经收款</a></p>
+                        </if>
+                    </eq>
+                </if>
+                
+            </div>
+                
+                
+        </div>
+           
+    </div>
+  </section>
+  </div>
+</block>
+<block name="script">
+<script type="text/javascript">
+function tabForm(_this,type){
+	$(_this).addClass('current').siblings().removeClass('current');
+    $('#tab'+type+'_content').show().siblings('.tab_content').hide();
+}
+function getShopping(){
+	$('.shipping_info').show();
+	//加载物流信息到shipping_info
+	$.post("{:U('get_send_info')}",{id:"{$info.id}"},function(html){
+		if(html==''){
+			$('.shipping_info').html('<P>暂时无物流信息</P>');
+		}else{
+			$('.shipping_info').html(html);
+		}
+	    
+	});
+}
+function doPay(){
+	if(confirm('确认设置为已收款？')){
+		$.post("{:U('set_pay_status')}",{id:"{$info.id}"},function(res){
+			 location.reload();
+	    });
+	}
+}
+</script>
+</block>

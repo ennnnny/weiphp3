@@ -1,0 +1,74 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+  <section id="contents"> 
+  	
+    <div class="tab-content">
+    <if condition="!empty($normal_tips)">
+		<p class="normal_tips"><b class="fa fa-info-circle"></b> {$normal_tips}</p>
+		<br/>
+	</if> 
+    	<empty name="info">
+        	<!-- 还没创建店铺 -->
+        	<h3><center><br/><br/><br/><br/>你还没有创建店铺，请先<a href="{:U('add')}">创建店铺</a>！</center></h3>
+        <else/>	
+            <div class="shop_base">
+            <notempty name='info.logo'>
+            	<img src="{$info.logo|get_cover_url}">
+            	<else />
+            	<img alt="默认LOGO" src="__IMG__/smile.png">
+            </notempty>
+                <div class="info">
+                    <p class="name">{$info.title}</p>
+                    <p>{$info.intro}</p>
+                    <div class="shop_summary">
+                        <span>在售商品: <em>{$count.sale_count|intval}</em></span>
+                        <span>下架商品: <em>{:intval($count['total_count']-$count[sale_count])}</em></span>
+                        <span>新订单数: <em style="color:red">{$order.new_count|intval}</em></span>
+                        <span>总订单数: <em>{$order.total_count|intval}</em></span>
+                    </div>
+                </div>
+                <div class="right_btn">
+                	<a class="btn" href="{:addons_url('Shop://Shop/preview')}" target="_blank">预览店铺</a>
+                    &nbsp;&nbsp;
+                    <a class="border-btn" id="copyLink" href="javascript:;" data-clipboard-text="{:addons_url('Shop://Wap/index',array('shop_id'=>$info['id'],'publicid'=>$public_info[id]))}">复制链接</a>
+                    <script type="application/javascript">
+                    	$.WeiPHP.initCopyBtn('copyLink');
+                    </script>
+                </div>
+            </div>
+            
+            <h3>24小时流量趋势</h3>
+            <div class="shop_pv" style="height:400px;">
+            	
+            </div>
+        </empty>
+    </div>
+  </section>
+  </div>
+</block>
+<block name="script"> 
+<script type="text/javascript" src="__STATIC__/highcharts-4.0.1/js/highcharts.js"></script>
+<script>
+$(function () {
+    $('.shop_pv').highcharts({
+        chart: {
+            type: 'area'
+        },
+		title: {
+            text: ''
+        },
+        xAxis: {
+            categories: [{$highcharts.xAxis}]
+        },
+        series: [{
+			name:'流量',
+            data: [{$highcharts.series}]
+        },{
+			name:'订单',
+            data: [{$highcharts.series2}]
+        },]
+    });
+});   	
+</script>			
+</block>

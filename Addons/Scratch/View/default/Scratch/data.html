@@ -1,0 +1,101 @@
+<div class="scr_top">
+    <img src="{:ADDON_PUBLIC_PATH}/top.jpg"/>
+    <div class="area">
+        <img src="{:ADDON_PUBLIC_PATH}/area.png"/>
+        <div class="scratch_area">
+        
+          <php> if ($error) { </php>
+            <div class="prize_text" style="font-size:16px; line-height:22px;">{$error}</div>   
+            <canvas style="display:none" /> 
+          <php> } else { </php>
+                <!-- 抽奖信息 -->
+                <div class="prize_text" style="display:none">{$prize.title}</div>
+                <canvas />             
+         <php> } </php> 
+        </div>
+    </div>
+</div>
+<if condition="$prize['count'] gt 0">
+    <p class="repeat_tips"><notempty name="data.max_num" >您还有<span id="leftCount">{$prize.count}</span>次抽奖机会，</notempty><a href="javascript:window.location.reload();">再刮一次</a></p>
+</if>
+<div class="block_out">
+    <div class="block_inner">
+        <h6>活动说明</h6>
+        <div class="desc">{$data.intro}</div>
+    </div>
+</div>
+<!--奖项 -->
+<div class="block_out">
+    <div class="block_inner">
+        <h6>活动奖项</h6>
+        <div class="desc">
+        <empty name="prizes">
+            <p class="empty">还没有设置奖项</p>
+        <else/>
+            <ul class="gift_list">
+            <volist name="prizes" id="vo">
+                <li>
+                    <p>{$vo.title}:({$vo.num|intval}名)</p>
+                    {$vo.img|get_img_html}
+                    <span>{$vo.name}</span>                   
+                </li>
+             </volist>
+            </ul>
+            </empty>
+        </div>
+    </div>
+</div>
+    <!--中将记录 -->
+    <div class="block_out">
+        <div class="block_inner">
+            <h6>我的中奖记录</h6>
+            
+            <empty name="my_prizes">
+            <p class="empty">您目前还没有中过奖</p>
+            <else />
+            <ul class="gift_history" id="my_gift_history">
+            <notempty name="prize.id">
+                    <li id="now_my_prize" style="display:none">
+                        <span class="col_1">刚刚</span>
+                        <span class="col_2">{$prize.title}</span>
+                    </li>  
+             </notempty>                      
+                <volist name="my_prizes" id="vo">
+                    <li>
+                        <span class="col_1">{$vo.cTime|time_format}</span>
+                        <span class="col_2">{$vo.prize_title}</span>
+                    </li>
+               </volist>
+             </ul>
+            </empty>
+        </div>
+    </div>
+    <!--最新中将记录 -->
+    <div class="block_out">
+        <div class="block_inner">
+            <h6>最新中奖记录</h6>
+            <empty name="new_prizes">
+            <p class="empty">暂还没有中奖记录</p>
+            <else />
+            <ul class="gift_history">
+              <volist name="new_prizes" id="vo">
+                <li>
+                    <span class="col_1">{$vo.cTime|time_format}</span>
+                    <span class="col_2">{$vo.uid|get_nickname}</span>
+                    <span class="col_3">{$vo.prize_title}</span>
+                </li>
+               </volist>
+             </ul>
+          </empty>
+        </div>
+    </div>
+    <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+    <script type="text/javascript">
+    	 $.WeiPHP.initWxShare({
+				title:'{$data.title}',
+				imgUrl:'{$data.cover|get_cover_url}',
+				desc:'{$data.intro}',
+				link:window.location.href
+			})
+    </script>
+</div>

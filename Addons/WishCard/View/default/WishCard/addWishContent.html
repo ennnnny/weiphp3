@@ -1,0 +1,49 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+  <section id="contents"> <include file="Addons/_nav" />
+    <div class="tab-content"> 
+      <!-- 表单 -->
+       <php> $post_url || $post_url = U('add?model='.$model['id'], $get_param);</php>
+      <form id="form" action="{$post_url}" method="post" class="form-horizontal" style="overflow:hidden">
+      	 <div class="fl" style="width:600px;">
+         	<div class="form-item">
+                <div class="controls">
+                    <label class="item-label">
+                           祝福语类别<span class="check-tips"></span>
+                    </label>
+                    <select name="content_cate_id">
+                        <volist name="content_cate" id="vo">
+                            <option value="{$vo.id}">{$vo.content_cate_name}</option>
+                        </volist>
+                    </select>
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="item-label">
+                       祝福语<span class="check-tips"></span>
+                </label>
+                <div class="controls">
+                    <label class="textarea input-large">
+                        <textarea name="content"></textarea>
+                    </label>
+                </div>
+            </div>
+         </div>   
+          <div class="form-item form_bh" style="text-align:center">
+            <notempty name="data.id"><input type="hidden" name="id" value="{$data.id}"></notempty>
+              <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">提交</button>
+          </div>
+    </form>
+    
+    </div>
+  </section>
+  </div>
+</block>
+<block name="script">
+<script type="text/javascript">
+$('#submit').click(function(){
+    $('#form').submit();
+});
+</script> 
+</block>

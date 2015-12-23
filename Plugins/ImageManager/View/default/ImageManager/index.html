@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>图片管理</title>
+ <!--[if lt IE 9]>
+<script type="text/javascript" src="__STATIC__/jquery-1.10.2.min.js"></script>
+<![endif]--><!--[if gte IE 9]><!-->
+<script type="text/javascript" src="__STATIC__/jquery-2.0.3.min.js"></script>
+<script src="{$addon_path}Public/jquery.lazyload.js" type="text/javascript" charset="utf-8"></script>
+<!--<![endif]-->
+<link rel="stylesheet" type="text/css" href="{$addon_path}Public/style/reset.css" />
+<link rel="stylesheet" type="text/css" href="{$addon_path}Public/style/style.css?20150708" />
+</head>
+
+<body style="padding:33px 8px 52px;">
+<div class="header">
+	<h2>图片管理
+        <select name="time" id="strTime">
+            <option value="all">全部日期</option>
+            <volist name='strTimes' id='time'>
+            <option value="{$key}" data-cur='{$curtime}' <eq name='key' value='$curtime'>selected</eq>>{$time}</option>
+            </volist>
+        </select>
+    </h2>
+</div>
+
+<ul id="pics" class="pictures cf" data-columns="6">
+	<volist name='_list' id='pic'>
+        <li class="picture" data-id="{$pic.id}" data-json='"url": "{$pic.url}","path": "{$pic.path}","id": "{$pic.id}","status": 1,"info": "上传成功"'>
+        	<div class="picture-preview js--select-attachment type-image subtype-jpeg portrait">
+                <div class="thumbnail">
+                    <div class="centered"><img src="{$addon_path}Public/grey.gif" data-original="__ROOT__{$pic.path}" /></div>
+                    <if condition='$config["delete_switch"] eq 1'>
+                    <a href="javascript:;" data-id="{$pic.id}" class="delete_button" title="删除图片">删除</a>
+                    </if>
+                </div>
+            </div>
+            <a title="取消选择" href="javascript:;" class="check"><div class="media-modal-icon"></div></a>
+        </li>
+    </volist>
+</ul>
+<div class="page">
+    {$_page}
+</div>
+<div class="footer">
+	<input type="button" id="confirm" value="确定" disabled />
+</div>
+
+<script type="text/javascript">
+$(".picture").click(function(e){
+	if(e.ctrlKey) {
+		if ($(this).hasClass("selected")) {
+			$(this).removeClass("details selected");
+			if ($(".details").length <= 0) {
+				$(".selected:last").addClass("details");
+			}
+		}else {
+			$(this).addClass("details selected").siblings().removeClass("details");
+			//$("#confirm").prop("disabled", false);
+		}
+	}else {
+		if ($(this).hasClass("details selected")) {
+			$(this).removeClass("details selected");
+			//$("#confirm").prop("disabled", true);
+		}else {
+			$(this).addClass("details selected").siblings().removeClass("details selected");
+			//$("#confirm").prop("disabled", false);
+		}
+	}
+	if ($(".selected").length <= 0) {
+		$("#confirm").prop("disabled", true);
+	}else {
+		$("#confirm").prop("disabled", false);
+	}
+})
+$("#confirm").click(function(e) {
+	if ($("li.selected").length <= 0) {
+		return false;
+	}
+	$("li.selected").each(function(index, element) {
+		window.parent.uploadPicture("{$name}",{}, "{" + $(this).data("json") + "}");
+        //console.log($(this).data("json"));
+    });
+	$(window.parent.document).find(".fancybox-overlay").click();
+});
+var url = "{:addons_url('ImageManager://ImageManager/ImageManager', array('name' => $name))}";
+$("#strTime").change(function(e) {
+	var value = $(this).val();
+	window.location.href = url + '&times='+value;
+});
+$("img").lazyload({
+	effect : "fadeIn"
+});
+$(".delete_button").on("click", function(){
+    var id = $(this).data('id'), isdelete = false;
+    if (window.confirm('确认删除？')) {
+        isdelete = true;
+    }
+    if (isdelete) {
+        $.ajax({
+            url : "{:addons_url('ImageManager://ImageManager/deleteImage')}",
+            type : 'POST',
+            data : {id : id},
+            dataType : 'JSON',
+            success : function(json){
+                if (json.status == 1) {
+                    location.reload();
+                }else {
+                    alert(json.info);
+                }
+            }
+        });
+    }
+})
+</script>
+</body>
+</html>

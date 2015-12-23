@@ -1,0 +1,44 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body class="withFoot">
+    <div class="container">
+    	
+    	<h6 style="text-align:center; padding-top:10px;">我的收藏</h6>
+         <empty name="orderList">
+       		 <div class="empty_container"><p>暂时收藏</p></div>
+        </empty>
+        <!-- 收藏 -->
+        <div class="order_list">
+        	<ul>
+            	<volist name="myCollect" id="vo">
+                <li>
+                	
+                    <a class="goods_item" href="{:U('detail',array('shop_id'=>$shop_id,'id'=>$vo[goods_id]))}">
+                        <img src="{$vo.cover|get_cover_url}"/>
+                        <div class="info">
+                            <P class="name">{$vo.title}</P>
+                            <!--
+                            <p class="property">
+                                <span class="colorless">型号</span>
+                                <span>红色 34</span>
+                            </p>
+                            -->
+                            <p class="property">
+                                <span class="colorless">价格</span>
+                                <span class="orange">￥{$vo.price}</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                </volist>
+                
+            </ul>
+         </div>
+        
+         
+        
+    </div>	
+     <!-- 底部导航 -->
+    <include file="_footer"/>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> <include file="Addons/_nav" />
+      <div class="table-bar">
+      	<div class="fl">
+          <empty name="model.extend">
+			<div class="tools">
+				<if condition="$add_button"><php> $add_url || $add_url = U('add?model='.$model['id'], $get_param);</php><a class="btn" href="{$add_url}">新 增</a></if>
+				<php>if(C('MATERIAL')) { </php> 
+                <a class="btn" href="{:U('syc_news_to_wechat')}">一键上传素材到微信素材库</a>
+                <a class="btn" href="{:U('syc_news_from_wechat')}">一键下载微信素材库到本地</a>
+                 <php> } </php>
+                
+                <volist name="top_more_button" id="vo">
+                <if condition="$vo[is_buttion]">
+                <button class="btn {$vo.class}" target-form="ids" url="{$vo.url}">{$vo.title}</button>
+                <else />
+                <a class="btn" href="{$vo.url}">{$vo.title}</a>
+                </if>
+                &nbsp;
+                </volist>            
+			</div>
+          </empty>
+        </div>
+        <div class="search-form fr cf">
+          <div class="sleft">
+            <php> $search_url = U('material_lists', $get_param);</php>
+            <php>empty($search_key) && $search_key=$model['search_key'];empty($search_key) && $search_key='title';</php>
+            <input type="text" name="{$search_key}" class="search-input" value="{:I($search_key)}" placeholder="{$placeholder}">
+            <a class="sch-btn" href="javascript:;" id="search" url="{$search_url}"><i class="btn-search"></i></a> </div>
+        </div>
+      </div>
+      <!-- 数据列表 -->
+      <div class="data-table">
+      
+        <div class="table-striped">
+        	<ul class="material_list js-masonry"  data-masonry-options='{ "itemSelector": ".appmsg_li", "columWidth": 308 }'>
+            <volist name="list_data" id="vo">
+            <if condition="$vo[count]==1">
+            	<!-- 单图文 -->
+                <li class="appmsg_li">
+                	<div class="appmsg_item">
+                        <h6 style="overflow: hidden;">{$vo.title}</h6>
+                        <p class="title">{$vo.cTime|time_format}</p>
+                        <div class="main_img">
+                            <img src="{$vo.cover_id|get_cover_url}"/>
+                        </div>
+                        <p class="desc" style="overflow: hidden;">{$vo.intro}</p>
+                    </div>
+                    <div class="appmsg_action">
+                    	<a href="{:U('add_material', array('group_id'=>$vo[group_id]))}">编辑</a>
+                        <a href="{:U('del_material_by_groupid', array('group_id'=>$vo[group_id]))}">删除</a>	
+                    </div>
+                </li>
+                <else />
+                <!-- 多图文 -->
+                <li class="appmsg_li">
+                	<div class="appmsg_item">
+                        <p class="title">{$vo.cTime|time_format}</p>
+                        <div class="main_img">
+                            <img src="{$vo.cover_id|get_cover_url}"/>
+                            <h6>{$vo.title}</h6>
+                        </div>
+                        <p class="desc">{$vo.intro}</p>
+                    </div>
+                    <volist name="vo.child" id="vv">
+                    <div class="appmsg_sub_item">
+                        <p class="title">{$vv.title}</p>
+                        <div class="main_img">
+                            <img src="{$vv.cover_id|get_cover_url}"/>
+                        </div>
+                    </div>
+                    </volist>
+                    <div class="appmsg_action">
+                    	<a href="{:U('add_material', array('group_id'=>$vo[group_id]))}">编辑</a>
+                        <a href="{:U('del_material_by_groupid', array('group_id'=>$vo[group_id]))}">删除</a>	
+                    </div>
+                </li>
+                </if>
+            	</volist>
+            </ul>
+          
+        </div>
+      </div>
+      <div class="page"> {$_page|default=''} </div>
+    </section>
+  </div>
+</block>
+<block name="script"> 
+  <script type="text/javascript">
+$(function(){
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search-form').find('input').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+        if(query == '' ){
+        	url="{:addons_url($_REQUEST ['_addons'].'://'.$_REQUEST ['_controller'].'/lists')}";
+        }
+		window.location.href = url;
+	});
+
+    //回车自动提交
+    $('.search-form').find('input').keyup(function(event){
+        if(event.keyCode===13){
+            $("#search").click();
+        }
+    });
+
+})
+</script> 
+</block>

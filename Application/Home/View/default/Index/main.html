@@ -1,0 +1,88 @@
+<extend name="Base/no_side_common" />
+<block name="body">
+  <div class="admin_container">
+    <section id="contents" class="tab-content">
+      <div class="table-bar">
+        <div class="main_data">
+        	<div class="left">
+        	<a class="data_item" href="{:addons_url('UserCenter://UserCenter/lists')}">
+            	<span>{$count.today|intval}</span><br/>今日新增用户
+            </a>
+            <a class="data_item" href="{:addons_url('UserCenter://UserCenter/lists')}">
+            	<span>{$count.yestoday|intval}</span><br/>昨日新增用户
+            </a>
+            </div>
+            <a class="data_item" href="{:addons_url('UserCenter://UserCenter/lists')}">
+            	<span>{$count.total|intval}</span><br/>总用户数
+            </a>
+            
+        </div>
+        <notempty name="notices">
+        <h6 class="main_h6">官网公告</h6>
+        <div class="main_notice">
+        <volist name="notices" id="nt">
+      		<p><a href="{$nt.url}" target="_blank">◆ {$nt.title}</a></p>
+            </volist>
+        </div>
+        </notempty>
+        <h6 class="main_h6">我的应用</h6>
+     
+       
+      <div class="main_apps">
+      	<ul>
+            <volist name="list_data" id="data">
+                <li>
+                	<div class="img">
+                		<a href="{$data.addons_url}"><img src="{$data.app_icon}"/></a>
+                    	
+                    </div>
+                	<div class="desc">
+                          <p class="name">{$data.title}</p>
+                          <p class="intro">{$data.description}</p>
+                          <p><a class="use_btn" href="{:U('setStatus','addon='.$data['name'].'&status='.$data['status'])}">{$data.action}</a></p>
+                    </div>
+                </li>
+            </volist>
+        </ul>
+      </div>
+      <div  class="mt_10"><center><a class="btn btn-large" href="http://bbs.weiphp.cn">获取更多应用</a></center></div>
+
+    </section>
+  </div>
+</block>
+<block name="script"> 
+  <script type="text/javascript">
+$(function(){
+	//ajax 提交启用
+	$('.use_btn').click(function(){
+		var href = $(this).attr('href');
+		var _this =$(this);
+		if(href.indexOf("1.html")!=-1){
+			//禁用
+			$.get(href,function(){
+				updateAlert("更新成功!","alert-success");
+				_this.attr('href',href.replace("1.html","0.html"));
+				_this.text("启用");
+				_this.parents('tr').attr('style','color:#ccc');
+				_this.parents('tr').find('.use_status').text("已禁用");;
+			});
+		}else{
+				//启用
+				$.get(href,function(){
+					updateAlert("更新成功!","alert-success");
+					_this.attr('href',href.replace("0.html","1.html"));
+					_this.text("禁用");
+					_this.parents('tr').removeAttr('style');
+					_this.parents('tr').find('.use_status').text("已启用");
+				});
+				}
+		setTimeout(function(){
+			$('#top-alert').find('.close').click();
+			},3000);		
+		return false;
+		
+		});
+
+})
+</script> 
+</block>

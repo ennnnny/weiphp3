@@ -1,0 +1,94 @@
+<html>
+	<head>
+    <meta http-equiv="Content-Type"content="text/html; charset=UTF-8">
+    <meta name="viewport"content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable"content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style"content="black">
+    <meta name="format-detection"content="telephone=no">
+    <style type="text/css">
+		*{ padding:0; margin:0;}
+    	.payHead{ background:#096; padding:60px; text-align:center; color:#fff}
+		.payHead .span1{ font-size:16px;}
+		.payHead .price{ font-size:30px; line-height:40px; font-weight:bold;}
+		.button{ color:#fff; font-size:16px; background:#0C3; border-radius:5px; padding:12px 0; text-align:center; display:block; margin:20px; -webkit-appearance:none; border:none; text-decoration:none;}
+		.failMsg{ padding:15px; margin:20px; background:#FFC; text-align:left; color:red;}
+    </style>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <title>微信支付</title>
+   
+    <script type="text/javascript">
+// 		function callpay(){
+// 			WeixinJSBridge.invoke('getBrandWCPayRequest',{$url},
+// 			function(res){
+// 				//WeixinJSBridge.log(res.err_msg);
+// 				if(res.err_msg=='get_brand_wcpay_request:ok'){
+// 					document.getElementById('payDom').style.display='none';
+// 					document.getElementById('successDom').style.display='block';
+// 					setTimeout(function(){
+// 						window.location.href = '{$returnUrl}';	
+// 					},2000);
+// 				}else{
+// 					document.getElementById('payDom').style.display='none';
+// 					document.getElementById('failDom').style.display='block';
+// 					document.getElementById('failRt').innerHTML=res.err_code+'<br/>'+res.err_desc+'<br/>'+res.err_msg;
+// 				}
+// 			});
+// 		}
+	
+		//调用微信JS api 支付
+		function jsApiCall()
+		{
+			WeixinJSBridge.invoke(
+				'getBrandWCPayRequest',
+				{$jsApiParameters},
+				function(res){
+					WeixinJSBridge.log(res.err_msg);
+					alert(res.err_code);
+					alert(res.err_desc);
+					alert(res.err_msg);
+// 					alert(res.err_code+res.err_desc+res.err_msg);
+				}
+			);
+		}
+
+		function callpay()
+		{
+			if (typeof WeixinJSBridge == "undefined"){
+			    if( document.addEventListener ){
+			        document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+			    }else if (document.attachEvent){
+			        document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+			        document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+			    }
+			}else{
+			    jsApiCall();
+			}
+		}
+    </script>
+</head>
+<body>
+	<div>
+    	<div class="payHead">
+        	<span class="span1">支付信息</span><br/>
+            <span class="price">金额:{$price}元</span>
+        </div>	{$jsApiParameters}
+        <div class="footReturn" id="payDom">
+        	<a href="javascript:void(0);" class="button" onClick="callpay()" >点击进行微信支付</a>
+        </div>
+    </div>
+    <div id="failDom" style="display:none">
+    	<div class="failMsg">
+            支付结果:支付失败
+            <div id="failRt">
+            </div>
+        </div>
+        <div id="footReturn">
+            <a href="javascript:void(0);" class="button" onClick="callpay()">重新进行支付</a>
+        </div>
+    </div>
+    <div id="successDom" style="display:none">
+    	<span>支付成功</span>
+        <span>您已支付成功，页面正在跳转...</span>
+    </div>
+</body>
+</html>

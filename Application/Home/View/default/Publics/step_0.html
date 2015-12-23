@@ -1,0 +1,113 @@
+<extend name="Base/no_side_common" />
+<block name="body">
+  <div class="wrap">
+	<section id="contents">
+  
+  <div class="setting_step app_setting">
+         <a class="step step_cur_1" href="{:U('Home/Public/step_0',array('id'=>$id))}">1.增加基本信息</a>
+         <!-- <a class="step " href="<empty name="id">javascript:;<else /> {:U('Home/Public/step_1',array('id'=>$id))}</empty>">2.配置公众平台</a>
+         <a class="step " href="<empty name="id">javascript:;<else /> {:U('Home/Public/step_2',array('id'=>$id))}</empty>">3.保存接口配置</a> 
+         -->
+         <a class="step " style="cursor:deault" >2.配置公众平台</a>
+         <a class="step " style="cursor:deault">3.保存接口配置</a> 
+  </div>     
+  
+  <div class="tab-content"> 
+    <!-- 表单 -->
+    <form class="form-horizontal bind_step_form" method="post" action="{:U('Home/Public/step_0')}" id="form" style="overflow:hidden; zoom:1">
+      <!-- 基础文档模型 -->
+      <div class="tab-pane in tab1" id="tab1">
+        <div class="item_wrap">
+      	 <div class="form-item cf">
+          <label class="item-label"> <span class="need_flag">*</span> 公众号类型 <span class="check-tips"> （请正确选择，公众号类型对应的接口如果没有权限，相关的功能将不显示）</span></label>
+          <div class="controls">
+                <select name="type">
+                   <option value="0" <eq name="info.type" value="0">selected</eq> >普通订阅号</option>
+                   <option value="1" <eq name="info.type" value="1">selected</eq> >微信认证订阅号</option>
+                   <option value="2" <eq name="info.type" value="2">selected</eq> >普通服务号</option>
+                   <option value="3" <eq name="info.type" value="3">selected</eq> >微信认证服务号</option>
+                </select>
+          </div>
+        </div>        
+      	 <div class="form-item cf toggle-public_name">
+          <label class="item-label"> <span class="need_flag">*</span> 公众号名称 <span class="check-tips"> </span></label>
+          <div class="controls">
+            <input type="text" value="{$info.public_name}" name="public_name" class="text input-large">
+          </div>
+        </div>
+        <div class="form-item cf toggle-public_id">
+          <label class="item-label"> <span class="need_flag">*</span> 原始ID <span class="check-tips"> （请正确填写，保存后不能再修改，且无法接收到微信的信息） </span></label>
+          <div class="controls">
+            <input type="text" value="{$info.public_id}" name="public_id" class="text input-large">
+          </div>
+        </div>
+        <div class="form-item cf toggle-wechat">
+          <label class="item-label"> <span class="need_flag">*</span> 微信号 <span class="check-tips"> </span></label>
+          <div class="controls">
+            <input type="text" value="{$info.wechat}" name="wechat" class="text input-large">
+          </div>
+        </div>       
+        <php>if(C('DIV_DOMAIN') && SITE_DOMAIN != 'localhost') { $arr = explode ( '.', SITE_DOMAIN ); if(count($arr)>2) { unset($arr[0]); } $new_site_domain = implode ( '.', $arr );</php>   
+        <div class="form-item cf toggle-domain">
+          <label class="item-label"> <span class="need_flag">*</span> 专属域名 <span class="check-tips">只能由字母，数字和下划线组成，不能是纯数字</span></label>
+          <div class="controls">
+            http://<input type="text" value="{$info.domain}" name="domain" class="text input-large" style="width:50px">.{$new_site_domain}
+          </div>
+        </div>
+        <php> } </php>           
+        </div>     
+        <div class="form-item cf mt_10 bind_step_form_next_item">
+          <input type="hidden" name="id" value="{$id|intval}">
+          <button target-form="form-horizontal" type="submit" id="submit" class="btn submit-btn ajax-post">下一步</button>
+          <br/>
+          <p style="padding:20px 0;">配置信息遇到问题？<a href="{:U('Home/index/lead')}" target="_blank">点击查看接入指引</a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!--帮助消息
+  <div class="help_content">
+      <h3>帮助信息</h3>
+      <p>以上消息可以从公众平台里找到，如下图</p>
+      <p><img src="{:SITE_URL}/Public/Home/images/help01.png" width="800"></p>
+      <a name="setting"></a>
+       <p>配置域名授权：在开发者中心，功能列表里配置，配置授权域名如下图</p>
+      <p><img src="{:SITE_URL}/Public/Home/images/help05.png" width="800"></p>
+       <p>配置JS接口安全域名，在公众号设置-功能配置里面配置，配置JS安全域名如下图</p>
+      <p><img src="{:SITE_URL}/Public/Home/images/help06.png" width="800"></p>
+  </div>
+  -->
+</section>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+  <script type="text/javascript">
+$('#submit').click(function(){
+    $('#form').submit();
+});
+
+$(function(){
+	 initUploadImg();
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+    $('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });	
+    showTab();
+});
+</script> 
+</block>

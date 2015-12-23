@@ -1,0 +1,21 @@
+<empty name="list_data">
+<div class="empty_container"><p>您的图片素材库为空，<a href="{:U('Home/Material/picture_lists')}">请先增加素材</a></p></div>
+<else /><div class="data_container"><ul class="material_list">
+      <volist name="list_data" id="vo">
+      <if condition="$vo[count]==1"><li class="appmsg_li" data-id="{$vo.id}" style="overflow:hidden">
+            <div class="appmsg_item">
+                <div class="main_img">
+                    <img src="{$vo.cover_url}" width='100px' height='100px'/>
+                </div>
+            </div>
+            <div class="hover_area"></div>
+        </li><else /><li class="appmsg_li" data-id="{$vo.id}" data-group_id="{$vo.group_id}" style="overflow:hidden">
+            <div class="appmsg_item">
+                <div class="main_img">
+                    <img src="{$vo.cover_url}" width='200px' height='200px'/>
+                </div>
+            </div>
+            <div class="hover_area"></div>
+        </li></if></volist></ul>
+</empty>
+<div class="page"> {$_page|default=''} </div></div>

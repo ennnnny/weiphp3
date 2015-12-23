@@ -1,0 +1,139 @@
+<include file="Public/mobile_head"/>
+<link rel="stylesheet" type="text/css" href="{:ADDON_PUBLIC_PATH}/shop_vote.css?v={:SITE_VERSION}">
+<body>
+    <div class="container">
+    	<div class="fixed_bg"></div>
+    	<div class="vote_wrap">
+        <empty name="vote_info">
+       		 <p class="empty_container"><img src="__IMG__/empty_content.png"/><br/>该活动不存在！</p>
+        <else />
+        	
+        		<div class="vote_content">
+	        		<p class='vote_title'>{$vote_info.title}</p>
+	        		<div>
+                    	<div class="vote_remark" onClick="switchRemark(this)">
+	        			<empty name='vote_info.remark'>
+	        				<p>{$vote_info.start_time|time_format='m月d日'} - {$vote_info.end_time|time_format='d日'},{$vote_info.title} 进行中！</p>
+	        			<else />
+	        				<p>{$vote_info.remark}</p>
+	        			</empty>
+                        <a href="javascript:;" class="open"></a>
+                        </div>
+	        		</div>
+	        	</div>
+        		<div class='option_list'>
+        			<notempty name='options'>
+        				<volist name='options'  id='vo'>
+        					<ul class='option_ul'>
+        						<li>
+        							<div class="list_content">
+                                        <a href="{:addons_url('Vote://Wap/option_detail')}&option_id={$vo.id}&vote_id={$vote_info.id}">
+                                            <img src="{$vo.image|get_cover_url=300,300}">
+                                        </a>
+                                        <div class="name">
+        									<p>{$vo.number}号 {$vo.truename}</p>
+        									<p class='opt_count'><span id="opt_count_{$vo.id}">{$vo.opt_count|intval} 票</span></p>
+                                        </div>
+                                        <div class="list_info">
+                                            <a class='detail_btn' href="{:addons_url('Vote://Wap/option_detail')}&option_id={$vo.id}&vote_id={$vote_info.id}" >了解</a>
+                                            <eq name='overtime' value='1'>
+                                                <span class="detail_btn over_btn"><em class="zan"></em>活动已结束</span>
+                                            <else />
+                                               <php> if($vo[has_vote]==1) { </php>
+                                               <a class='detail_btn has_vote'><em class="zan"></em>已投票</a>
+                                               <php> }elseif($finish_vote==1) { </php>
+                                                <a class='detail_btn over_btn'><em class="zan"></em>已投完</a>
+                                                <php> }else { </php>
+                                                <a class='detail_btn' onClick="vote_join({$vo.id},{$vote_info.id},this);"><em class="zan"></em>投TA 一票</a>
+                                                <php> } </php>
+                                            </eq>
+                                        </div>
+                                    </div>
+        						</li>
+        					</ul>
+        				</volist>
+        			</notempty>
+        		</div>
+        	
+        </empty>
+        </div>
+    </div>	
+<script type="text/javascript">
+var is_verify = '{$vote_info.is_verify}';
+function vote_join(optionid,voteid, _this){
+	if (optionid ==0) {
+        $.Dialog.fail('获取不到投票选项');
+		return false;
+    }
+    if (voteid ==0) {
+         $.Dialog.fail('该活动不存在');
+		 return false;
+    }
+	if($(_this).hasClass('has_vote')){
+		return false;
+	}
+	$(_this).addClass('has_vote');
+	if(is_verify!="" && parseInt(is_verify)==1){
+		$html = $('<p><img style="background:URL('+IMG_PATH +'/loading_icon.gif) no-repeat center center" width="100%" height="60" src="{:U("verify_img")}"/><br/><input type="text" name="verify" value=""/><a style="color:#3772cb;padding:5px 0 0 0;" href="javascript:;">看不清？换一个</a></p>');
+		$('a',$html).click(function(){
+			$('img',$html).attr('src',"{:U('verify_img')}");
+		})
+		$.Dialog.confirm('请输入验证码',$html,function(){
+			verify = $('input',$html).val();
+			do_vote(_this,voteid,optionid,verify);
+		});
+	}else{
+		do_vote(_this,voteid,optionid,0);
+	}
+	
+}
+function do_vote(_this,voteid,optionid,verify){
+	var url="{:addons_url('Vote://Wap/join')}";
+	$.post(url,{'vote_id':voteid,'option_id':optionid,'verify':verify},function(res){
+        if(res.error){
+        	 $.Dialog.fail(res.error);
+			 $(_this).removeClass('has_vote');
+        }else{
+        	 $.Dialog.success(res.success);
+        	 setTimeout(function(){
+				location.href="{:addons_url('Vote://Wap/index')}&vote_id={$vote_info.id}";
+			},1500)
+        }     
+    });
+}
+function switchRemark(ele){
+	var remarkEle = $(ele);
+	if(remarkEle.hasClass('vote_remark_open')){
+		remarkEle.removeClass('vote_remark_open')
+	}else{
+		remarkEle.addClass('vote_remark_open')
+	}
+}
+
+$(function(){
+	$('.list_content img').height($('.list_content img').width());
+})
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	WeixinJSBridge.call('hideToolbar');
+});
+wx.ready(function(){
+	var shareData = {
+			title: '{$vote_info.title}', // 分享标题
+			desc: '{$vote_info.remark}', // 分享描述
+			link: "{:U( 'index',array('vote_id'=>$vote_info['id'],'publicid'=>$public_info[id]))}", //分享的链接地址
+			imgUrl: "{:SITE_URL}/Addons/Vote/icon.png", // 分享图标
+			type: 'link', // 分享类型,music、video或link，不填默认为link
+			dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			success: function () { 
+			},
+			cancel: function () { 
+			}
+	}
+	wx.onMenuShareAppMessage(shareData);
+	wx.onMenuShareTimeline(shareData);
+	wx.onMenuShareQQ(shareData);
+	wx.onMenuShareWeibo(shareData);
+});
+</script>    
+</body>
+</html>

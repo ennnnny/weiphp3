@@ -1,0 +1,24 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+<div id="container" class="container"> 
+	<div class="head_hd">
+        <a href="{$jumpURL}" class="start_btn" title="{$button_name}"><img src="{:ADDON_PUBLIC_PATH}/bg.png" width="100%"></a>
+     </div>
+    <div class="content">
+     	 <h4 style="word-wrap:break-word;">{$info.title}</h4>
+         <div class="detail_desc" style="word-wrap:break-word;">{$info.intro}</div>
+    </div> 
+    <p class="copyright">{$system_copy_right}</p>
+</div>
+<include file="Public/mobile_foot"/>
+<script type="text/javascript">
+	$.WeiPHP.initWxShare({
+		title:"{$info.title}",
+		imgUrl:"{$info.cover|get_cover_url}",
+		desc:"{$info.intro}",
+		link:window.location.href
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+* {
+  box-sizing: content-box;
+}
+.cf::before, .cf::after {
+    content: "";
+    display: table;
+}
+.cf::after {
+    clear: both;
+}
+.header{
+	margin-bottom:10px; position:fixed; top:0px; background:#FFF; left:0; width:100%; z-index:999;
+}
+.header h2{
+	font-size:15px;
+	text-align:center;
+	border-bottom:1px solid #CCC;
+	height:32px;
+	line-height:32px;
+}
+.footer{ padding:10px 0; text-align:center; position:fixed; bottom:0px; background:#FFF; left:0; width:100%;}
+.footer #confirm{
+	border:0;
+	background:#099;
+	display:inline-block;
+	text-align:center;
+	color:#FFF;
+	height:32px;
+	width:50px;
+	cursor:pointer;	
+}
+.footer #confirm[disabled] {
+  background: none repeat scroll 0 0 #298cba !important;
+  border-color: #1b607f !important;
+  box-shadow: none !important;
+  color: #94cde7 !important;
+  cursor: default;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
+}
+.pictures{
+  min-height:300px;
+}
+.picture {
+  -moz-user-select: none;
+  box-sizing: border-box;
+  color: #464646;
+  cursor: pointer;
+  float: left;
+  list-style: outside none none;
+  margin: 0;
+  padding: 8px;
+  position: relative;
+  text-align: center;
+  width: 25%;
+}
+.pictures[data-columns="6"] .picture {
+  width: 16.66%;
+}
+.selected.picture {
+  box-shadow: 0 0 0 5px #fff inset, 0 0 0 7px #ccc inset;
+}
+.picture.details {
+  box-shadow: 0 0 0 3px #fff inset, 0 0 0 7px #1e8cbe inset;
+}
+.picture-preview {
+  background: none repeat scroll 0 0 #eee;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1) inset, 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+  cursor: pointer;
+  position: relative;
+}
+.picture-preview::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+.picture .thumbnail {
+  bottom: 0;
+  left: 0;
+  opacity: 1;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: opacity 0.1s ease 0s;
+}
+.picture .thumbnail::after {
+  bottom: 0;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1) inset;
+  content: "";
+  display: block;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.picture .thumbnail .centered {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: translate(50%, 50%);
+  width: 100%;
+}
+.picture .thumbnail img {
+  position: absolute;
+}
+.picture .thumbnail .centered img {
+	max-width: 220px;
+  	transform: translate(-50%, -50%);
+}
+.media-modal-icon {
+  background-image: url("../uploader-icons.png");
+  background-repeat: no-repeat;
+}
+.picture .check div {
+  background-position: -1px 0;
+  height: 15px;
+  margin: 5px;
+  width: 15px;
+}
+.picture .check {
+  background: none repeat scroll 0 0 #eee;
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px rgba(0, 0, 0, 0.15);
+  display: none;
+  height: 24px;
+  outline: 0 none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 24px;
+  z-index: 10;
+}
+.picture.selected .check {
+  display: block;
+}
+.picture.selected .check:hover div {
+  background-position: -40px 0;
+}
+.picture.details .check div {
+  background-position: -21px 0;
+}
+.picture.details .check:hover div {
+  background-position: -60px 0;
+}
+.picture.details .check, .picture.selected .check:focus{
+  background-color: #1e8cbe;
+  box-shadow: 0 0 0 1px #fff, 0 0 0 2px #1e8cbe;
+}
+.page {
+    margin: 10px 0;
+}
+.page::before, .page::after {
+    content: "";
+    display: table;
+}
+.page::after {
+    clear: both;
+}
+.page a, .page span {
+    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+    color: #000;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    margin-left: -1px;
+    padding: 0 14px;
+}
+.page a:hover {
+    background-color: #387c0b;
+    text-decoration: none;
+}
+.page .current {
+    border-top: 1px solid #387c0b;
+}
+.page .next, .page .prev {
+    font-family: "宋体";
+    font-weight: bold;
+}
+.page .rows {
+    border-right: 1px solid #cccccc;
+}
+.page a, .page span {
+    border: 1px solid #cccccc;
+    color: #686868;
+}
+.page a:hover {
+    background: none repeat scroll 0 0 #e1e1e1;
+}
+.page .current {
+    border-top: 3px solid #4bbd00;
+    height: 28px;
+    line-height: 26px;
+}
+
+.delete_button{
+    background: black;
+    bottom: 5px;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px;
+    position: absolute;
+    right: 5px;
+    z-index: 999;
+}

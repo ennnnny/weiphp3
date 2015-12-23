@@ -1,0 +1,292 @@
+<extend name="Base/common" />
+<block name="body">
+	<style type="text/css">
+.s1{width:120px;}
+#d1{width:710px;height:320px;background-color:#F5DEB3;margin-bottom:20px;}
+#d2{height:30px;font-size:18px;color:white; padding:5px; background-color:#999999;}
+#d3{padding-left:30px;}
+</style>
+  <div class="span9 page_message">
+    <section id="contents">
+      <include file="Addons/_nav" />  
+      <div class="tab-content"> 
+        <!-- 表单 -->
+        <form id="form" action="{:U('add?ctid='.$ctid.'&model='.$model['id'])}" method="post" class="form-horizontal">
+
+              <volist name="fields" id="field">
+                <if condition="$field['is_show'] == 4">
+                  <input type="hidden" class="text input-large" name="{$field.name}" value="{:I($field[name], $field[value])}">
+                </if>
+                <if condition="$field['is_show'] == 1 || $field['is_show'] == 2 || ($field['is_show'] == 5 && I($field['name']))">
+					
+                  <div class="form-item cf">
+                    <label class="item-label">{$field['title']}<span class="check-tips">
+                      <notempty name="field['remark']">（{$field['remark']}）</notempty>
+                      </span></label>
+                    <div class="controls">
+                      <switch name="field.type">
+                        <case value="num">
+                          <input type="text" class="text input-medium" name="{$field.name}" value="">
+                        </case>
+                        <case value="string">
+                          <input type="text" class="text input-large" name="{$field.name}" value="">
+                        </case>
+                        <case value="textarea">
+                          <label class="textarea input-large">
+                            <textarea name="{$field.name}"></textarea>
+                          </label>
+                        </case>
+                        <case value="datetime">
+                          <input type="text" name="{$field.name}" class="text input-large time" value="" placeholder="请选择时间" />
+                        </case>
+                        <case value="bool">
+                          <select name="{$field.name}">
+                            <volist name=":parse_field_attr($field['extra'])" id="vo"> <option value="{$key}" 
+                              <eq name="field.value" value="$key">selected</eq>
+                              >{$vo}
+                              </option>
+                            </volist>
+                          </select>
+                        </case>
+                        <case value="select">
+                          <select name="{$field.name}">
+                            <volist name=":parse_field_attr($field['extra'])" id="vo"> <option value="{$key}" 
+                              <eq name="field.value" value="$key">selected</eq>
+                              >{$vo}
+                              </option>
+                            </volist>
+                          </select>
+                        </case>
+                        <case value="radio">
+                          <volist name=":parse_field_attr($field['extra'])" id="vo">
+                          	<div class="check-item">
+                            
+                              <input type="radio" value="{$key}" id="{$field.name}_{$key}" class="regular-radio" name="{$field.name}">
+                              <label for="{$field.name}_{$key}"></label>{$vo}
+                            </div>
+                           </volist>
+                        </case>
+                        <case value="checkbox">
+                          <volist name=":parse_field_attr($field['extra'])" id="vo">
+                            <div class="check-item">
+                              <input type="checkbox" value="{$key}" class="regular-checkbox" id="{$field.name}_{$key}" name="{$field.name}[]">
+                              <label for="{$field.name}_{$key}"></label>{$vo}
+                          </volist>
+                        </case>
+                        <case value="editor">
+                          <label class="textarea" style="width:600px">
+                            <textarea name="{$field.name}"></textarea>
+                            {:hook('adminArticleEdit', array('name'=>$field['name'],'value'=>''))} </label>
+                        </case>
+                        <case value="picture">
+                          <div class="controls uploadrow" title="点击修改图片">
+                            <input type="file" id="upload_picture_{$field.name}">
+                            <input type="hidden" name="{$field.name}" id="cover_id_{$field.name}"/>
+                            <div class="upload-img-box">
+                              <notempty name="data[$field['name']]">
+                                <div class="upload-pre-item"><img width="120" height="120" src="{$data[$field['name']]|get_cover_url}"/></div>
+                              </notempty>
+                            </div>
+                          </div>
+                          <script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件 */
+								$("#upload_picture_{$field.name}").uploadify({
+							        "height"          : 120,
+							        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传图片",
+							        "uploader"        : "{:U('home/File/uploadPicture',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        'fileTypeExts'	  : '*.jpg; *.png; *.gif;',
+							        "onUploadSuccess" : uploadPicture{$field.name}
+							    });
+								function uploadPicture{$field.name}(file, data){
+							    	var data = $.parseJSON(data);
+							    	var src = '';
+							        if(data.status){
+							        	$("#cover_id_{$field.name}").val(data.id);
+							        	src = data.url || '__ROOT__' + data.path;
+							        	$("#cover_id_{$field.name}").parent().find('.upload-img-box').html(
+							        		'<div class="upload-pre-item"><img width="120" height="120" src="' + src + '"/></div>'
+							        	);
+										$('.weixin-cover-pic').attr('src',src);
+							        } else {
+							        	updateAlert(data.info);
+							        	setTimeout(function(){
+							                $('#top-alert').find('button').click();
+							                $(that).removeClass('disabled').prop('disabled',false);
+							            },1500);
+							        }
+							    }
+								</script> 
+                        </case>                        
+                        <case value="file">
+                          <div class="controls uploadrow">
+                            <input type="file" id="upload_file_{$field.name}">
+                            <input type="hidden" name="{$field.name}" value="{$data[$field['name']]}"/>
+                            <div class="upload-img-box">
+                              <present name="data[$field['name']]">
+                                <div class="upload-pre-file"><span class="upload_icon_all"></span>{$data[$field['name']]}</div>
+                              </present>
+                            </div>
+                          </div>
+                          <script type="text/javascript">
+								//上传图片
+							    /* 初始化上传插件 */
+								$("#upload_file_{$field.name}").uploadify({
+							        "height"          : 120,
+							        "swf"             : "__STATIC__/uploadify/uploadify.swf",
+							        "fileObjName"     : "download",
+							        "buttonText"      : "上传附件",
+							        "uploader"        : "{:U('File/upload',array('session_id'=>session_id()))}",
+							        "width"           : 120,
+							        'removeTimeout'	  : 1,
+							        "onUploadSuccess" : uploadFile{$field.name}
+							    });
+								function uploadFile{$field.name}(file, data){
+									var data = $.parseJSON(data);
+							        if(data.status){
+							        	var name = "{$field.name}";
+							        	$("input[name="+name+"]").val(data.id);
+							        	$("input[name="+name+"]").parent().find('.upload-img-box').html(
+							        		"<div class=\"upload-pre-file\"><span class=\"upload_icon_all\"></span>" + data.name + "</div>"
+							        	);
+										
+							        } else {
+							        	updateAlert(data.info);
+							        	setTimeout(function(){
+							                $('#top-alert').find('button').click();
+							                $(that).removeClass('disabled').prop('disabled',false);
+							            },1500);
+							        }
+							    }
+								</script> 
+                        </case>
+                        <default/>
+                        <input type="text" class="text input-large" name="{$field.name}" value="">
+                      </switch>
+                    </div>
+                  </div>				 
+                </if>				
+              </volist>
+
+		  <div id="d1">
+					<div id="d2">选择客服</div>
+					<div id="d3">
+						<table cellpadding="0" cellspacing="8">
+							<tr>
+								<td>可选客服</td>
+								<td>&nbsp;</td>
+								<td>选择客服</td>
+							</tr>
+							<tr>
+								<td>								
+									<select id="s1" name="s1" style="width:250px; height:220px;" multiple="multiple">
+										<volist name="option_users" id="uinfo">
+											<option value="{$uinfo.userName}">{$uinfo.name}({$uinfo.userName})</option>
+										</volist>
+									</select>
+								</td>
+								<td>
+									<p><input id="b1" type="button" class="s1" value="--&gt;" /></p>
+									<p><input type="button" id="b2" class="s1" value="--&gt;&gt;" /></p>
+									<p><input type="button" id="b3" class="s1" value="&lt;--" /></p>
+									<p><input type="button" id="b4" class="s1" value="&lt;&lt;--" /></p>
+								</td>
+								<td><select id="s2" name="s2" style="width:250px;height:220px;" multiple="multiple"></select></td>
+							</tr>
+						</table>
+						<input type="hidden" class="text input-large" id="groupdatastr" name="groupdatastr" value="">
+					</div>
+				</div>		
+          <div class="form-item cf">
+            <button class="btn submit-btn ajax-post" id="submit" type="submit" target-form="form-horizontal">确 定</button>			
+			<button class="btn" type="button" onclick="javascript:history.back(-1);return false;" target-form="form-horizontal">返 回</button>
+			</div>
+			</div>
+          </div>
+        </form>
+        <!-- 预览 -->
+        <include file="Addons/weixinPreview" />  
+      </div>
+    </section>
+  </div>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.min.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+  <script type="text/javascript">
+  $(function(){
+	
+	$('#b1').click(function(){
+		$obj = $('select option:selected').clone(true);
+		if($obj.size() == 0){
+			alert("请至少选择一条!");
+		}
+		$('#s2').append($obj);
+		$('select option:selected').remove();
+	});
+	
+	$('#b2').click(function(){
+		$('#s2').append($('#s1 option'));
+	});
+	
+	$('#b3').click(function(){
+		$obj = $('select option:selected').clone(true);
+		if($obj.size() == 0){
+			alert("请至少选择一条!");
+		}
+		$('#s1').append($obj);
+		$('select option:selected').remove();
+	});
+	
+	$('#b4').click(function(){
+		$('#s1').append($('#s2 option'));
+	});
+	
+	$('option').dblclick(function(){
+		var flag = $(this).parent().attr('id');
+		if(flag == "s1"){
+			var $obj = $(this).clone(true);
+			$('#s2').append($obj);
+			$(this).remove();
+		} else {
+			var $obj = $(this).clone(true);
+			$('#s1').append($obj);
+			$(this).remove();
+		}
+	});
+	
+});
+  
+  
+$('#submit').click(function(){
+	//if($("input[name='groupname']").eq(0).val() == ""){ alert("请填写分组名称!");return false;}
+	//if($("#s2").find("option").size() == 0){ alert("请填写选择需要分配的客服!");return false;}
+	var strs = [];
+	$("#s2 option").each(function(){
+		strs.push($(this).val());
+	});
+	$("#groupdatastr").val(strs.join(","));
+    $('#form').submit();
+});
+
+$(function(){
+       $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+    showTab();
+
+});
+</script> 
+</block>

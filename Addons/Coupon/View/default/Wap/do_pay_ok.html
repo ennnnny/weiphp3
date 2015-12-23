@@ -1,0 +1,46 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/Coupon.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body id="scratch">
+<div class="container body" style="position:relative">
+   <div class="head_hd" style="background:{$coupon.head_bg_color}">
+          <img 
+          <empty name="coupon.background">style="display:none"</empty> 
+          class="head_pic" src="{$coupon.background|get_cover_url}" width="100%">	  
+          
+          <div class="seller">
+          		<notempty name="coupon.shop_logo">
+                	<img src="{$coupon.shop_logo|get_cover_url}">	
+                <else/>
+                	<img src="{:ADDON_PUBLIC_PATH}/pic_money.png"/>
+                </notempty>
+          		<span class="name">{$coupon.shop_name}</span>
+          </div>
+          <p class="title">
+          	{$coupon.title}<br/><br/>
+          	<span class="time">有效期：<span class="use_start_time">{$coupon.use_start_time|time_format}</span> - <span class="over_time">{$coupon.over_time|time_format}</span></span> 
+          </p>
+          <div class="line"></div>
+      </div>
+      
+      <div class="sn_box">
+      	 <p class="qr_tips">{$msg}</p>
+         <p class=""><a class="btn" href="javascript:;" onClick="closepage();">返回继续扫码</a></p>
+          <div class="box" style="text-align:left; display:none;">
+              <h3>{$conpon.title}使用统计</h3>
+                <p>计划发放数量：{$conpon.num|intval}</p>
+                <p>已领取数量：{$conpon.collect_count|intval}</p>
+                <p>已使用数量：{$conpon.use_count|intval}</p>
+                <notempty name="conpon.end_time"><p>过期时间：{$conpon.end_time|time_format}</p></notempty>
+          </div> 
+     </div>
+   <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+</div>
+</body>
+<script type="text/javascript">
+function closepage(){
+	WeixinJSBridge.call('closeWindow');
+}
+var h=$(document).height();
+$('.container').css("min-height",h);
+</script>
+</html>

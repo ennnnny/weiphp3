@@ -1,0 +1,123 @@
+<extend name="Base/no_side_common" />
+<block name="body">
+<div class="wrap">
+<section id="contents">
+  <div class="tab-content" style="margin:30px auto;"> 
+    
+    <!-- 表单 -->
+    <form class="form-horizontal bind_step_form" method="post" action="{:U('Home/Public/add', array('from'=>7))}" id="form" style="overflow:hidden; zoom:1">
+      <!-- 基础文档模型 -->
+      <div class="tab-pane in tab1" id="tab1">
+        <div class="item_wrap">
+          <h3 style="padding-bottom:30px; text-align:center">初始化账号信息</h3>              
+          <div class="form-item cf">
+            <label class="item-label"> 上传网站LOGO </label>
+            <div class="controls uploadrow2" title="点击修改图片" rel="website_logo">
+              <input type="file" id="upload_picture_website_logo">
+              <input type="hidden" name="website_logo" id="cover_id_website_logo" value="{$info.website_logo}"/>
+              <div class="upload-img-box">
+                <notempty name="info[website_logo]">
+                  <div class="upload-pre-item2"><img width="100" height="100" src="{$info[website_logo]|get_cover_url}"/></div>
+                  <em class="edit_img_icon">&nbsp;</em> </notempty>
+              </div>
+            </div>
+          </div>
+          <div class="form-item cf">
+            <label class="item-label"> 管理员头像 </label>
+            <div class="controls uploadrow2" title="点击修改图片" rel="headface_url">
+              <input type="file" id="upload_picture_headface_url">
+              <input type="hidden" name="headface_url" id="cover_id_headface_url" value="{$info.headface_url}"/>
+              <div class="upload-img-box">
+                <notempty name="info[headface_url]">
+                  <div class="upload-pre-item2"><img width="100" height="100" src="{$info[headface_url]|get_cover_url}"/></div>
+                  <em class="edit_img_icon">&nbsp;</em> </notempty>
+              </div>
+            </div>
+          </div>
+          <div class="form-item cf toggle-copy_right">
+            <label class="item-label"> 版权信息 <span class="check-tips">(例如:XXX版权所有，圆梦云制作) </span></label>
+            <div class="controls">
+              <input type="text" value="{$info.copy_right}" name="copy_right" class="text input-large">
+            </div>
+          </div>
+          <!--        <div class="form-item cf toggle-GammaAppId">
+          <label class="item-label"> GammaAppId <span class="check-tips"> （由摇电视平台提供的GammaAppId） </span></label>
+          <div class="controls">
+            <input type="text" value="{$info.GammaAppId}" name="GammaAppId" class="text input-large">
+          </div>
+        </div>
+        <div class="form-item cf toggle-GammaSecret">
+          <label class="item-label"> GammaSecret <span class="check-tips"> （由摇电视平台提供的GammaSecret） </span></label>
+          <div class="controls">
+            <input type="text" value="{$info.GammaSecret}" name="GammaSecret" class="text input-large">
+          </div>
+        </div>-->
+          
+          <div class="form-item cf toggle-tongji_code">
+            <label class="item-label"> 第三方统计代码 <span class="check-tips"></span></label>
+            <div class="controls">
+              <textarea  name="tongji_code" class="textarea input-large">{$info.tongji_code}</textarea>
+            </div>
+          </div>
+<!--          <div class="form-item cf toggle-tips_url" style="display:none">
+            <label class="item-label">提示关注公众号的文章地址 <span class="check-tips"> </span></label>
+            <div class="controls">
+              <input type="text" value="{$info.tips_url}" name="tips_url" class="text input-large">
+            </div>
+          </div>
+        </div>-->
+        <div class="form-item cf mt_10 bind_step_form_next_item">
+          <input type="hidden" name="id" value="{$id|intval}">
+          <button target-form="form-horizontal" type="submit" id="submit" class="btn submit-btn ajax-post">提 交</button>
+          <br/>
+          <p style="padding:20px 0;">配置信息遇到问题？<a href="{:U('Home/index/lead')}" target="_blank">点击查看接入指引</a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+  
+  <!--帮助消息
+  <div class="help_content">
+      <h3>帮助信息</h3>
+      <p>以上消息可以从公众平台里找到，如下图</p>
+      <p><img src="{:SITE_URL}/Public/Home/images/help01.png" width="800"></p>
+      <a name="setting"></a>
+       <p>配置域名授权：在开发者中心，功能列表里配置，配置授权域名如下图</p>
+      <p><img src="{:SITE_URL}/Public/Home/images/help05.png" width="800"></p>
+       <p>配置JS接口安全域名，在公众号设置-功能配置里面配置，配置JS安全域名如下图</p>
+      <p><img src="{:SITE_URL}/Public/Home/images/help06.png" width="800"></p>
+  </div>
+  --> 
+</section>
+</block>
+<block name="script">
+  <link href="__STATIC__/datetimepicker/css/datetimepicker.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <php>if(C('COLOR_STYLE')=='blue_color') echo '
+    <link href="__STATIC__/datetimepicker/css/datetimepicker_blue.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+    ';</php>
+  <link href="__STATIC__/datetimepicker/css/dropdown.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/bootstrap-datetimepicker.js"></script> 
+  <script type="text/javascript" src="__STATIC__/datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js?v={:SITE_VERSION}" charset="UTF-8"></script> 
+  <script type="text/javascript">
+$('#submit').click(function(){
+    $('#form').submit();
+});
+
+$(function(){
+	 initUploadImg();
+    $('.time').datetimepicker({
+        format: 'yyyy-mm-dd hh:ii',
+        language:"zh-CN",
+        minView:0,
+        autoclose:true
+    });
+    $('.date').datetimepicker({
+        format: 'yyyy-mm-dd',
+        language:"zh-CN",
+        minView:2,
+        autoclose:true
+    });	
+    showTab();
+});
+</script> 
+</block>

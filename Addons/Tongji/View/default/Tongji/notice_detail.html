@@ -1,0 +1,21 @@
+<extend name="Base/no_side_common" />
+<block name="body">
+  <div class="wrap">
+  <section id="contents">
+  
+   
+  
+      <div class="tab-content notice_detail" style="margin:30px 0;"> 
+            <h3>{$notice.title}</h3>
+            <div class="detail">
+            	{$notice.content}
+                <p class="author">
+                	圆梦云团队<br/>
+                    <span>{$notice.create_time|time_format}</span>
+                </p>
+            </div>
+            
+      </div>
+</section>
+</block>
+</block>

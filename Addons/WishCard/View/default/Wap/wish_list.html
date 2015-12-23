@@ -1,0 +1,40 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container body">
+    	<div class="head_div">
+        	<img src="{:ADDON_PUBLIC_PATH}/head_bg.jpg"/>
+            <notempty name="user[headimgurl]">
+                <p class="u_info">
+                    <img class="head" src="{$user.headimgurl}"/>
+                    <span>{$user.nickname}</span>
+                </p>
+            </notempty>
+        </div>
+        <notempty name="wish_list">
+           <form id="form" action="{:addons_url('WishCard://Wap/write_info')}" method="post">
+           <input type="hidden" value="" name="content"/>
+           <ul class="wish_list">
+                <volist name="wish_list" id="vo">
+                <li>
+                    <a href="javascript:;">
+                        <p>
+                        	{$vo.content}
+                        </p>
+                    </a>
+                </li>
+                </volist>
+            </ul>
+            </form>
+        <else/>
+        	<p class="empty_tips">管理员真懒~~还没有配置数据!</p>
+        </notempty>        <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+	</div>
+    <script type="text/javascript">
+    	$('.wish_list a').click(function(){
+			$('input[name="content"]').val($(this).text());
+			$('#form').submit();
+		})
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{:ADDON_PUBLIC_PATH}/mobile/shop.js?v={:SITE_VERSION}"></script>
+<body class="withFoot">
+    <div class="container">
+    	<div class="top_tab">
+        	<a href="{:U('myOrder')}" class="{$allClass}">全部订单</a>
+            <a href="{:U('unPayOrder')}" class="{$unPayClass}">待付款</a>
+            <a href="{:U('shippingOrder')}" class="{$shippingClass}">配送中</a>
+            <a href="{:U('waitCommentOrder')}" class="{$waitClass}">待评价</a>
+        </div>
+    	
+        <empty name="orderList">
+       		 <div class="empty_container"><p>暂时无订单数据</p></div>
+        <else />
+        <!-- 订单信息 -->
+        <div class="order_list">
+        	<ul>
+            	<volist name="orderList" id="vo">
+                <li>
+                	<a style="display:block" href="{:U('orderDetail',array('id'=>$vo[id],'shop_id'=>$shop_id))}">
+                	<p class="top">
+                    <span class="t">订单编号：{$vo.order_number}</span><br/>
+                    <span class="c">订单状态：<span class="blue">{$vo.status_code_name}</span></span>
+                    </p>
+                    
+                    <volist name="vo.goods" id="gg">
+                    <div class="goods_item">
+                        <img src="{$gg.cover|get_cover_url}"/>
+                        <div class="info">
+                            <P class="name">{$gg.title}</P>
+                            <p class="property">
+                                <span class="colorless">价格</span>
+                                <span class="orange">￥{$gg[price]*$gg[num]}元</span>
+                            </p>
+                            <p class="property">
+                                <span class="colorless">数量</span>
+                                <span>{$gg.num}</span>
+                            </p>
+                        </div>
+                        
+                    </div></volist>
+                    </a>
+                    <div class="order_list_bottom">
+                    	<if condition="$vo[pay_status]==0 && $vo[pay_type]!=10">
+                             <a class="btn small_btn" href="{:U('choose_pay')}&order_id={$info.id}">立即付款</a>
+                        <else />
+                            <eq name="vo[is_send]" value="0">
+                                <span>等待卖家发货</span>
+                            <else/>
+                            	<if condition="$vo['status_code']==3">
+                                <a class="btn small_btn" href="javascript:;" onClick="confirmGetGoods('{:U('confirm_get',array('id'=>$vo[id]))}');">确认收货</a>
+                                </if>
+                            </eq>
+                        </if>
+                    	
+                    </div>
+                </li>
+                </volist>
+                
+            </ul>
+         </div>
+        </empty>
+         
+        
+    </div>	
+    <!-- 底部导航 -->
+    <include file="_footer"/>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container body">
+    	<div class="head_div">
+        	<img src="{:ADDON_PUBLIC_PATH}/head_bg.jpg"/>
+            <notempty name="user[headimgurl]">
+                <p class="u_info">
+                    <img class="head" src="{$user.headimgurl}"/>
+                    <span>{$user.nickname}</span>
+                </p>
+            </notempty>
+        </div>
+        <form id="form" action="{:addons_url('WishCard://Wap/card_show')}" method="post">
+        <input type="hidden" value="" name="template_cate"/>
+        <input type="hidden" value="" name="template"/>
+       <notempty name="template">
+       	   <div class="template_cate">
+           		<a href="javascript:;" class="current" data-file="">
+                        全部
+                    </a>
+                <volist name="template[tempListCate]" id="vo">
+                	<a href="javascript:;" data-file="{$vo.file}">
+                        {$vo.title}
+                    </a>
+                </volist>
+            </div>
+           <ul class="card_type_list card_template">
+                <volist name="template[tempList]" id="vo">
+                <li>
+                    <a data-templatecate="{$vo.cate}" data-template="{$vo.dirName}" href="javascript:;">
+                        <img class="preview_img" src="{$vo.icon}"/>
+                        <p class="desc">{$vo.desc}</p>
+                    </a>
+                </li>
+                </volist>
+            </ul>
+        <else/>
+        	<p class="empty_tips">管理员真懒~~还没有配置数据!</p>
+        </notempty>
+        </form>
+       <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+	</div>
+</body>
+<script type="text/javascript">
+<php>
+echo "tempList =".json_encode($template['tempList']).";";
+</php>
+
+$('.template_cate a').click(function(){
+	if($(this).hasClass('current'))return;
+	$(this).addClass('current');
+	$(this).siblings().removeClass('current');
+	var cate = $(this).data('file');
+	var cardHtml = "";
+	for(var i=0;i<tempList.length;i++){
+		var temp = tempList[i];
+		if(temp['cate']==cate || cate==""){
+			cardHtml += '<li>'+
+                    '<a data-templatecate="'+temp['cate']+'" data-template="'+temp['dirName']+'" href="javascript:;">'+
+                       ' <img class="preview_img" src="'+temp['icon']+'"/>'+
+                        '<p class="desc">'+temp['desc']+'</p>'+
+                   ' </a>'+
+                '</li>';
+		}
+	}
+	$('.card_type_list').html(cardHtml);
+})
+$(document).on('click','.card_type_list a',function(){
+	$('input[name="template_cate"]').val($(this).data('templatecate'));
+	$('input[name="template"]').val($(this).data('template'));
+	$('#form').submit();
+})
+</script>
+</html>

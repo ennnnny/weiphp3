@@ -1,0 +1,34 @@
+<empty name="list_data">
+<div class="empty_container"><p>您的图文素材库为空，<a href="{:U('Home/Material/material_lists')}">请先增加素材</a></p></div>
+<else /><div class="data_container"><ul class="material_list">
+      <volist name="list_data" id="vo">
+      <li class="appmsg_li" data-id="{$vo.id}"  style="overflow:hidden">
+      	<div class="picture_item">
+             <div class="sound_item" onClick="playSound('sound_{$vo.id}',this);">
+                 <img class="icon_sound" src="__IMG__/icon_sound.png"/>
+                 <p class="audio_name">{$vo.title}<span class="fr colorless">{$vo.file_info.playtime}</span></p>
+                 <p class="ctime colorless">{$vo.cTime|time_format}</p>
+                 <audio id="sound_{$vo.id}" src="{$vo.file_id|get_file_url}"></audio>
+             </div>
+         </div>
+      </li>
+      </if></volist></ul>
+</empty>
+<div class="page"> {$_page|default=''} </div></div>
+<script type='text/javascript'>
+function playSound(id,obj){
+	var audio = document.getElementById(id);
+	if(audio.paused){
+		audio.play();
+		$(obj).find('img').attr('src',IMG_PATH+'/icon_sound_play.gif');
+		audio.addEventListener('ended', function () {  
+// 			alert('over');
+			$(obj).find('img').attr('src',IMG_PATH+'/icon_sound.png');
+		}, false);
+		return;
+	}
+	audio.pause();
+	$(obj).find('img').attr('src',IMG_PATH+'/icon_sound.png');
+	
+}
+</script>

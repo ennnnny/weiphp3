@@ -1,0 +1,121 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<link href="{:CUSTOM_TEMPLATE_PATH}Public/shop.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body class="withFoot">
+    <div class="container">
+    	<form class="search_form" action="{:U('lists',array('shop_id'=>$shop_id))}" method="get">
+        	<a href="javascript:void(0);" class="cate_icon" onClick="showPopCategory()">&nbsp;</a>
+            <input type="text" placeholder="输入关键字搜索商品" value="{:I('search_key')}" name="search_key"/>
+            <button type="button" id="search" url="{:U('lists',array('shop_id'=>$shop_id))}">搜索</button>
+        </form>
+        <!-- banner -->
+        <div class="banner">
+        	<ul>
+            <volist name="slideshow_list" id="vo">
+                <li>
+                    <a href="{$vo.url}"><img src="{$vo.img|get_cover_url}"/></a>
+                </li>
+             </volist>
+            </ul>
+            <span class="identify">
+            	
+            <volist name="slideshow_list" id="vo">
+               <em></em>
+             </volist>
+            </span>
+        </div>
+        <!-- 店标和名称 -->
+        <div class="shop_row">
+        	<notempty name="shop.logo"><img src="{$shop.logo|get_cover_url}"/></notempty>
+            {$shop.title}
+        </div>
+        <div class="index_nav">
+        	<a href="{:U('lists',array('shop_id'=>$shop_id))}">全部商品</a>
+            <span class="line"></span>
+            <a href="javascript:;" onClick="showPopCategory()">商品分类</a>
+            <span class="line"></span>
+            <a href="{:U('shop_intro',array('shop_id'=>$shop_id))}">店铺简介</a>
+            <span class="line"></span>
+            <a href="{:U('contact',array('shop_id'=>$shop_id))}">联系卖家</a>
+        </div>
+        <!-- 推荐类目 -->
+        <notempty name="recommend_cate">
+        <div class="recommend_cate">
+           <volist name="recommend_cate" id="cate">
+        	<a href="{:U('lists',array('shop_id'=>$shop_id,'cid0'=>$cate[pid],'cid1'=>$cate[id]))}"><img src="{$cate.icon|get_cover_url}"/></a>
+            </volist>
+        </div>
+        </notempty>
+        
+        <!-- 推荐商品 -->
+        <notempty name="recommend_list">
+        <div class="recommend_list">
+        	<h6 class="cate_title">商城推荐</h6>
+            <div class="product_list">
+                <ul>
+                    <volist name="recommend_list" id="vo">
+                    <li>
+                        <a href="{:U('detail',array('shop_id'=>$shop_id,'id'=>$vo['id']))}">
+                            <img src="{$vo.cover|get_cover_url}"/>
+                            <div class="desc">
+                            	<p class="name">{$vo.title}</p>
+                            	<p class="price">￥{$vo.price|wp_money_format}</p>
+                            </div>
+                        </a>
+                    </li>
+                    </volist>
+                </ul>
+            </div>
+        </div>
+        </notempty>
+        
+        <!-- 推荐商品 -->
+        <div class="all_list">
+        	<h6 class="cate_title">所有商品</h6>
+            <div class="product_list">
+                <ul>
+                    <volist name="goods_list" id="vo">
+                    <li>
+                        <a href="{:U('detail',array('shop_id'=>$shop_id,'id'=>$vo['id']))}">
+                            <img src="{$vo.cover|get_cover_url}"/>
+                            <div class="desc">
+                            	<p class="name">{$vo.title}</p>
+                            	<p class="price">￥{$vo.price|wp_money_format}</p>
+                            </div>
+                        </a>
+                    </li>
+                    </volist>
+                </ul>
+            </div>
+            <a class="list_bottom_btn" href="{:U('lists',array('shop_id'=>$shop_id))}">查看所有商品&gt;</a>
+        </div>
+        
+    </div>	
+    <!-- 分类目录 -->
+    <include file="_category"/>
+    
+    <!-- 底部导航 -->
+   <include file="_footer"/>
+   
+<script type="text/javascript">
+$(function(){
+	//通用banner 滑动
+	$.WeiPHP.initBanner(true,5000);
+	
+	//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search_form').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});	
+})
+</script>    
+</body>
+</html>

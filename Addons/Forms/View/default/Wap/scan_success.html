@@ -1,0 +1,67 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="__STATIC__/qrcode/jquery.qrcode.js"></script>
+<body>
+	<div id="container" class="container body">
+      <div class="top_relative" <empty name="forms.cover">style="background:url({:ADDON_PUBLIC_PATH}/background.png) no-repeat"</empty>> 
+            <notempty name="forms.cover"><img src="{$forms.cover}"/></notempty>
+            <p style="word-wrap:break-word;">{$forms.title}</p>
+            <span class="joined">已参加人数:{$attend_num}</span>
+       </div>
+       <div class="forms_success">
+        	  <div class="success_wrap">
+              		<br/>
+              		<center><img src="__IMG__/yes.png" width="60"/></center>
+              		<eq name='is_check' value='1'>
+              			<center>“{$value_data.username}”已通过验证！</center>
+              			<else />
+              			<center>验证不通过</center>
+              		</eq>
+					
+                    <br/>
+                    <center><a class="btn yellow_btn back_btn" href="javascript:;" onClick="closepage()">返回继续扫描</a></center>
+                    <br/>
+              </div>
+              <div class="pay_tips">
+              	<eq name='is_pay' value='0'>
+              		<p><center>该用户还没有支付，请确认已支付！</center></p>
+                    <div class="m_15">
+                    	<a class="btn" href="javascript:;" id='do_pay'>确认支付</a>
+                    </div>
+                   </eq>
+              </div>
+              <div class="user_info">
+              	<p class="title">活动信息</p>
+                <p class="info">活动名称：{$forms.title}</p>
+                <p class="info">报名项目：{$value_data.option_id}</p>
+                <p class="info">预约编号：{$value_data.scan_code}</p>
+              </div>
+       </div>
+       <p class="copyright">{$system_copy_right}</p>
+	</div>
+  	<script type="text/javascript">
+   	function closepage(){
+		WeixinJSBridge.call('closeWindow');
+	}
+   	
+   	$(function(){
+   		$('#do_pay').click(function(){
+   			$.Dialog.confirmBox('提示','确定用户已支付？',{leftBtnText:"取 消",rightBtnText:'确 定',rightCallback:function(){
+   				var url="{:U('set_pay')}&id={$value_data.id}";
+   				$.post(url,function(d){
+   					if(d){
+   						$.Dialog.success('修改成功！');
+ 						$('.pay_tips').hide();
+   					}else{
+   						$.Dialog.fail('修改失败');
+
+   					}
+   				});
+   				
+   			}});
+   		});
+   	});
+   </script>
+	<include file="Public/mobile_foot"/>
+</body>
+</html>

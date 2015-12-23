@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>后台管理</title>
+    <link rel="stylesheet" href="http://tools.wiicms.com/skins/css/uet.css">
+    <script src="http://tools.wiicms.com/skins/js/jquery.js"></script>
+    <script src="http://tools.wiicms.com/skins/js/jquery.pagination.js"></script>
+    <script src="http://tools.wiicms.com/skins/js/easytemplate.js"></script>
+    <script src="/leyao/Public/static/ueditor/dialogs/internal.js"></script>
+</head>
+<body>
+<div id="tboxlist">
+    <div id="but_fresh">Fresh</div>
+    <ul id="listbox" class="uetbox">
+    </ul>
+    <div id="pagelist"></div>
+</div>
+<textarea name="template" id="template" cols="30" rows="10" style="display: none;">
+    <#list data as list>
+        <li tid="${list.id}"><img src="${list.titlepic}">
+            <div style="display:none;" id="uet-${list.id}">${list.code}</div>
+        </li>
+    </#list>
+</textarea>
+</body>
+</html>
+<script type="text/javascript">
+    var page = 0;
+    var x = "";
+    var template = "";
+    $(function () {
+        template = $("#template").val();
+        //编辑器插件开始
+        function uetTotal(){
+            $.ajax({
+                url:"http://tools.wiicms.com/index.php/ue/uetTotal",
+                type:"post",
+                dataType:"jsonp",
+                async:false,
+                jsonp:"jsoncallback",
+                success:function(data){
+                    if(data.status=="success"){
+                        $("#pagelist").pagination(data.total,{
+                            items_per_page:9,
+                            callback:function(cpage){
+                                page=cpage;
+                                uetList();
+                            }
+                        });
+                    }else{
+                        $("#listbox").html(data.msg);
+                    }
+                }
+            });
+        }
+        function uetList() {
+            $.ajax({
+                url:"http://tools.wiicms.com/index.php/ue/uetList?page="+page,
+                type:"post",
+                dataType:"jsonp",
+                async:false,
+                jsonp:"jsoncallback",
+                success:function (data) {
+                    x = easyTemplate(template, data.rows);
+                    $("#listbox").html(x.toString());
+                    $("#but_fresh").html("Fresh");
+                }
+            });
+        }
+
+        uetTotal();
+        $("#but_fresh").click(function () {
+            $(this).html("F....");
+            uetList();
+        });
+        var tstr = "";
+        var tid = 0;
+        $("#tboxlist ul li").live("click", function () {
+            tid = $(this).attr("tid");
+            tstr = $("#uet-" + tid).html();
+            editor.execCommand("inserthtml", tstr);
+        });
+        //编辑器插件结束
+    })
+</script>

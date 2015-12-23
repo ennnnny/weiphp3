@@ -1,0 +1,51 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/css.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container body">
+    	<div class="head_div">
+        	<img src="{:ADDON_PUBLIC_PATH}/head_bg.jpg"/>
+            <notempty name="user[headimgurl]">
+                <p class="u_info">
+                    <img class="head" src="{$user.headimgurl}"/>
+                    <span>{$user.nickname}</span>
+                </p>
+            </notempty>
+        </div>
+       <div class="m_15"> 
+      <form id="form" action="{:addons_url('WishCard://Wap/choose_template')}" method="post">
+      		<label class="mb_10">
+           	 发送人
+       		<input type="text" placeholder="发送人" name="send_name" value="{$user.nickname}"/>
+            </label>
+            <label class="mb_10">
+           	 接收人
+            <input type="text" placeholder="接收贺卡的人的名称" name="receive_name" value=""/>
+            </label>
+            <label class="mb_10">
+           	 祝福语
+            <textarea name="content">{$content}</textarea>
+            </label>
+            <button class="btn" id="submitBtn" type="submit">下一步</button>
+      </form>
+       </div>
+       <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+	</div>
+    <script type="text/javascript">
+    	$('#submitBtn').click(function(){
+			/*
+			if($('input[name="send_name"]').val()==""){
+				$.Dialog.fail("发送人不能为空");
+				return false;
+			}
+			*/
+			if($('input[name="receive_name"]').val()==""){
+				$.Dialog.fail("请填写接收人");
+				return false;
+			}else if($('textarea[name="content"]').val()==""){
+				$.Dialog.fail("请填写祝福语");
+				return false;
+			}
+		})
+    </script>
+</body>
+</html>

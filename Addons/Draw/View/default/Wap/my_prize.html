@@ -1,0 +1,55 @@
+<include file="Public/mobile_head"/>	
+<link href="{:ADDON_PUBLIC_PATH}/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+	<div id="container" class="container">
+		<div class="common_header">
+        	<a class="back" href="javascript:;" onClick="history.back()"></a>
+            <span>我的奖品</span>
+        </div>
+        <ul class="my_prizes">
+        	<notempty name='user_award' >
+        		<volist name='user_award' id='vo'>
+        		<li>
+        			<notempty name='vo.img'>
+        			<img src="{$vo.img|get_cover_url}"/>
+        			<else />
+        			 <img src="__IMG__/default_goods_pic.jpg"/>
+        			</notempty>
+	                
+	                <p class="title">[{$vo.grade}] {$vo.award_name}</p>
+	                <notempty name='vo.address'>
+	                <p class="address">地址： {$vo.address}</p>
+	                </notempty>
+	                
+	                <p class="status">状态：
+	                	<eq name='vo.state' value='0'>
+	                	未发奖
+	                	<else/>
+	                	已发奖
+	                	</eq>
+	                </p>
+	                <p class="colorless">时间：{$vo.zjtime|time_format}</p>
+	                <!-- 虚拟物品直接跳到优惠券 -->
+	                <eq name='vo.state' value='0'>
+	                	<notempty name='vo.address'>
+	                	<p class="btn_p"><a href="{:U('get_prize')}&id={$vo.id}" class="get_btn">修改地址</a></p>
+	               
+	                	<else/>
+	                	<p class="btn_p"><a href="{:U('get_prize')}&id={$vo.id}" class="get_btn">领取</a></p>
+	                	</notempty>
+	                	
+	                </eq>
+            	</li>
+        		</volist>
+        	</notempty>
+        </ul>
+        
+        <p class="copyright">{$system_copy_right}{$tongji_code}</p>
+    </div>
+    <include file="Public/mobile_foot"/>
+    <script>
+	$('#container').css({'min-height':$(window).height()});
+	</script>
+    
+</body>
+</html>

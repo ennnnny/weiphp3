@@ -1,0 +1,40 @@
+<block name="header"></block>
+<php> //验证登录
+  if(!is_login()){
+  Cookie ( '__forward__', $_SERVER ['REQUEST_URI'] );
+  redirect(U('home/user/login',array('from'=>4)));
+  } </php>
+<div id="main-container" class="admin_container">
+  <notempty name="core_side_menu">
+    <div class="sidebar">
+      <ul class="sidenav">
+        <li>
+          <notempty name="now_top_menu_name"><a class="sidenav_parent" href="javascript:;"> 
+            <!--<img src="__IMG__/left_icon_{$core_side_category.left_icon}.png"/>--> 
+            {$now_top_menu_name}</a></notempty>
+          <ul class="sidenav_sub">
+            <volist name='core_side_menu' id='vo'>
+              <li class="{$vo.class}" data-id="{$vo.id}"> <a href="{$vo.url}"> {$vo.title} </a><b class="active_arrow"></b></li>
+            </volist>
+          </ul>
+        </li>
+        <notempty name="addonList">
+          <li> <a class="sidenav_parent" href="javascript:;"> <img src="__IMG__/ico1.png"/> 其它功能</a>
+            <ul class="sidenav_sub" style="display:none">
+              <volist name='addonList' id='vo'>
+                <li class="{$navClass[$vo[name]]}"> <a href="{$vo[addons_url]}" title="{$vo.description}"> <i class="icon-chevron-right">
+                  <php>if(!empty($vo['icon'])) { </php>
+                  <img src="{$vo.icon}" />
+                  <php> } </php>
+                  </i> {$vo.title} </a> </li>
+              </volist>
+            </ul>
+          </li>
+        </notempty>
+      </ul>
+    </div>
+  </notempty>
+  <div class="main_body">
+    <block name="body"></block>
+  </div>
+</div>

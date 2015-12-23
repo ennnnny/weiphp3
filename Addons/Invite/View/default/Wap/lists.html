@@ -1,0 +1,39 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/css1.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<!-- {:ADDON_PUBLIC_PATH}/top.jpg -->
+<body>
+<div id="container" class="container body">
+  <div class="common_header">
+        <if condition="!$_GET['preview']">
+            <a class="back" href="javascript:history.back();">&nbsp;</a>
+        </if>
+        微邀约
+    </div>
+  <ul class="item_list">
+    <volist name="list_data" id="vo">
+      <li> 
+      	<a href="{:addons_url('Invite://Wap/receive',array('id'=>$vo['id']))}"> 
+        	<p class="title" style="overflow: hidden;">{$vo.title}</p>
+            <img src="{:get_cover_url ( $vo ['cover'] )}"/>
+            <!-- <span class="from">剩余优惠券数：{:intval($vo['coupon_num']-$vo['receive_num'])}</span> --> 
+        </a> 
+       </li>
+    </volist>
+  </ul>
+  <div class="page"> {$_page|default=''} </div>
+</div>
+<p class="copyright">{$system_copy_right}{$tongji_code}</p>
+</body>
+<script type="text/javascript">
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	WeixinJSBridge.call('hideToolbar');
+});
+$(function(){
+	$('.item_list img').each(function() {
+        var max_w = $(this).width();
+		var max_h = (max_w*5)/9;
+		if(max_h<$(this).height()) $(this).height(max_h);
+    });
+});
+</script>
+</html>

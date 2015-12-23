@@ -1,0 +1,22 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body>
+    <div class="container">
+    	<div class="address_list">
+        	<ul>
+             <volist name="lists" id="vo">
+            	<li>
+                	<a class="address_item" href="{:U('confirm_order',array('address_id'=>$vo['id']))}" title="选择">
+                    	<em class="radio_icon">&nbsp;</em>
+                    	<p>{$vo.city_name} {$vo.address}</p>
+                        <p><b>{$vo.truename}</b>  {$vo.mobile}</p>
+                    </a>
+                    <a class="write_icon" href="{:U('add_address',array('id'=>$vo['id']))}" title="编辑">&nbsp;</a>
+                </li>
+                </volist>
+            </ul>
+            <a class="add_address" href="{:addons_url('Shop://Wap/add_address', array('from'=>1))}"><em class="add_icon">&nbsp;</em>新增收货地址<em class="arrow_right">&nbsp;</em></a>
+        </div>
+    </div>	
+</body>
+</html>

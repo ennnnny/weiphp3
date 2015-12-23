@@ -1,0 +1,145 @@
+<extend name="Base/common" />
+<block name="body">
+<div class="span9 page_message">
+	<section id="contents">
+		<include file="Addons/_nav" />
+		<div class="tongji_nav">
+			<div class="fl">
+            <php>$min = I('min',60);$class[$min]='cur';</php>
+				<a class="{$class[30]}" href="{:U('lists',array('min'=>30))}">30分钟</a> <a class="{$class[60]}" 
+					href="{:U('lists',array('min'=>60))}">1小时</a> <a class="{$class[360]}" 
+					href="{:U('lists',array('min'=>360))}">6小时</a> <a class="{$class[1440]}" 
+					href="{:U('lists',array('min'=>1440))}">24小时</a>
+			</div>
+			<div class="fr">
+				（1分钟自动刷新一次）<a class="refresh" href="javascript:;"
+					onClick="updateData();"><img width="24"
+					src="__IMG__/refresh_icon.png" /></a>
+			</div>
+		</div>
+		<div class="tongji_data_area">
+			<div class="Result_graph" id="container">
+				<center>
+					<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <img
+						src="__IMG__/loading.gif" />
+				</center>
+			</div>
+		</div>
+        <div class="notice_list">
+        	<h6>系统公告</h6>
+            <ul>
+            	<notempty name="noticeData.list_data">
+                	<volist name="noticeData.list_data" id="vo">
+                    <li><a href="{:U('notice_detail',array('id'=>$vo[id]))}"><span class="fl">{$vo.title}</span><span class="fr">{$vo.create_time|time_format}</span></a></li>
+                    </volist>
+                </notempty>
+            </ul>
+        </div>
+</div>
+</section>
+</div>
+<style type="text/css">
+.data-chart {
+	margin: 20px;
+}
+
+.data-chart td {
+	background: #fafafa;
+	padding: 20px;
+	word-break: break-all;
+	word-wrap: break-word;
+	vertical-align: top
+}
+
+.data-chart tr:hover td {
+	background: #f6f6f6
+}
+
+.data-chart table {
+	background: #ddd
+}
+
+.data-chart .answer {
+	line-height: 20px;
+	margin: 10px 0;
+}
+</style>
+<script type="text/javascript">
+	function showData(xData, yData) {
+		$('#container').highcharts({
+			chart : {
+				type : 'area'
+			},
+			title : {
+				text : '摇电视次数监控'
+			},
+			xAxis : {
+				categories : xData
+			},
+			yAxis : {
+				title : {
+					text : '摇次数'
+				},
+				labels : {
+					formatter : function() {
+						return this.value;
+					}
+				}
+			},
+			tooltip : {
+				pointFormat : '<b>{point.y}</b>'
+			},
+			plotOptions : {
+				area : {
+					pointStart : 0,
+					marker : {
+						enabled : false,
+						symbol : 'circle',
+						radius : 2,
+						states : {
+							hover : {
+								enabled : true
+							}
+						}
+					}
+				}
+			},
+			series : [ {
+				name : '时间',
+				data : yData
+			} ]
+		});
+	}
+	function updateData() {
+		var min = "{:I('min', 60, 'intval')}";
+		$.ajax({
+			url : "{:U('getDataByAjax')}",
+			data: {'min':min},
+			dataType : 'JSON',
+			type : 'post',
+			success : function(data) {
+				//console.log(data);
+				////var data = $.parseJSON(data);
+				//console.log(data);
+				var xData = data.x;
+				var yData = data.y;
+				showData(xData, yData);
+			}
+		})
+
+		//测试数据
+		// 		yData = [200,10000,500,100,400];
+		// 		xData = ['10:00','10:20','10:30','10:40','10:50'];
+		// 		showData(xData,yData);
+	}
+	$(function() {
+		updateData();
+		setInterval(function() {
+			updateData();
+		}, 1000 * 60);
+
+	});
+</script> </block>
+<block name="script"> <script
+	src="__STATIC__/highcharts-4.0.1/js/highcharts.js?v={:SITE_VERSION}"></script>
+</block>

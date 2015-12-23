@@ -1,0 +1,106 @@
+<include file="Public/mobile_head"/>
+<link rel="stylesheet" type="text/css" href="{:ADDON_PUBLIC_PATH}/shop_vote.css?v={:SITE_VERSION}">
+<body>
+    <div class="container">
+    	<div class="fixed_bg"></div>
+    	<div class="vote_wrap">
+        <div class="common_header">
+        	<a class="back" href="javascript:;" onClick="history.back()"></a>
+            <span>投票详情</span>
+        </div>
+      	<notempty name='option' >
+        	<div class="option_user">
+        		<img src="{$option.image|get_cover_url=300,300}">
+      			<p>姓名：{$option.truename} ({$option.number}号)</p>
+      			<p>总票数：{$option.opt_count}</p>
+                <p>
+      			 <eq name='overtime' value='1'>
+                    <span class="detail_btn over_btn"><em class="zan"></em>活动已结束</span>
+                <else />                    
+                    <php> if($option[has_vote]==1) { </php>
+                    <a class='detail_btn has_vote'><em class="zan"></em>已投票</a>
+                    <php> }elseif($finish_vote==1) { </php>
+                    <a class='detail_btn over_btn'><em class="zan"></em>已投完</a>
+                    <php> }else { </php>
+                    <a class='detail_btn' onClick="vote_join({$option.id},{$vote_info.id},this);"><em class="zan"></em>投TA 一票</a>
+                    <php> } </php>                    
+                </eq>
+                </p>
+      		</div>	
+            <div class="option_content">
+            	<h6><img src="{:ADDON_PUBLIC_PATH}/smile.png"/>微笑宣言</h6>
+                <p>{$option.manifesto}</p>
+            	<h6><img src="{:ADDON_PUBLIC_PATH}/remark.png"/>选手介绍</h6>
+                <p>{$option.introduce}</p>
+            </div>
+      	</notempty>
+        
+    </div>	
+   </div>
+<script type="text/javascript">
+var is_verify = '{$vote_info.is_verify}';
+function vote_join(optionid,voteid,_this){
+	if (optionid ==0) {
+        $.Dialog.fail('获取不到投票选项');
+    }
+    if (voteid ==0) {
+         $.Dialog.fail('该活动不存在');
+    }
+	if($(_this).hasClass('has_vote')){
+		return false;
+	}
+	$(_this).addClass('has_vote');
+	var url="{:addons_url('Vote://Wap/join')}";
+	if(is_verify!="" && parseInt(is_verify)==1){
+		$html = $('<p><img style="background:URL('+IMG_PATH +'/loading_icon.gif) no-repeat center center" width="100%" height="60" src="{:U("verify_img")}"/><br/><input type="text" name="verify" value=""/><a style="color:#3772cb;padding:5px 0 0 0;" href="javascript:;">看不清？换一个</a></p>');
+		$('a',$html).click(function(){
+			$('img',$html).attr('src',"{:U('verify_img')}");
+		})
+		$.Dialog.confirm('请输入验证码',$html,function(){
+			verify = $('input',$html).val();
+			do_vote(_this,voteid,optionid,verify);
+		});
+	}else{
+		do_vote(_this,voteid,optionid,0);
+	}
+}
+function do_vote(_this,voteid,optionid,verify){
+	var url="{:addons_url('Vote://Wap/join')}";
+	$.post(url,{'vote_id':voteid,'option_id':optionid,'verify':verify},function(res){
+        if(res.error){
+        	 $.Dialog.fail(res.error);
+			 $(_this).removeClass('has_vote');
+        }else{
+        	 $.Dialog.success(res.success);
+			 
+        	 setTimeout(function(){
+				window.location.reload();
+			},1500)
+			
+        }     
+    });
+}
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	WeixinJSBridge.call('hideToolbar');
+});
+wx.ready(function(){
+	var shareData = {
+			title: '{$vote_info.title}', // 分享标题
+			desc: '{$vote_info.remark}', // 分享描述
+			link: "{:U( 'index',array('id'=>$info['id'],'publicid'=>$public_info[id]))}", //分享的链接地址
+			imgUrl: "{:SITE_URL}/Addons/Vote/icon.png", // 分享图标
+			type: 'link', // 分享类型,music、video或link，不填默认为link
+			dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+			success: function () { 
+			},
+			cancel: function () { 
+			}
+	}
+	wx.onMenuShareAppMessage(shareData);
+	wx.onMenuShareTimeline(shareData);
+	wx.onMenuShareQQ(shareData);
+	wx.onMenuShareWeibo(shareData);
+});
+</script>    
+</body>
+</html>

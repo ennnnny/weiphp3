@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <button id="copy-button" data-clipboard-text="Copy Me!" title="Click to copy me.">Copy to Clipboard</button>
+    <script src="ZeroClipboard.min.js"></script>
+    <script type="text/javascript">
+    	// main.js
+		var client = new ZeroClipboard( document.getElementById("copy-button") );
+		client.on( "ready", function( readyEvent ) {
+		  client.on( "aftercopy", function( event ) {
+			alert("复制功能");
+		  } );
+		} );
+    </script>
+  </body>
+</html>

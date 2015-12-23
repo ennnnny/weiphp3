@@ -1,0 +1,50 @@
+<extend name="Base/common" />
+<block name="body">
+  <div class="span9 page_message">
+    <section id="contents"> 
+      <include file="Addons/_nav" />  
+      <div class="table-bar">
+        <div class="fl">
+          <empty name="model.extend">
+			<div class="tools">
+			</div>
+          </empty>
+        </div>        
+      </div>
+      
+      <!-- 数据列表 -->
+      <div class="data-table">
+        <div class="table-striped">
+          <table cellpadding="0" cellspacing="1">
+            <!-- 表头 -->
+            <thead>
+              <tr>
+               <volist name="list_grids" id="field">
+                  <th>{$field.title}</th>
+                </volist>
+              </tr>
+            </thead>
+            
+            <!-- 列表 -->
+            <tbody id="tbd_listsbody">
+              <volist name="list_data" id="data">
+                <tr>				  
+                    <td><?php echo $data->kf_id; ?></td>
+					<td><?php echo $data->name; ?></td>
+					<td><?php echo $data->kf_account; ?></td>
+					<td><?php echo $data->accepted_case; ?></td>
+					<td><?php echo $data->auto_accept; ?></td>
+					<td><?php $state = $data->status; echo (($state ==1)?"PC在线":(($state ==2)?"微信在线":(($state ==3)?"PC+微信在线":"未知"))); ?></td>
+                </tr>
+              </volist>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+	
+  </div>
+</block>
+<block name="script"> 	
+	
+</block>

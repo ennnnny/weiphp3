@@ -1,0 +1,76 @@
+<include file="Public/mobile_head"/>
+<link href="{:ADDON_PUBLIC_PATH}/mobile/common.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<link href="{:CUSTOM_TEMPLATE_PATH}Public/shop.css?v={:SITE_VERSION}" rel="stylesheet" type="text/css">
+<body class="withFoot">
+    <div class="container">
+    	<form class="search_form" action="{:U('lists',array('shop_id'=>$shop_id))}" method="get">
+        	<a href="{:U('index',array('shop_id'=>$shop_id))}" class="back_icon">&nbsp;</a>
+            <input type="text" placeholder="输入关键字搜索商品" value="{:I('search_key')}" name="search_key" />
+            <button type="button" id="search" url="{:U('lists',array('shop_id'=>$shop_id))}">搜索</button>
+            <a href="javascript:void(0);" class="cate_icon" onClick="showPopCategory()">&nbsp;</a>
+        </form>
+        <div class="list_type">
+            <a href="{:U('lists',array('shop_id'=>$shop_id,'order_key'=>'id','order_type'=>I('order_type','desc'),'search_key'=>I('search_key')))}">最新</a>
+            <span class="line"></span>
+            <a href="{:U('lists',array('shop_id'=>$shop_id,'order_key'=>'rank','order_type'=>I('order_type','desc'),'search_key'=>I('search_key')))}">热销</a>
+            <span class="line"></span>
+            <a href="{:U('lists',array('shop_id'=>$shop_id,'order_key'=>'sale_count','order_type'=>I('order_type','desc'),'search_key'=>I('search_key')))}">销量</a>
+        </div>
+        <!-- 产品列表 -->
+        <div class="product_list">
+            <ul id="productContainer">
+            <volist name="goods_list" id="vo">
+                <li class="contentItem" data-lastid="{$vo.id}">
+                        <a href="{:U('detail',array('shop_id'=>$shop_id,'id'=>$vo['id']))}">
+                            <img src="{$vo.cover|get_cover_url}"/>
+                            <div class="desc">
+                            	<p class="name">{$vo.title}</p>
+                            	<p class="price">￥{$vo.price|wp_money_format}</p>
+                            </div>
+                        </a>                    
+                </li>
+                </volist>
+            </ul>
+        </div>
+        <div class="noMore">没有更多内容</div> 
+     	<div class="moreLoading"><em>&nbsp;</em>正在加载更多···</div>
+        
+        
+    </div>	
+    
+    <!-- 分类目录 -->
+    <include file="_category"/>
+    
+    <!-- 底部导航 -->
+    <include file="_footer"/>
+    
+<script type="text/javascript">
+$(function(){
+	var __lastId = $('.contentItem').last().data('lastid');
+	$.WeiPHP.initLoadMore({
+		"pageCount":10, //每次拉取的数量
+		"lastId": __lastId,//第一次加载的Id
+		"loadType" : 1,//0:页码加载  1:lastId加载
+		"loadUrl" : "{:U('product_model',array('shop_id'=>$shop_id,'order_key'=>I('order_key','id'),'order_type'=>I('order_type','desc'),'search_key'=>I('search_key')))}",
+		//loadUrl 加载的model连接 可带参数 返回为空时自动停止下拉
+		"domClass" : "contentItem", //每个item的Class
+		"domContainer" : "productContainer" //所有item的容器Id
+	});
+	
+		//搜索功能
+	$("#search").click(function(){
+		var url = $(this).attr('url');
+        var query  = $('.search_form').serialize();
+        query = query.replace(/(&|^)(\w*?\d*?\-*?_*?)*?=?((?=&)|(?=$))/g,'');
+        query = query.replace(/^&/g,'');
+        if( url.indexOf('?')>0 ){
+            url += '&' + query;
+        }else{
+            url += '?' + query;
+        }
+		window.location.href = url;
+	});	
+})
+</script>
+</body>
+</html>
