@@ -1221,7 +1221,10 @@ function get_hide_attr($str) {
 function parse_field_attr($string) {
 	if (0 === strpos ( $string, ':' )) {
 		// 采用函数定义
-		return eval ( substr ( $string, 1 ) . ';' );
+		$str = substr($string,1).';';
+		eval("\$str = $str");
+		return $str;
+//		return eval ( substr ( $string, 1 ) . ';' );
 	}
 	$array = preg_split ( '/[\s;\r\n]+/', trim ( $string, ",;\r\n" ) );
 	// dump($array);
