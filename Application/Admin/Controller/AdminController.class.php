@@ -44,13 +44,21 @@ class AdminController extends Controller {
         }
         C($config); //添加配置
 
+//         // 是否是超级管理员
+//         define('IS_ROOT',   is_administrator());
+//         if(!IS_ROOT && C('ADMIN_ALLOW_IP')){
+//             // 检查IP地址访问
+//             if(!in_array(get_client_ip(),explode(',',C('ADMIN_ALLOW_IP')))){
+//                 $this->error('403:禁止访问');
+//             }
+//         }
         // 是否是超级管理员
         define('IS_ROOT',   is_administrator());
-        if(!IS_ROOT && C('ADMIN_ALLOW_IP')){
-            // 检查IP地址访问
-            if(!in_array(get_client_ip(),explode(',',C('ADMIN_ALLOW_IP')))){
-                $this->error('403:禁止访问');
-            }
+        if(!IS_ROOT || C('ADMIN_ALLOW_IP')){ // 修复任意注册用户都能登录系统后台bug  end 2016.1.11 网缘
+        	// 检查IP地址访问
+        	if(!in_array(get_client_ip(),explode(',',C('ADMIN_ALLOW_IP')))){
+        		$this->error('403:禁止访问',U('Admin/Public/logout'));// 修复任意注册用户都能登录系统后台bug  end 2016.1.11 网缘
+        	}
         }
         // 检测系统权限
         if(!IS_ROOT){

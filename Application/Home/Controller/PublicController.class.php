@@ -41,9 +41,12 @@ class PublicController extends HomeController {
 	 * 显示指定模型列表数据
 	 */
 	public function lists() {
-		if (! is_administrator ( $this->mid )) {
-			redirect ( addons_url ( 'UserCenter://UserCenter/lists' ) );
-		}
+		//红中 vteyqh@gmail.com
+		//2016-2-2 
+		//新用户非超级管理员会跳转到下面的页面导致无法进入模型列表，故屏蔽此代码，如有导致其他问题请联系我，谢谢
+// 		if (! is_administrator ( $this->mid )) {
+// 			redirect ( addons_url ( 'UserCenter://UserCenter/lists' ) );
+// 		}
 		// 获取模型信息
 		$model = $this->model;
 		

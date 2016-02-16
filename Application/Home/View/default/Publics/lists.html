@@ -77,8 +77,8 @@
                 <td>{$data.public_name}</td>
                 <td>{$data.token}</td>
                 <td>{$data.count}</td>
-                <td><a href="{:U('Home/Public/main',array('public_id'=>$data[id]))}" target="_self">进入管理</a></td>
-              </tr>
+                <td><a href="{:U('Home/Index/main',array('publicid'=>$data[id]))}" target="_self">进入管理</a></td>
+               </tr>
               </volist>
             </tbody>
           </table>

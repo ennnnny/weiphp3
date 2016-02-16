@@ -11,24 +11,21 @@
  * 系统配文件
  * 所有系统级别的配置
  */
-return array (
-		
+return array(
 		// 数据库配置
-		'DB_TYPE' => 'mysql', // 数据库类型
-'DB_HOST' => '115.29.168.253', //服务器地址 
-'DB_NAME' => 'develop', // 数据库名 
-'DB_USER' => 'develop', // 用户名 
-'DB_PWD' => 'develop', // 密码
-		
-		
-		'DB_PORT' => '3306', // 端口
-		'DB_PREFIX' => 'wp_', // 数据库表前缀
+        'DB_TYPE'   => 'mysql', // 数据库类型
+        'DB_HOST'   => '115.29.168.253', // 服务器地址
+        'DB_NAME'   => 'develop', // 数据库名
+        'DB_USER'   => 'develop', // 用户名
+        'DB_PWD'    => 'develop',  // 密码
+        'DB_PORT'   => '3306', // 端口
+        'DB_PREFIX' => 'wp_', // 数据库表前缀
 		'DB_PARAMS' => array (
 				\PDO::ATTR_CASE => \PDO::CASE_NATURAL 
 		),
 		
 		// 系统数据加密设置
-		'DATA_AUTH_KEY' => ',mKjc8(_`J2Dr@e9Po-W|;5^n">pd:z$VT#}v&SH', // 默认数据加密KEY
+		'DATA_AUTH_KEY' => '2fEA^CdG0wD$L/=.*|;>QsWy!gknFuN,aSBUv3lH', // 默认数据加密KEY
 		                                                               
 		// 调试配置
 		'SHOW_PAGE_TRACE' => false,
