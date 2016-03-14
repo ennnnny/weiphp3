@@ -25,7 +25,7 @@ return array(
 		),
 		
 		// 系统数据加密设置
-		'DATA_AUTH_KEY' => '2fEA^CdG0wD$L/=.*|;>QsWy!gknFuN,aSBUv3lH', // 默认数据加密KEY
+		'DATA_AUTH_KEY' => '~Oo|ky,Ez-[4xuW%TiNS!L1cg6t^fw.VeKF:7`GR', // 默认数据加密KEY
 		                                                               
 		// 调试配置
 		'SHOW_PAGE_TRACE' => false,
