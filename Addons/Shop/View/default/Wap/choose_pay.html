@@ -37,9 +37,9 @@
 </html>
 <script type="text/javascript">
 	$('.choose_pay_type a').each(function(){
-		$(this).click(function(){
+		$(this).click(function(){			
 			var paytype=$(this).attr('data-paytype');//alert(paytype);
-			var order_id={$order_id};
+			var order_id={$order_id};		
 			var url="{:U('do_pay')}&paytype="+paytype+"&order_id="+order_id;
 			$(this).attr('href',url);
 		});

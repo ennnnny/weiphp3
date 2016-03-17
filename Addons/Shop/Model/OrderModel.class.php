@@ -105,15 +105,17 @@ class OrderModel extends Model {
 	}
 	function getSendInfo($id) {
 		$info = $this->getInfo ( $id );
-		$map ['id'] = $info ['shop_id'];
-		$api_key = M ( 'shop' )->where ( $map )->getField ( 'api_key' );
-		empty ( $api_key ) && $api_key = '02727dd96ccf4c4eabb091d85cb7fa10';
-		
+		//以下3行代码是有问题的，shop数据库中是没聚合数据的api_key这个字段的，会导致网页错误，所以屏蔽了		
+		//$map ['id'] = $info ['shop_id'];		
+		//$api_key = M ( 'shop' )->where ( $map )->getField ( 'api_key' );
+		//empty ( $api_key ) && $api_key = '02727dd96ccf4c4eabb091d85cb7fa10';
+		$api_key = '6df4bd9a502849eb856b0fa2c232deda';
 		$url = 'http://v.juhe.cn/exp/index?key=' . $api_key . '&com=' . $info ['send_code'] . '&no=' . $info ['send_number'];
 		$data = wp_file_get_contents ( $url );
 		$data = json_decode ( $data, true );
 		
 		if ($data ['resultcode'] == 200) {
+			
 			$save ['order_id'] = $id;
 			$save ['status_code'] = 3;
 			$save ['extend'] = 1;
@@ -124,8 +126,7 @@ class OrderModel extends Model {
 				$save ['remark'] = $vo ['zone'] . ' ' . $vo ['remark'];
 				M ( 'shop_order_log' )->add ( $save );
 			}
-		}
-		
+		}		
 		return $data;
 	}
 	function update($id, $save) {

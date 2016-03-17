@@ -64,9 +64,10 @@ function checkCartSubmit(){
 	}
 }
 function confirmGetGoods(url){
+
 	$.Dialog.confirmBox('温馨提示','确认已收货？',{rightCallback:function(){
 		$.Dialog.loading();
-		$.post(url,function(res){
+		$.post(url,function(res){			
 			 setTimeout(function(){
 				 location.reload();	
 			},1500);			

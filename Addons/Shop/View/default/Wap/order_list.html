@@ -43,13 +43,13 @@
                     </a>
                     <div class="order_list_bottom">
                     	<if condition="$vo[pay_status]==0 && $vo[pay_type]!=10">
-                             <a class="btn small_btn" href="{:U('choose_pay')}&order_id={$info.id}">立即付款</a>
+                             <a class="btn small_btn" href="{:U('choose_pay')}&order_id={$vo[id]}">立即付款</a>
                         <else />
                             <eq name="vo[is_send]" value="0">
                                 <span>等待卖家发货</span>
                             <else/>
-                            	<if condition="$vo['status_code']==3">
-                                <a class="btn small_btn" href="javascript:;" onClick="confirmGetGoods('{:U('confirm_get',array('id'=>$vo[id]))}');">确认收货</a>
+                            	<if condition="$vo['status_code']==3">                                
+								<a class="btn small_btn" href="javascript:;" onClick="confirmGetGoods('{:U('confirm_get',array('id'=>$vo[id]))}');">确认收货</a>
                                 </if>
                             </eq>
                         </if>

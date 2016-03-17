@@ -1,5 +1,4 @@
 <?php
-
 namespace Addons\Shop\Controller;
 
 use Home\Controller\AddonsController;
@@ -228,7 +227,11 @@ class WapController extends AddonsController {
 		$this->assign ( 'addressInfo', $addressInfo );
 		
 		if ($orderInfo ['status_code'] == 3) { // 在配送中的订单自动从接口获取快递信息
-			$res = $orderDao->getSendInfo ( $id );
+			//20160302 
+			//聚合数据 http://www.juhe.cn
+			//这个免费的只有100次使用，所以屏蔽吧
+			//免费 10000次的只是针对app的SDK的
+			//$res = $orderDao->getSendInfo ( $id );
 		}
 		
 		$log = M ( 'shop_order_log' )->where ( $map )->order ( 'status_code desc,cTime desc' )->select ();
@@ -478,8 +481,8 @@ class WapController extends AddonsController {
 		return $list;
 	}
 	// 确认收货
-	function confirm_get() {
-		$id = I ( 'id' );
+	function confirm_get() {	
+		$id = I ( 'get.id' );		
 		$res = D ( 'Addons://Shop/Order' )->setStatusCode ( $id, 4 );
 		if ($res) {
 			$this->success ( '设置成功' );

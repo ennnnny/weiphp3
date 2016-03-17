@@ -47,7 +47,7 @@ class WeiSiteController extends BaseController {
 			// 分类
 			$category = M ( 'weisite_category' )->where ( $map )->order ( 'sort asc, id desc' )->select ();
 			foreach ( $category as &$vo ) {
-				$vo ['icon'] = get_cover_url ( $vo ['icon'] );
+				$vo ['icon'] = get_cover_url ( $vo ['icon'] );				
 				empty ( $vo ['url'] ) && $vo ['url'] = addons_url ( 'WeiSite://WeiSite/lists', array (
 						'cate_id' => $vo ['id'] 
 				) );
@@ -91,7 +91,7 @@ class WeiSiteController extends BaseController {
 				}
 				$this->assign ( 'category', $category );
 				$this->_footer ();
-				$this->display ( ONETHINK_ADDON_PATH . 'WeiSite/View/default/TemplateSubcate/' . $this->config ['template_subcate'] . '/index.html' );
+				$this->display ( ONETHINK_ADDON_PATH . 'WeiSite/View/default/TemplateSubcate/' . $this->config ['template_subcate'] . '/cate.html' );
 			} else {
 				
 				$page = I ( 'p', 1, 'intval' );
