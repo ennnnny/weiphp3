@@ -48,18 +48,14 @@ class WeixinAddonModel extends WeixinModel {
 			dump ( '图灵机器人结果：' );
 			dump ( $result );
 		}
-		if ($result ['code'] > 40000&& $result['code']<40008) {
-			if ($result ['code'] < 40008 && ! empty ( $result ['text'] )) {
+		if ($result ['code'] > 40000 && $result['code'] < 40008) {
+			if ( ! empty ( $result ['text'] )) {
 				$this->replyText ( '图灵机器人请你注意：' . $result ['text'] );
 			} else {
 				return false;
 			}
 		}
 		switch ($result ['code']) {
-			case '200000' :
-				$text = $result ['text'] . ',<a href="' . $result ['url'] . '">点击进入</a>';
-				$this->replyText ( $text );
-				break;
 			case '200000' :
 				$text = $result ['text'] . ',<a href="' . $result ['url'] . '">点击进入</a>';
 				$this->replyText ( $text );

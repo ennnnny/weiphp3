@@ -277,12 +277,13 @@ class UserModel extends Model {
 			// 公众号粉丝信息
 			$userInfo ['tokens'] = array ();
 			$tokens = M ( 'public_follow' )->where ( "uid='$uid'" )->field ( true )->select ();
-			foreach ( $tokens as $t ) {
-				$userInfo ['tokens'] [$t ['token']] = $t ['openid'];
-				$userInfo ['remarks'] [$t ['token']] = $t ['remark'];
-				$userInfo ['has_subscribe'] [$t ['token']] = $t ['has_subscribe'];
+			if ($tokens) {
+				foreach ( $tokens as $t ) {
+					$userInfo ['tokens'] [$t ['token']] = $t ['openid'];
+					$userInfo ['remarks'] [$t ['token']] = $t ['remark'];
+					$userInfo ['has_subscribe'] [$t ['token']] = $t ['has_subscribe'];
+				}
 			}
-			
 			// 是否为系统管理员
 			$userInfo ['is_root'] = is_administrator ( $uid );
 			$userInfo ['headimgurl'] = empty ( $userInfo ['headimgurl'] ) ? SITE_URL . '/Public/static/face/default_head_50.png' : $userInfo ['headimgurl'];

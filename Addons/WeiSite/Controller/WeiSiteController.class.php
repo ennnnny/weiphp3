@@ -66,7 +66,7 @@ class WeiSiteController extends BaseController {
 		}
 	}
 	// 分类列表
-	function lists() {
+	function lists($model = null, $page = 0) {
 		$cate_id = I ( 'cate_id', 0, 'intval' );
 		empty ( $cate_id ) && $cate_id = I ( 'classid', 0, 'intval' );
 		
@@ -151,30 +151,34 @@ class WeiSiteController extends BaseController {
 		} else {
 			$list = D ( 'Addons://WeiSite/Footer' )->get_list ();
 			
-			foreach ( $list as $k => $vo ) {
-				if ($vo ['pid'] != 0)
-					continue;
-				
-				$one_arr [$vo ['id']] = $vo;
-				unset ( $list [$k] );
-			}
-			
-			foreach ( $one_arr as &$p ) {
-				$two_arr = array ();
-				foreach ( $list as $key => $l ) {
-					if ($l ['pid'] != $p ['id'])
+			if ($list) {
+				foreach ( $list as $k => $vo ) {
+					if ($vo ['pid'] != 0)
 						continue;
 					
-					$two_arr [] = $l;
-					unset ( $list [$key] );
+					$one_arr [$vo ['id']] = $vo;
+					unset ( $list [$k] );
 				}
 				
-				$p ['child'] = $two_arr;
+				foreach ( $one_arr as &$p ) {
+					$two_arr = array ();
+					foreach ( $list as $key => $l ) {
+						if ($l ['pid'] != $p ['id'])
+							continue;
+						
+						$two_arr [] = $l;
+						unset ( $list [$key] );
+					}
+					
+					$p ['child'] = $two_arr;
+				}
+				$this->assign ( 'footer', $one_arr );
+				
+				$html = $this->fetch ( ONETHINK_ADDON_PATH . 'WeiSite/View/default/TemplateFooter/' . $this->config ['template_footer'] . '/footer.html' );
+				$this->assign ( 'footer_html', $html );
+			} else {
+				$this->assign ( 'footer_html', '' );
 			}
-			$this->assign ( 'footer', $one_arr );
-			
-			$html = $this->fetch ( ONETHINK_ADDON_PATH . 'WeiSite/View/default/TemplateFooter/' . $this->config ['template_footer'] . '/footer.html' );
-			$this->assign ( 'footer_html', $html );
 		}
 	}
 	function _deal_footer_data($vo, $k) {

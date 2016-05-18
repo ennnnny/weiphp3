@@ -37,6 +37,12 @@ return array (
 				'value' => 'ColorV1',
 				'tip' => ''
 		),
+		'template_subcate' => array (
+				'title' => '二级分类模板',
+				'type' => 'hidden',
+				'value' => 'default',
+				'tip' => ''
+		),
 		'template_footer' => array (
 				'title' => '底部模板',
 				'type' => 'hidden',

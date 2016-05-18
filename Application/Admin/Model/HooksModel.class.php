@@ -33,8 +33,8 @@ class HooksModel extends Model {
         }
     }
     protected $_validate = array(
-        array('name','require','钩子名称必须！'), //默认情况下用正则进行验证
-        array('description','require','钩子描述必须！'), //默认情况下用正则进行验证
+        array('name','require','钩子名称不能为空！'), //默认情况下用正则进行验证
+        array('description','require','钩子描述不能为空！'), //默认情况下用正则进行验证
     );
 
     /**

@@ -498,7 +498,7 @@ function addons_url($url, $param = array()) {
 	}
 	$url = parse_url ( $url );
 	$case = C ( 'URL_CASE_INSENSITIVE' );
-	! $addons || $url ['scheme'] = $addons;
+	!isset($addons) || ! $addons || $url ['scheme'] = $addons;
 	$addons = $case ? parse_name ( $url ['scheme'] ) : $url ['scheme'];
 	$controller = $case ? parse_name ( $url ['host'] ) : $url ['host'];
 	$action = trim ( $case ? strtolower ( $url ['path'] ) : $url ['path'], '/' );
@@ -1061,6 +1061,8 @@ function get_cover_url($cover_id, $width = '', $height = '') {
 		$thumb = "?imageMogr2/thumbnail/{$width}x";
 	} elseif ($height > 0) {
 		$thumb = "?imageMogr2/thumbnail/x{$height}";
+	} else {
+		$thumb = "";
 	}
 	if ($info ['url'])
 		return $info ['url'] . $thumb;
@@ -1709,7 +1711,7 @@ function getShort($str, $length = 40, $ext = '') {
 	$str = strip_tags ( $str );
 	$str = htmlspecialchars_decode ( $str );
 	$strlenth = 0;
-	$out = '';
+	$output = '';
 	preg_match_all ( "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/", $str, $match );
 	foreach ( $match [0] as $v ) {
 		preg_match ( "/[\xe0-\xef][\x80-\xbf]{2}/", $v, $matchs );

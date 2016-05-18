@@ -167,6 +167,7 @@ class IndexController extends HomeController {
 			redirect ( $url );
 		}
 		$map_addons ['status'] = 1;
+		$map_addons ['is_show'] = 1;
 		$data = M ( 'addons' )->where ( $map_addons )->order ( 'id DESC' )->select ();
 		$token_status = D ( 'Common/AddonStatus' )->getList ( true );
 		foreach ( $data as $k => &$vo ) {
