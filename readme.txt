@@ -1,4 +1,4 @@
-更新至2016/5/18
+﻿更新至2016/5/18
 1、增加shop_vote的3个表 by windfic
 2、投票插件的has_adminlist改为1 by windfic
 3、补充template_subcate by windfic
