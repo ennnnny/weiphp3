@@ -1,4 +1,8 @@
-﻿更新至2016/5/18
+号外：停止更新了
+官网有出最新正式版了：http://bbs.weiphp.cn/thread-4043-1-1.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+更新至2016/5/18
 1、增加shop_vote的3个表 by windfic
 2、投票插件的has_adminlist改为1 by windfic
 3、补充template_subcate by windfic
